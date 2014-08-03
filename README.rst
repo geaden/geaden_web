@@ -1,4 +1,4 @@
-Officail web site
+Official web site
 =================
 
 Gennady Denisov's official web site source code.
