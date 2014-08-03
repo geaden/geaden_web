@@ -1,0 +1,25 @@
+<div id="quotes" ng-show="quotesCtrl.quotes.length">
+  <h3>Favourite Quotes</h3>
+  <!-- Controls -->
+  <a href="javascript:void(0);" class="left quotes-control" ng-click="quotesCtrl.prevQuote()">
+    <i class="fa fa-chevron-left fa-2x"></i>
+  </a>
+  <a href="javascript:void(0)" class="right quotes-control" ng-click="quotesCtrl.nextQuote()">
+    <i class="fa fa-chevron-right fa-2x"></i>
+  </a>
+  <!-- Quotes content -->
+  <div class="quotes-carousel">
+    <section ng-repeat="quote in quotesCtrl.quotes">
+      <div class="quotes-item animate" ng-show="quotesCtrl.isCurrent($index)">
+        <p>{{ quote.content }}</p>
+        <cite>&ndash;&nbsp;{{ quote.author }}</cite>
+      </div>      
+    </section>    
+  </div>
+  <!-- Indicators -->
+  <div>
+    <a href="javascript:void(0)" ng-repeat="quote in quotesCtrl.quotes" class="quotes-indicators" ng-class="{ current: quotesCtrl.isCurrent($index) }" ng-click="quotesCtrl.selectQuote($index)">
+      <i class="fa fa-circle" ></i>
+    </a>
+  </div>
+</div>

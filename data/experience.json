@@ -1,0 +1,34 @@
+[
+    {
+        "start": "October, 2013",
+        "end": null,
+        "company": "Raiffeisen Bank",
+        "url": "http://www.raiffeisen.ru",
+        "position": "IBM BPM Developer",
+        "summary": "Front end developer as well as backend developer. Java, javascript (esp. Rhino from Mozilla on server side, and Dojo on client side), jython, Websphere Application Server."
+    },
+    {
+        "start": "May, 2013",
+        "end": "October, 2013",
+        "url": "http://www.monosnap.com",
+        "company": "Monosnap",
+        "position": "Backend developer",
+        "summary": "Amazon WS, Ubuntu server, uwsgi, java, python, mongodb"
+    },
+    {
+        "start": "January, 2013",
+        "end": "May, 2013",
+        "url": "http://www.rls.ru/",
+        "company": "Roslab System",
+        "position": "Python Developer",
+        "summary": "Developing REST API for laboratory system, CouchDB, Flask"
+    },
+    {
+        "start": "April, 2008",
+        "end": "December, 2012",
+        "url": "http://www.adandzo.com",
+        "company": "ADANDZO",
+        "position": "System administrator, IT Consultant, Django Developer",
+        "summary": "Manage company IT infrastructure, Python automation, internal company start up developer"
+    }
+]

@@ -1,0 +1,69 @@
+[
+    {
+        "title": "Python",
+        "order": 1,
+        "approved": 0,
+        "desc": "Started learing python as a course in university in 2007 completley fallen love with this language. Built some apps using Django, GAE, Flask. Use Python as a power tool for routines automation.",
+        "links": [
+            {
+                "url": "http://spring-blog-stage.herokuapp.com/",
+                "title": "Django based blog"
+            },
+            {
+                "url": "http://kms-add.herokuapp.com/",
+                "title": "Knowledge Management System (in progress)"
+            },
+            {
+                "url": "http://dry-coast-3580.herokuapp.com/",
+                "title": "Argiculture machines web site (prototype)"
+            },
+            {
+                "url": "http://bookmarkit.geaden.com/",
+                "title": "Bookmark It! Easily manage your internet bookmarks"
+            },
+            {
+                "url": "http://www.github.com/geaden/",
+                "title": "My Github"
+            },
+            {
+                "url": "http://www.bitbucket.org/geaden/",
+                "title": "My Bitbucket"
+            }
+        ]
+    },
+    {
+        "title": "Java",
+        "order": 0,
+        "approved": 0,
+        "desc": "JUnit, Netty, GAE, Android. I have less experience in Java than in Python, but nowdays preferebly use Java.",
+        "links": [
+            {
+                "url": "http://www.github.com/geaden/",
+                "title": "My Github"
+            }
+        ]
+    },
+    {
+        "title": "TDD",
+        "order": 2,
+        "approved": 0,
+        "desc": "TDD is not dead"
+    },
+    {
+        "title": "CI",
+        "order": 3,
+        "approved": 0,
+        "desc": "Continious integration is a crucial part in modern development. Jenkins, TeamCity, Travis.",
+        "links": [
+            {
+                "url": "https://travis-ci.org/geaden/gae-handlers",
+                "title": "Travis configuration for GAE application"
+            },
+            {
+                "url": "https://travis-ci.org/geaden/bookmarkit",
+                "title": "Travis configuration with auto deploy to Heroku"
+            }
+
+        ]
+    }
+] 

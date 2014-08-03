@@ -1,0 +1,13 @@
+<hr />
+<div id="education">
+  <h3>Education</h3>
+  <section ng-repeat="education in educationCtrl.educationList">
+    <p class="period">{{ education.start }} &ndash; {{ education.end || "current"}}</p>   
+    <div class="school">    	
+    	<img ng-src="{{ education.logo }}" alt="{{ education.school }}" width="60px" />
+    	<span>{{ education.school }} <a target="_blank" ng-show="education.url" href="{{ education.url }}"><i class="fa fa-globe"></i></a></span>
+    </div>
+    <p>{{ education.major }}</p>
+    <p class="summary">{{ education.summary }}</p>
+  </section>
+</div>

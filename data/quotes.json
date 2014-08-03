@@ -1,0 +1,16 @@
+[
+    {
+        "author": "Peter Norvig",
+        "content": "To be a good programmer, you have to be a good tester.",
+        "img": "pic.jpg"
+    },
+    {
+        "author": "Richard Branson",
+        "content": "Opportunities are like buses there is always another one coming.",
+        "img": "pic-2.jpg"
+    },
+    {
+        "author": "Albert Einstein",
+        "content": "If you can't explain it to a six year old, you don't understand it yourself."
+    }
+]
