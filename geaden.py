@@ -1,0 +1,112 @@
+#!/usr/bin/env python
+#
+# Copyright 2007 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+import webapp2
+
+import os
+import json
+
+from jinja import JINJA_ENVIRONMENT as jinja_env
+
+from models import Skills, Link
+
+import logging
+
+__author__ = 'geaden'
+
+
+class MainHandler(webapp2.RequestHandler):
+    """
+    Basic handler for web application.
+    """
+    def write(self, *args, **kwargs):
+        """
+        Write out in response provided args and kwargs
+        """
+        return self.response.out.write(*args, **kwargs)
+
+    def render_str(self, template, **params):
+        """
+        Rendering provided kwargs into template
+        """
+        t = jinja_env.get_template(template)
+        return t.render(params)
+
+    def render(self, template, **kwargs):
+        """
+        Render page
+        """
+        return self.write(self.render_str(template, **kwargs))
+
+    def initialize(self, *args, **kwargs):
+        """
+        Initializing Main Handler.
+        """
+        webapp2.RequestHandler.initialize(self, *args, **kwargs)
+
+
+def date_handler(obj):
+    return obj.isoformat() if hasattr(obj, 'isoformat') else obj
+
+
+class SkillsEditHandler(webapp2.RequestHandler):
+    """
+    Skills Editor Handler
+    """
+    def get(self):
+        self.render('skills.html')
+
+
+class SkillsJSONHandler(webapp2.RequestHandler):
+    """
+    Skills JSON Handler
+    """
+    def get(self):        
+        self.response.headers.add_header("Content-type", "application/json")
+        resp = []
+        for skill in Skills.all():
+            skill_dict = skill.to_dict();
+            skill_dict.update({'_id': skill.key.id()})
+            resp.append(skill_dict)      
+        self.response.out.write(json.dumps(resp, default=date_handler, indent=4))
+
+
+class SkillsApproverHandler(webapp2.RequestHandler):
+    """
+    Approves skill
+    """
+    def post(self):
+        data = json.loads(self.request.body)
+        skill = Skills.get(data['_id'])
+        skill.approve()
+        skill.put()
+        self.response.set_status(201)
+
+
+class MainPage(MainHandler):
+    """
+    Main page handler
+    """
+    def get(self):
+        self.render('index.html')
+
+
+app = webapp2.WSGIApplication([
+    ('/', MainPage),
+    ('/skills/?', SkillsJSONHandler),
+    ('/skills/approve/?', SkillsApproverHandler)
+], debug=True)

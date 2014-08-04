@@ -3,7 +3,7 @@
         "title": "Python",
         "order": 1,
         "approved": 0,
-        "desc": "Started learing python as a course in university in 2007 completley fallen love with this language. Built some apps using Django, GAE, Flask. Use Python as a power tool for routines automation.",
+        "desc": "Started learning python as a course in university in 2007 completley felt in love with this language. Built some apps using Django, GAE, Flask. Use Python as a power tool for routines automation and big data analysis.",
         "links": [
             {
                 "url": "http://spring-blog-stage.herokuapp.com/",

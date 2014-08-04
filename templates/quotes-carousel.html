@@ -1,16 +1,16 @@
-<div id="quotes" ng-show="quotesCtrl.quotes.length">
+<div id="quotes" ng-show="quotes.length">
   <h3>Favourite Quotes</h3>
   <!-- Controls -->
-  <a href="javascript:void(0);" class="left quotes-control" ng-click="quotesCtrl.prevQuote()">
+  <a href="javascript:void(0);" class="left quotes-control" ng-click="prevQuote()">
     <i class="fa fa-chevron-left fa-2x"></i>
   </a>
-  <a href="javascript:void(0)" class="right quotes-control" ng-click="quotesCtrl.nextQuote()">
+  <a href="javascript:void(0)" class="right quotes-control" ng-click="nextQuote()">
     <i class="fa fa-chevron-right fa-2x"></i>
   </a>
   <!-- Quotes content -->
   <div class="quotes-carousel">
-    <section ng-repeat="quote in quotesCtrl.quotes">
-      <div class="quotes-item animate" ng-show="quotesCtrl.isCurrent($index)">
+    <section ng-repeat="quote in quotes">
+      <div class="quotes-item animate" ng-show="isCurrent($index)">
         <p>{{ quote.content }}</p>
         <cite>&ndash;&nbsp;{{ quote.author }}</cite>
       </div>      
@@ -18,7 +18,7 @@
   </div>
   <!-- Indicators -->
   <div>
-    <a href="javascript:void(0)" ng-repeat="quote in quotesCtrl.quotes" class="quotes-indicators" ng-class="{ current: quotesCtrl.isCurrent($index) }" ng-click="quotesCtrl.selectQuote($index)">
+    <a href="javascript:void(0)" ng-repeat="quote in quotes" class="quotes-indicators" ng-class="{ current: isCurrent($index) }" ng-click="selectQuote($index)">
       <i class="fa fa-circle" ></i>
     </a>
   </div>

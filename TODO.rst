@@ -1,10 +1,3 @@
-Tests
-=====
-
-Karma e2e tests
-Python tests
-GAE Handlers
-
 Pages
 =====
 /quotes - favourite quotes
@@ -18,4 +11,7 @@ Pages
 
 DONE:
 Angular.js
+Karma tests
+Python tests
+Skills Approving
 / - main page

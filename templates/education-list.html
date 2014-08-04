@@ -1,7 +1,7 @@
 <hr />
 <div id="education">
   <h3>Education</h3>
-  <section ng-repeat="education in educationCtrl.educationList">
+  <section ng-repeat="education in educationList">
     <p class="period">{{ education.start }} &ndash; {{ education.end || "current"}}</p>   
     <div class="school">    	
     	<img ng-src="{{ education.logo }}" alt="{{ education.school }}" width="60px" />

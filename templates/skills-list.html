@@ -3,13 +3,13 @@
   <h3>Skills</h3>
   <div class="skills-enumerate">
     <ul>
-      <li ng-repeat="skills in skillsCtrl.skills | orderBy:order">
-        <a class="skills-title" href="javascript:void(0);" ng-click="skillsCtrl.showDescription($index)">{{ skills.title }}</a><a class="skills-approve" href="javascript:void(0);" ng-click="skillsCtrl.approve($index)"><i class="fa fa-plus"></i></a><span>{{ skills.approved }}</span>
-        <section ng-show="skillsCtrl.isShown($index);" class="animate-show">
-          {{ skills.desc }}
-          <ul class="skills-links" ng-show="skills.links.length">
+      <li ng-repeat="skill in skills | orderBy:order">
+        <a class="skills-title" href="javascript:void(0);" ng-click="showDescription($index)">{{ skill.title }}</a><a class="skills-approve" href="javascript:void(0);" ng-click="approve(skill)"><i class="fa fa-plus"></i></a><span>{{ skill.approved }}</span>
+        <section ng-show="isShown($index);" class="animate-show">
+          {{ skill.desc }}
+          <ul class="skills-links" ng-show="skill.links.length">
             <p>Check out:</p>
-            <li ng-repeat="link in skills.links"><a href="{{ link.url }}">{{ link.title }}</a></li>
+            <li ng-repeat="link in skill.links"><a href="{{ link.url }}">{{ link.title }}</a></li>
           </ul>
         </section>
       </li>

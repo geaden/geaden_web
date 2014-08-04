@@ -105,6 +105,7 @@ hr {
   display: inline-block;
   float: left;
   padding-right: 15px;
+  margin-bottom: 20px;
 }
 
 .location {
@@ -232,7 +233,8 @@ a.skills-title {
 
 #experience section,
 #education section {
-  margin: 15px 0;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
   line-height: 2em;
   border-bottom: 1px dotted #c0c0c0;
 }
@@ -240,6 +242,8 @@ a.skills-title {
 #experience section:last-of-type,
 #education section:last-of-type {
   border: none;
+  padding-bottom: 0; 
+  margin-bottom: 0; 
 }
 
 .period {
@@ -296,6 +300,12 @@ a.skills-title {
   line-height: 0px;
 }
 /** End of animate **/
+
+/** Toaster **/
+#toast-container {
+  font-family: 'Roboto Condensed', sans-serif;
+  line-height: 1.2em;
+}
 
 /** Dialog box **/
 .dialog-box {

@@ -1,7 +1,7 @@
 <hr />
 <div id="experience">
   <h3>Experience</h3>
-  <section ng-repeat="experience in experienceCtrl.experienceList">
+  <section ng-repeat="experience in experienceList">
     <p class="period">{{ experience.start }} &ndash; {{ experience.end || "current"}}</p>
     <p class="company">{{ experience.company }} <a target="_blank" ng-show="experience.url" href="{{ experience.url }}"><i class="fa fa-globe"></i></a></p>
     <p>{{ experience.position }}</p>
