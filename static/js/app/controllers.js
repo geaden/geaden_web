@@ -154,8 +154,7 @@
         } else {
           $http.post('/skills/', {data: skill, action: 'update'})
             .success(function(data) {
-              $scope.skill = data;              
-              toaster.pop('success', 'Skill added', 'Skill with id ' + data._id + ' added.');
+              $scope.skill = data;
             });
           toaster.pop('success', 'Skill updated', 'Skill with id ' + $scope.skill._id + ' updated.');
         }    
