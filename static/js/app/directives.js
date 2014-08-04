@@ -17,6 +17,14 @@
     }
   });
 
+  app.directive('skillsEdit', function () {
+    return {
+      restrict: 'E',
+      templateUrl: '/templates/skills-edit.html',
+      controller: 'SkillsCtrl'
+    }
+  });
+
   app.directive("experienceList", ['$log', '$http', function ($log, $http) {
     return {
       restrict: 'E',

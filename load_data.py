@@ -4,7 +4,7 @@ import json
 
 from google.appengine.ext import ndb
 
-from models import Skills, Link
+from models import Skill, Link
 
 
 def load_skills():
@@ -12,7 +12,7 @@ def load_skills():
     skills = json.load(open('data/skills.json'))
     data = []
     for skill in skills:
-        s = Skills(
+        s = Skill(
             title=skill['title'],
             desc=skill['desc'])
         if 'links' in skill:
@@ -24,4 +24,4 @@ def load_skills():
 
 
 if __name__ == '__main__':
-    load()
+    load_skills()

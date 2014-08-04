@@ -9,7 +9,7 @@ class Link(ndb.Model):
     title = ndb.StringProperty()
 
 
-class Skills(ndb.Model):
+class Skill(ndb.Model):
     """Models an individual Skill entry with title and desc, approved and link."""
     title = ndb.StringProperty()
     desc = ndb.StringProperty()
@@ -24,8 +24,12 @@ class Skills(ndb.Model):
         self.approved += 1
 
     @classmethod
+    def delete(cls, skill_id):
+        return cls.get(int(skill_id)).delete()
+
+    @classmethod
     def get(cls, skill_id):
-        return cls.get_by_id(skill_id)
+        return cls.get_by_id(int(skill_id))
 
     @classmethod
     def all(cls):

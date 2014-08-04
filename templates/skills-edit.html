@@ -1,0 +1,66 @@
+<div id="skills-edit">
+  <!-- Live Preview -->
+  <section ng-show="skill.title && !skill._id">
+    <h3>{{ skill.title}}</h3>
+    <p>{{ skill.desc }}</p>
+    <ul ng-show="skill.links.length" class="skills-links">
+      Links:
+      <li ng-repeat="link in skill.links">
+        <a href="{{ link.url }}">{{ link.title }}</a>
+      </li>
+    </ul>
+  </section>
+  <!-- Skill Form -->
+  <form class="skill-form" name="skillForm" ng-submit="skillForm.$valid && addSkill(skill)" novalidate>
+    <!--  Skill Form -->
+    <h3>Add skill</h3>
+    <fieldset class="form-group">
+      <label for="skill-title">What skill: </label>
+      <input id="skill-title" ng-model="skill.title" type="text" class="form-control" placeholder="Huskell" required/>
+    </fieldset>
+    <fieldset class="form-group">
+      <label for="skill-description">Description: </label>
+      <textarea id="skill-description" ng-model="skill.desc" class="form-control" placeholder="Write a short description, i.e. how this skill is used..." required></textarea>
+    </fieldset>
+    <fieldset class="form-group" ng-show="skill.title">
+      <p class="links">Links:
+        <a href="javascript:void(0);" ng-click="addLink(skill)">
+          <i class="fa fa-plus-circle fa-x5"></i></a>
+      </p>      
+      <div class="skill-link" ng-repeat="link in skill.links">
+        <p class="right">
+          <a href="javascript:void(0);" ng-click="removeLink(skill, link, $index)">
+            <i class="fa fa-times-circle fa-x5"></i></a>
+        </p>
+        <fieldset class="form-group">
+          <label>Title:</label>
+          <input id="skill-link-title-$index" type="text" ng-model="link.title" required/>
+        </fieldset>
+        <fieldset class="form-group">
+          <label for="skill-link-url-$index">Url:</label>
+          <input id="skill-link-$index" type="text" ng-model="link.url" required/>
+        </fieldset>              
+      </div>
+    </fieldset>    
+    <fieldset class="form-group">
+      <input type="submit" class="skill-submit" value="{{ !skill._id ? 'Submit Skill' : 'Update Skill' }}" />
+      <button type="button" class="btn" ng-click="reset()">Reset form</button>
+    </fieldset>
+  </form>
+  <section ng-repeat="skill in skills">
+    <p class="right">      
+      <a href="javascript:void(0);" class="skill-control" ng-click="editSkill(skill)">
+        <i class="fa fa-pencil"></i></a>
+      <a href="javascript:void(0);" class="skill-control" ng-click="removeSkill(skill, $index)">
+        <i class="fa fa-trash-o"></i></a>
+    </p>
+    <h3>{{ skill.title }}</h3>
+    <p>{{ skill.desc}}</p>
+    <ul ng-show="skill.links.length" class="skills-links animate-show">
+      Links:
+      <li ng-repeat="link in skill.links">
+        <a href="{{ link.url }}">{{ link.title }}</a>
+      </li>
+    </ul>
+  </section>  
+</div>

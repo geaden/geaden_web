@@ -268,6 +268,94 @@ a.skills-title {
 }
 /** End Education & Experience **/
 
+/** Skills Edit **/
+#skills-edit section {
+  margin: 20px 0;
+  line-height: 1.4em;
+  font-family: 'Roboto Condensed', sans-serif;
+  padding: 10px;
+  border-radius: 3px solid #c0c0c0;
+  box-shadow: 0 0 5px #c0c0c0;
+}
+
+.skill-control {
+  padding: 0 7px;
+}
+
+#skills-edit h3 {  
+  font-family: 'Roboto', sans-serif;
+}
+
+#skills-edit a {
+  font-family: 
+}
+
+/** Form **/
+fieldset {
+  padding: 15px 0;
+}
+
+.btn,
+input, 
+textarea { 
+  padding: 9px; 
+  border: solid 1px #E5E5E5; 
+  outline: 0; 
+  font: normal 14px / 100% 'Roboto Condensed', sans-serif; 
+  width: 200px; 
+  background: #FFFFFF; 
+  box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
+  -moz-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
+  -webkit-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
+  background: -webkit-gradient(linear, left top, left 25, from(#FFFFFF), color-stop(4%, #EEEEEE), to(#FFFFFF)); 
+  background: -moz-linear-gradient(top, #FFFFFF, #EEEEEE, 1px, #FFFFFF 25px); 
+} 
+   
+textarea { 
+  width: 600px; 
+  height: 150px; 
+  line-height: 1.5em; 
+} 
+  
+.btn:hover, .btn:focus, 
+input:hover, textarea:hover, 
+input:focus, textarea:focus { 
+  border-color: #C9C9C9; 
+} 
+   
+.skill-form label,
+.skill-form p.links { 
+  display: block;
+  margin-bottom: 10px;   
+  color: #999999; 
+} 
+
+.skill-link {
+  padding: 10px;
+  border-radius: 3px solid #c0c0c0;
+  box-shadow: 0 0 5px #c0c0c0;
+  margin-bottom: 10px;
+}
+   
+.skill-submit input { 
+  width: auto; 
+  padding: 9px 15px; 
+  background: #617798; 
+  border: 0; 
+  font-size: 14px; 
+  color: #FFFFFF; 
+}
+
+.ng-invalid.ng-dirty {
+   border-color: #FA787E;
+}
+
+.ng-valid.ng-dirty {
+  border-color: green;
+}
+
+/** End Skills Edit **/
+
 .right {
   display: block;
   float: right;
@@ -349,6 +437,10 @@ and (max-device-width : 480px) {
     display: block;
     margin: 0 auto;
     width: 70%;
+  }
+
+  textarea {
+    width: 90%;    
   }
 
   #quotes {

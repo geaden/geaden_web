@@ -11,7 +11,7 @@ import webtest
 
 import geaden
 
-from models import Skills, Link
+from models import Skill, Link
 
 from load_data import load_skills
 
@@ -55,14 +55,42 @@ class PageTestCase(BaseTestCase):
         data = json.loads(response.normal_body)
         self.assertEquals(4, len(data))
         # Approve skill
-        skill = Skills(title="Math").put()
+        skill = Skill(title="Math").put()
         response = self.testapp.post_json('/skills/approve/', {'_id': skill.id()})
         self.assertEquals(response.status_int, 201)
-        self.assertEquals(Skills.get(skill.id()).approved, 1)
+        self.assertEquals(Skill.get(skill.id()).approved, 1)
+        # Create skill
+        before = len(Skill.all())
+        response = self.testapp.post_json('/skills',
+            {
+                'action': 'new',
+                'data': {
+                    'title': 'Python',
+                    'desc': 'Love it!',
+                    'links': [
+                        {
+                            'url': 'http://www.github.com',
+                            'title': 'Github'
+                        }
+                    ]
+                }                
+            })
+        self.assertEquals(response.status_int, 201)
+        self.assertEquals(response.content_type, 'application/json')
+        self.assertEquals(before + 1, len(Skill.all()))
+        # Remove skill
+        before = len(Skill.all())
+        response = self.testapp.post_json('/skills', 
+            {
+                '_id': skill.id(), 
+                'action': 'delete'
+            })
+        self.assertEquals(response.status_int, 200)
+        self.assertEquals(before - 1, len(Skill.all()))
 
     def testSkillsEditorHandler(self):
         load_skills();
-        response = self.testapp.get('/skills')
+        response = self.testapp.get('/skills/edit')
         self.assertEquals(response.status_int, 200)
 
 
@@ -71,17 +99,23 @@ class ModelsTestCase(BaseTestCase):
     Models Test Case
     """
     def testSkillModel(self):             
-        skill = Skills(title="Python", desc="Cool", 
+        skill = Skill(title="Python", desc="Cool", 
             links=[Link(title='Github', url='http://www.github.com')])
         skill.approve()
         self.assertEquals(skill.approved, 1)
         load_skills()
-        skills = Skills.all()        
+        skills = Skill.all()        
         self.assertEquals(len(skills), 4)
         s_key = skill.put()
         skill.id = s_key.id()
         skill.put()
-        s = Skills.get(skill.id)
+        s = Skill.get(skill.id)
         self.assertEquals(skill.id, s_key.id())
+
+    def testDeleteSkill(self):
+        skill = Skill(title='foo').put()
+        s = Skill.get(skill.id())
+        s.key.delete()
+        self.assertEquals(0, len(Skill.all()))
 
 

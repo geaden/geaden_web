@@ -121,12 +121,27 @@ describe('Geaden controllers', function() {
     it('should approve skill', function() {
       $httpBackend.flush();
       var skillId = 2;
-      $httpBackend.expectPOST('/skills/approve/', {_id: skillId}, function() {
-        scope.skills[1].approved += 1;
-      }).respond(201, '');
-      scope.approve(skillId);
-      expect(scope.skills[1].approved, 1);
-    });    
+      $httpBackend.expectPOST('/skills/approve/', {_id: skillId}).respond(201, '');
+      scope.approve(scope.skills[1]);
+      expect(scope.skills[1].approved).toBe(1);
+    });  
+
+    it('should delete skill', function() {
+      $httpBackend.flush();
+      var before = scope.skills.length;
+      $httpBackend.expectPOST('/skills/', {_id: 2, action: 'delete'}).respond(200, '');
+      scope.removeSkill(scope.skills[0], 0);
+      expect(scope.skills.length).toBe(before - 1);
+    }); 
+
+    it('should create skill', function() {
+      $httpBackend.flush();
+      var before = scope.skills.length;
+      var skill = {title: 'Python', desc: 'Love it!'};
+      skill['_id'] = 5;
+      $httpBackend.expectPOST('/skills/', {data: skill, action: 'new'}).respond(201, skill);
+      scope.addSkill(skill);      
+    }); 
   });
 
   describe('ExperienceCtrl', function() {

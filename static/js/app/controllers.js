@@ -103,7 +103,13 @@
       // Index of shown skills
       $scope.shownIdx = undefined;
 
-      $scope.skills = Skills.query();  
+      $scope.skills = Skills.query(); 
+
+      // New skill to be added
+      $scope.skill = {links:[]};
+
+      // New link
+      $scope.link = {};
 
       /**
        * Shows description by clicking skills title
@@ -118,6 +124,89 @@
           $scope.shownIdx = skillsIdx;
         }          
       } 
+
+      /**
+       * Edits skill title
+       * @param  {Object} skill skill object representation
+       * @param  {String} title new skill title
+       */
+      $scope.editSkill = function(skill) {
+        $scope.skill = skill;
+      }
+
+      /**
+       * Resets current scope value
+       */
+      $scope.reset = function() {
+        $scope.skill = {links:[]};
+      }
+
+      /**
+       * Adds new skill
+       */
+      $scope.addSkill = function(skill) {
+        if (!skill._id) {
+          $http.post('/skills/', {data: skill, action: 'new'})
+            .success(function(data) {
+              $scope.skills.push(data);
+              toaster.pop('success', 'Skill added', 'Skill with id ' + data._id + ' added.');
+            });                      
+        } else {
+          $http.post('/skills/', {data: skill, action: 'update'})
+            .success(function(data) {
+              $scope.skill = data;              
+              toaster.pop('success', 'Skill added', 'Skill with id ' + data._id + ' added.');
+            });
+          toaster.pop('success', 'Skill updated', 'Skill with id ' + $scope.skill._id + ' updated.');
+        }    
+        $scope.skill = {links:[]};
+      }
+
+      /**
+       * Force edit skill
+       * @param  {Objct} skill  skill to edit
+       */
+      $scope.editSkill = function(skill) {
+        $log.info('edit' + JSON.stringify(skill));
+        $scope.skill = skill;
+        $('.skill-form input')[0].focus();
+      }
+
+      /**
+       * Removes skills from skills list
+       * @param {Object} skill skill to be deleted
+       * @parm {int} index of skill
+       */
+      $scope.removeSkill = function(skill, idx) {        
+        $http.post('/skills/', {'_id': skill._id, 'action': 'delete'}).success(function() {
+          toaster.pop('info', 'Skill removed!', 'Skill ' + skill.title + ' was removed.');
+        }).error(function() {
+          toaster.pop('error', 'Error', 'Error removing skill ' + skill.title);
+        });
+        if ($scope.skill) {
+          $scope.skill = {links:[]};
+        }
+        $scope.skills.splice(idx, 1);        
+      }
+
+      /**
+       * Add new link to skill
+       * @param {Object} skill skill to add link to
+       */
+      $scope.addLink = function(skill) {        
+        skill.links.push($scope.link);
+        $scope.link = {};
+      }
+
+      /**
+       * Removes link from skill
+       * @param  {Object} skill skill to remove link from
+       * @param  {Object} link  link to delete
+       * @param  {int}    idx   idx in link array
+       */
+      $scope.removeLink = function(skill, link, idx) {
+        skill.links.splice(idx, 1);
+      }
 
       /**
        * Approves skill
