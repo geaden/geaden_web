@@ -13,7 +13,10 @@ before_script:
 - sudo ln -s `pwd`/google_appengine /usr/local/google_appengine
 - sudo ln -s `pwd`/google_appengine/dev_appserver.py /usr/local/bin/dev_appserver.py
 - npm install
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
 
 install: pip install -r requirements.txt
+
 script: ./run_tests.sh
-script: ./node_modules/karma/bin/karma start --browsers PhantomJS --single-run config/karma.conf.js
+script: ./node_modules/karma/bin/karma start --single-run --browswers PhantomJS config/karma.conf.js
