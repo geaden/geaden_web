@@ -33,10 +33,10 @@
     }
   });
 
-  app.directive('skillsTabs', function () {
+  app.directive('editTabs', function () {
     return {
       restrict: 'E',
-      controller: 'SkillsTabsCtrl',
+      controller: 'TabsCtrl',
       templateUrl: '/templates/skills-tabs.html'
     }
   });

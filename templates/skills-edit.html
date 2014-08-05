@@ -33,10 +33,13 @@
             <i class="fa fa-times-circle fa-x5"></i></a>
         </p>
         <fieldset class="form-group">
-          <label>Link url:</label>
-          <input id="skill-link-url-$index" class="link-url" type="text" ng-model="link.url" required />
-          <p style="padding: 10px 0;"><a class="skills-title" href="javascript:void(0)" ng-click="toggleAvailableLinks()">Available Links</a></p>
-          <ul class="dropdown" ng-show="showAvailableLinks && availableLinks.length">
+          <p class="skills-links" style="font-family: 'Roboto Condensed', sans-serif; margin-bottom: 10px;">
+            <a href="{{ link.url }}">{{ link.title }}</a>
+          </p>
+          <input class="typeahead" type="text" ng-model="q" ng-change="queryLink(link, q)" placeholder="Start typing..." />
+          <input id="skill-link-url-$index" class="link-url" type="text" ng-model="link.url" hidden required />
+          <!-- <p style="padding: 10px 0;"><a class="skills-title" href="javascript:void(0)" ng-click="toggleAvailableLinks(link)">Available Links</a></p> -->
+          <ul class="dropdown" ng-show="link.showAvailableLinks && availableLinks.length">
             <li ng-repeat="aLink in availableLinks">
               <a href="javascript:void(0)" ng-click="selectSkillLink(aLink, $parent.$index)">
                 <p>{{ aLink.title}}</p>

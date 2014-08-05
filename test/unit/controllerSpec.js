@@ -210,12 +210,12 @@ describe('Geaden controllers', function() {
     });
   });
 
- describe('SkillsTabsCtrl', function() {
+ describe('TabsCtrl', function() {
     var scope, ctrl;
 
     beforeEach(inject(function($rootScope, $controller) {      
       scope = $rootScope.$new();
-      ctrl = $controller('SkillsTabsCtrl', {$scope: scope});
+      ctrl = $controller('TabsCtrl', {$scope: scope});
     }));
 
     it('should create "skills tabs" model', function() {

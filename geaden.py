@@ -62,14 +62,6 @@ def date_handler(obj):
     return obj.isoformat() if hasattr(obj, 'isoformat') else obj
 
 
-class SkillsEditPageHandler(MainHandler):
-    """
-    Skills Editor Handler
-    """
-    def get(self):
-        self.render('skills.html')
-
-
 class LinksJSONHandler(webapp2.RequestHandler):
     """
     Links JSON Handler
@@ -96,6 +88,7 @@ class LinksJSONHandler(webapp2.RequestHandler):
             self.response.set_status(201)
         link.put()
         return self.response.out.write(json.dumps(link.to_dict()))
+
 
 class SkillsJSONHandler(webapp2.RequestHandler):
     """
@@ -165,6 +158,14 @@ class SkillsApproverHandler(webapp2.RequestHandler):
         self.response.set_status(201)
 
 
+class EditPageHandler(MainHandler):
+    """
+    Editor Handler
+    """
+    def get(self):
+        self.render('edit.html')
+
+
 class MainPage(MainHandler):
     """
     Main page handler
@@ -177,6 +178,6 @@ app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/skills/?', SkillsJSONHandler),
     ('/links/?', LinksJSONHandler),
-    ('/skills/edit', SkillsEditPageHandler),
+    ('/edit', EditPageHandler),
     ('/skills/approve/?', SkillsApproverHandler)
 ], debug=True)

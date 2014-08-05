@@ -14,7 +14,7 @@
     <link href="/static/css/pace-theme.css" rel="stylesheet" type="text/css" />
   </head>
   <body ng-controller="MyCtrl"> 
-    <img class="beta" src="/static/img/beta.png" alt="beta" />
+    <a href="/"><img class="beta" src="/static/img/beta.png" alt="beta" /></a>
     <toaster-container></toaster-container>     
     <header>       
     </header>            
@@ -26,12 +26,14 @@
     </a>
     </div>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    {% block ext_js %}{% endblock %}
+    {% block ext_js %}
+    <script data-require="bloodhound.js@*" data-semver="0.10.0" src="http://twitter.github.com/typeahead.js/releases/latest/bloodhound.js"></script>
+    {% endblock %}
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script>    
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular-resource.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular-animate.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/0.4.4/toaster.js"></script>
-    {% block ext_angular %}{% endblock %}
+    {% block ext_angular %}{% endblock %}    
     <script type="text/javascript" src="/static/js/app/app.js"></script>
     <script type="text/javascript" src="/static/js/app/controllers.js"></script>
     <script type="text/javascript" src="/static/js/app/services.js"></script>    

@@ -110,9 +110,9 @@ class PageTestCase(BaseTestCase):
         link = Link.get_by_id('http://www.foo.bar')
         self.assertEquals(link.title, 'Foo Bar')            
 
-    def testSkillsEditorHandler(self):
+    def testEditorHandler(self):
         load();
-        response = self.testapp.get('/skills/edit')
+        response = self.testapp.get('/edit')
         self.assertEquals(response.status_int, 200)
 
 

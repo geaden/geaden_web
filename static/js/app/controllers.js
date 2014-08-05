@@ -98,9 +98,10 @@
     '$scope', 
     'Skills',
     'Link',
-    '$http',
+    '$http',    
     'toaster', 
-    '$log', function ($scope, Skills, Link, $http, toaster, $log) {
+    '$timeout',
+    '$log', function ($scope, Skills, Link, $http, toaster, $timeout, $log) {
       // Index of shown skills
       $scope.shownIdx = undefined;
 
@@ -152,13 +153,15 @@
         $scope.skill = {links:[]};        
       }
 
-      $scope.showAvailableLinks = false;
-
       /**
        * Toggles available links visibility
        */
-      $scope.toggleAvailableLinks = function () {
-        $scope.showAvailableLinks = !$scope.showAvailableLinks;
+      $scope.toggleAvailableLinks = function (link) {
+        link.showAvailableLinks = !link.showAvailableLinks;
+        if (!link.showAvailableLinks) {
+          // Clean up link object
+          delete link['showAvailableLinks']
+        }
       }
 
       /**
@@ -214,6 +217,35 @@
        */
       $scope.removeSkillLink = function(skill, link, idx) {
         skill.links.splice(idx, 1);
+      }
+
+      // Query string for getting links
+      $scope.q = null;
+
+      var availableLinks = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('title'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        limit: 10,
+        remote: '/links',
+        prefetch: {
+          url: '/links'
+        }
+      });
+ 
+      // kicks off the loading/processing of `local` and `prefetch`
+      availableLinks.initialize();
+
+      $scope.queryLink = function (link, q) {
+        availableLinks.get(q, function(suggestions) {
+          $log.info(suggestions);
+          $scope.availableLinks = suggestions;
+          link.showAvailableLinks = true;            
+        });  
+        if (!q) {
+          link.showAvailableLinks = false;
+          // Clean up links
+          delete link['showAvailableLinks'];
+        }    
       }
 
       /**
@@ -294,7 +326,7 @@
         }
   }]);
 
-  geadenControllers.controller('SkillsTabsCtrl', [
+  geadenControllers.controller('TabsCtrl', [
       '$scope',
       '$log', function($scope, $log) {
         $scope.tabIndex = 0;
