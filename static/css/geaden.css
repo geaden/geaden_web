@@ -46,6 +46,10 @@ hr {
   display: none;
 }
 
+.small {
+  font-size: 0.6em;
+}
+
 .content {
   width: 50%;
   margin: 0 auto;
@@ -107,6 +111,27 @@ img.beta {
   top: 0;
   right: 0;
   z-index: 9999;
+}
+
+/** Dropdown **/
+.dropdown {
+  margin-top: 5px;
+  border-radius: 4px;
+  border: 1px solid #c0c0c0;
+  box-shadow: 0 0 2px #c0c0c0;
+}
+
+.dropdown li {
+  font-family: 'Roboto Condensed', sans-serif;
+  padding: 10px;
+}
+
+.dropdown li:hover {
+  background-color: #9999CF;
+}
+
+.dropdown li:hover a {  
+  color: #ffffff;
 }
 
 /** Info **/
@@ -235,6 +260,37 @@ a.skills-title {
 }
 /** End of skills **/
 
+/** Tabs **/
+#tabs .tab {
+  display: inline-block;
+  padding: 20px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  background-color: #ffffff;
+  margin-right: 10px;
+}
+
+#tabs .tab:hover {
+  background-color: #9999FF;
+}
+
+#tabs .tab:hover > a {
+  color: #ffffff;
+}
+
+#tabs .tab.active > a {
+  font-weight: 400;
+}
+
+#tabs .tab-content {
+  background-color: #ffffff;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-top-right-radius: 4px;
+  top: -15px;
+  padding: 20px;
+}
+
 /** Experience & education **/
 #experience, #education {
   display: block;
@@ -321,7 +377,7 @@ textarea {
 } 
    
 textarea { 
-  width: 600px; 
+  width: 90%; 
   height: 150px; 
   line-height: 1.5em; 
 } 
@@ -331,7 +387,8 @@ input:hover, textarea:hover,
 input:focus, textarea:focus { 
   border-color: #C9C9C9; 
 } 
-   
+ 
+.link-form label,  
 .skill-form label,
 .skill-form p.links { 
   display: block;
@@ -346,6 +403,7 @@ input:focus, textarea:focus {
   margin-bottom: 10px;
 }
    
+.link-submit input,
 .skill-submit input { 
   width: auto; 
   padding: 9px 15px; 
@@ -356,7 +414,7 @@ input:focus, textarea:focus {
 }
 
 .ng-invalid.ng-dirty {
-   border-color: #FA787E;
+  border-color: #FA787E;
 }
 
 .ng-valid.ng-dirty {

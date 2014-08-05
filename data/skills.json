@@ -5,30 +5,12 @@
         "approved": 0,
         "desc": "Started learning python as a course in university in 2007 completley felt in love with this language. Built some apps using Django, GAE, Flask. Use Python as a power tool for routines automation and big data analysis.",
         "links": [
-            {
-                "url": "http://spring-blog-stage.herokuapp.com/",
-                "title": "Django based blog"
-            },
-            {
-                "url": "http://kms-add.herokuapp.com/",
-                "title": "Knowledge Management System (in progress)"
-            },
-            {
-                "url": "http://dry-coast-3580.herokuapp.com/",
-                "title": "Argiculture machines web site (prototype)"
-            },
-            {
-                "url": "http://bookmarkit.geaden.com/",
-                "title": "Bookmark It! Easily manage your internet bookmarks"
-            },
-            {
-                "url": "http://www.github.com/geaden/",
-                "title": "My Github"
-            },
-            {
-                "url": "http://www.bitbucket.org/geaden/",
-                "title": "My Bitbucket"
-            }
+            "http://spring-blog-stage.herokuapp.com/",            
+            "http://kms-add.herokuapp.com/",
+            "http://dry-coast-3580.herokuapp.com/",
+            "http://bookmarkit.geaden.com/",
+            "http://www.github.com/geaden/",
+            "http://www.bitbucket.org/geaden/"
         ]
     },
     {
@@ -37,10 +19,7 @@
         "approved": 0,
         "desc": "JUnit, Netty, GAE, Android. I have less experience in Java than in Python, but nowdays preferebly use Java.",
         "links": [
-            {
-                "url": "http://www.github.com/geaden/",
-                "title": "My Github"
-            }
+            "http://www.github.com/geaden/"
         ]
     },
     {
@@ -55,15 +34,8 @@
         "approved": 0,
         "desc": "Continious integration is a crucial part in modern development. Jenkins, TeamCity, Travis.",
         "links": [
-            {
-                "url": "https://travis-ci.org/geaden/gae-handlers",
-                "title": "Travis configuration for GAE application"
-            },
-            {
-                "url": "https://travis-ci.org/geaden/bookmarkit",
-                "title": "Travis configuration with auto deploy to Heroku"
-            }
-
+            "https://travis-ci.org/geaden/gae-handlers/",
+            "https://travis-ci.org/geaden/bookmarkit/"
         ]
     }
 ] 

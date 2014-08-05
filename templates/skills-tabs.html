@@ -1,0 +1,9 @@
+<div id="tabs">
+  <div ng-repeat="tab in tabs" class="tab" ng-click="selectTab($index)" ng-class="{ active : currentTab($index) }"><a href="javascript:void(0)">{{ tab }}</a></div>
+  <div class="tab-content" id="skills" ng-show="currentTab(0)">
+  	<skills-edit></skills-edit>
+  </div>
+  <div class="tab-content" id="links" ng-show="currentTab(1)">
+  	<links-edit></links-edit>
+  </div>
+</div>

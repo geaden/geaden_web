@@ -13,7 +13,7 @@ import geaden
 
 from models import Skill, Link
 
-from load_data import load_skills
+from load_data import load
 
 
 class BaseTestCase(unittest.TestCase):
@@ -48,13 +48,12 @@ class PageTestCase(BaseTestCase):
         self.assertIn('{{ info.name }}', response.normal_body)
 
     def testSkillsHandler(self):
-        load_skills()
+        load()
         response = self.testapp.get('/skills')
         self.assertEquals(response.status_int, 200)
         self.assertEquals(response.content_type, 'application/json')
         data = json.loads(response.normal_body)
         self.assertEquals(4, len(data))
-        print data
         # Approve skill
         skill = Skill(title="Math").put()
         response = self.testapp.post_json('/skills/approve/', {'_id': skill.id()})
@@ -71,7 +70,7 @@ class PageTestCase(BaseTestCase):
                     'links': [
                         {
                             'url': 'http://www.github.com',
-                            'title': 'Github'
+                            'title': 'My Github'                            
                         }
                     ]
                 }                
@@ -89,8 +88,30 @@ class PageTestCase(BaseTestCase):
         self.assertEquals(response.status_int, 200)
         self.assertEquals(before - 1, len(Skill.all()))
 
+    def testLinksHandler(self):
+        load()
+        response = self.testapp.get('/links')
+        self.assertEquals(response.status_int, 200)
+        self.assertEquals(response.content_type, "application/json")
+        data = json.loads(response.normal_body)
+        self.assertEquals(len(data), 8)        
+        # create link
+        before = len(Link.query().fetch())
+        response = self.testapp.post_json('/links', {'title': 'Foo',
+            'url': 'http://www.foo.bar'})
+        self.assertEquals(response.status_int, 201)
+        self.assertEquals(len(Link.query().fetch()), before + 1)
+        # Update link
+        response = self.testapp.post_json('/links', {'title': 'Foo Bar',
+            'url': 'http://www.foo.bar'});
+        self.assertEquals(response.status_int, 200)
+        # Quantaty of links doesn't change
+        self.assertEquals(len(Link.query().fetch()), before + 1)
+        link = Link.get_by_id('http://www.foo.bar')
+        self.assertEquals(link.title, 'Foo Bar')            
+
     def testSkillsEditorHandler(self):
-        load_skills();
+        load();
         response = self.testapp.get('/skills/edit')
         self.assertEquals(response.status_int, 200)
 
@@ -100,11 +121,11 @@ class ModelsTestCase(BaseTestCase):
     Models Test Case
     """
     def testSkillModel(self):             
-        skill = Skill(title="Python", desc="Cool", 
-            links=[Link(title='Github', url='http://www.github.com')])
+        load()
+        skill = Skill(title='Python', desc='Cool', 
+            links=['http://www.github.com/'])
         skill.approve()
-        self.assertEquals(skill.approved, 1)
-        load_skills()
+        self.assertEquals(skill.approved, 1)        
         skills = Skill.all()        
         self.assertEquals(len(skills), 4)
         s_key = skill.put()
@@ -114,15 +135,20 @@ class ModelsTestCase(BaseTestCase):
         self.assertEquals(skill.id, s_key.id())
 
     def testLinkModel(self):
-        link = Link(url="http://www.github.com",
-            title="My Github")
-        link.put()
-        print link.to_dict()
+        link = Link(id='http://www.github.com/', title='My Github')
+        Link(id='http://www.bitbucket.com/',
+            title='My bitbucket')
+        link_key = link.put()
+        self.assertEquals(link_key.id(), 'http://www.github.com/')
+        # Link queries
+        link = Link.get_by_id('http://www.github.com/')
+        self.assertEquals(link.title, 'My Github')
 
     def testDeleteSkill(self):
         skill = Skill(title='foo').put()
         s = Skill.get(skill.id())
-        s.key.delete()
+        s.enabled = False
+        s.put()
         self.assertEquals(0, len(Skill.all()))
 
 

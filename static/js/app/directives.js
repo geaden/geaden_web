@@ -25,6 +25,22 @@
     }
   });
 
+  app.directive('linksEdit', function () {
+    return {
+      restrict: 'E',
+      templateUrl: '/templates/links-edit.html',
+      controller: 'LinksCtrl'
+    }
+  });
+
+  app.directive('skillsTabs', function () {
+    return {
+      restrict: 'E',
+      controller: 'SkillsTabsCtrl',
+      templateUrl: '/templates/skills-tabs.html'
+    }
+  });
+
   app.directive("experienceList", ['$log', '$http', function ($log, $http) {
     return {
       restrict: 'E',

@@ -1,0 +1,34 @@
+[
+    {
+        "url": "http://spring-blog-stage.herokuapp.com/",
+        "title": "Django based blog"
+    },
+    {
+        "url": "http://kms-add.herokuapp.com/",
+        "title": "Knowledge Management System (in progress)"
+    },
+    {
+        "url": "http://dry-coast-3580.herokuapp.com/",
+        "title": "Argiculture machines web site (prototype)"
+    },
+    {
+        "url": "http://bookmarkit.geaden.com/",
+        "title": "Bookmark It! Easily manage your internet bookmarks"
+    },
+    {
+        "url": "http://www.github.com/geaden/",
+        "title": "My Github"
+    },
+    {
+        "url": "http://www.bitbucket.org/geaden/",
+        "title": "My Bitbucket"
+    },
+    {
+        "url": "https://travis-ci.org/geaden/gae-handlers/",
+        "title": "Travis configuration for GAE application"
+    },
+    {
+        "url": "https://travis-ci.org/geaden/bookmarkit/",
+        "title": "Travis configuration with auto deploy to Heroku"
+    }
+]

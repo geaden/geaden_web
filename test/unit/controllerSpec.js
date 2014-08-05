@@ -144,6 +144,35 @@ describe('Geaden controllers', function() {
     }); 
   });
 
+  describe('LinksCtrl', function() {
+    var scope, ctrl, $httpBackend;
+
+    beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
+      $httpBackend = _$httpBackend_;
+      $httpBackend.expectGET('/links').
+        respond(
+          [
+            {
+              url: 'http://www.github.com/geaden',
+              title: 'Github'
+            },
+            {
+              url: 'http://www.bitbucket.com/geaden',
+              title: 'Bitbucket'
+            }          
+          ]);
+      scope = $rootScope.$new();
+      ctrl = $controller('LinksCtrl', {$scope: scope});
+    }));
+
+    it('should create "links" model', function() {
+      expect(scope.links.length).toBe(0);
+      $httpBackend.flush();
+      expect(scope.links.length).toBe(2);
+      expect(scope.links[0].url).toBe('http://www.github.com/geaden');
+    });
+  });
+
   describe('ExperienceCtrl', function() {
     var scope, ctrl, $httpBackend;
 
@@ -178,6 +207,19 @@ describe('Geaden controllers', function() {
       $httpBackend.flush();
       expect(scope.experienceList.length).toBe(2);
       expect(scope.experienceList[0].company).toBe('Foo');
+    });
+  });
+
+ describe('SkillsTabsCtrl', function() {
+    var scope, ctrl;
+
+    beforeEach(inject(function($rootScope, $controller) {      
+      scope = $rootScope.$new();
+      ctrl = $controller('SkillsTabsCtrl', {$scope: scope});
+    }));
+
+    it('should create "skills tabs" model', function() {
+      expect(scope.tabs.length).toBe(2);      
     });
   });
 

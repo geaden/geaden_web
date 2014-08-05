@@ -26,10 +26,12 @@
     </a>
     </div>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    {% block ext_js %}{% endblock %}
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script>    
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular-resource.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular-animate.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/0.4.4/toaster.js"></script>
+    {% block ext_angular %}{% endblock %}
     <script type="text/javascript" src="/static/js/app/app.js"></script>
     <script type="text/javascript" src="/static/js/app/controllers.js"></script>
     <script type="text/javascript" src="/static/js/app/services.js"></script>    

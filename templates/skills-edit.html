@@ -24,27 +24,32 @@
     </fieldset>
     <fieldset class="form-group" ng-show="skill.title">
       <p class="links">Links:
-        <a href="javascript:void(0);" ng-click="addLink(skill)">
+        <a href="javascript:void(0);" ng-click="newSkillLink(skill)">
           <i class="fa fa-plus-circle fa-x5"></i></a>
       </p>      
       <div class="skill-link" ng-repeat="link in skill.links">
         <p class="right">
-          <a href="javascript:void(0);" ng-click="removeLink(skill, link, $index)">
+          <a href="javascript:void(0);" ng-click="removeSkillLink(skill, link, $index)">
             <i class="fa fa-times-circle fa-x5"></i></a>
         </p>
         <fieldset class="form-group">
-          <label>Title:</label>
-          <input id="skill-link-title-$index" type="text" ng-model="link.title" required/>
-        </fieldset>
-        <fieldset class="form-group">
-          <label for="skill-link-url-$index">Url:</label>
-          <input id="skill-link-$index" type="text" ng-model="link.url" required/>
-        </fieldset>              
+          <label>Link url:</label>
+          <input id="skill-link-url-$index" class="link-url" type="text" ng-model="link.url" required />
+          <p style="padding: 10px 0;"><a class="skills-title" href="javascript:void(0)" ng-click="toggleAvailableLinks()">Available Links</a></p>
+          <ul class="dropdown" ng-show="showAvailableLinks && availableLinks.length">
+            <li ng-repeat="aLink in availableLinks">
+              <a href="javascript:void(0)" ng-click="selectSkillLink(aLink, $parent.$index)">
+                <p>{{ aLink.title}}</p>
+                <p class="small">{{ aLink.url }}</p>
+              </a>
+            </li>
+          </ul>
+        </fieldset>             
       </div>
     </fieldset>    
     <fieldset class="form-group">
       <input type="submit" class="skill-submit" value="{{ !skill._id ? 'Submit Skill' : 'Update Skill' }}" />
-      <button type="button" class="btn" ng-click="reset()">Reset form</button>
+      <button type="button" class="btn" ng-click="resetSkill()">Reset form</button>
     </fieldset>
   </form>
   <section ng-repeat="skill in skills">

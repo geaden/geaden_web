@@ -18,6 +18,13 @@
       });
   }]);
 
+  geadenServices.factory('Link', ['$resource',
+    function($resource){
+      return $resource('/links', {}, {
+        query: {method: 'GET', isArray: true}
+      });
+  }]);
+
   geadenServices.factory('Skills', ['$resource',
     function($resource){
       return $resource('/skills', {}, {

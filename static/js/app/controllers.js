@@ -97,9 +97,10 @@
   geadenControllers.controller('SkillsCtrl', [
     '$scope', 
     'Skills',
+    'Link',
     '$http',
     'toaster', 
-    '$log', function ($scope, Skills, $http, toaster, $log) {
+    '$log', function ($scope, Skills, Link, $http, toaster, $log) {
       // Index of shown skills
       $scope.shownIdx = undefined;
 
@@ -116,7 +117,6 @@
        * @param  {int} skills index of selected skills
        */
       $scope.showDescription = function (skillsIdx) {
-        $log.info('Show description'); 
         if ($scope.isShown(skillsIdx)) {
           // Hide it
           $scope.shownIdx = undefined;
@@ -126,18 +126,9 @@
       } 
 
       /**
-       * Edits skill title
-       * @param  {Object} skill skill object representation
-       * @param  {String} title new skill title
-       */
-      $scope.editSkill = function(skill) {
-        $scope.skill = skill;
-      }
-
-      /**
        * Resets current scope value
        */
-      $scope.reset = function() {
+      $scope.resetSkill = function() {
         $scope.skill = {links:[]};
       }
 
@@ -153,12 +144,21 @@
             });                      
         } else {
           $http.post('/skills/', {data: skill, action: 'update'})
-            .success(function(data) {
-              $scope.skill = data;
-            });
-          toaster.pop('success', 'Skill updated', 'Skill with id ' + $scope.skill._id + ' updated.');
-        }    
-        $scope.skill = {links:[]};
+            .success(function(data) {  
+              skill = data;            
+              toaster.pop('success', 'Skill updated', 'Skill with id ' + data._id + ' updated.');              
+          });          
+        }
+        $scope.skill = {links:[]};        
+      }
+
+      $scope.showAvailableLinks = false;
+
+      /**
+       * Toggles available links visibility
+       */
+      $scope.toggleAvailableLinks = function () {
+        $scope.showAvailableLinks = !$scope.showAvailableLinks;
       }
 
       /**
@@ -166,7 +166,7 @@
        * @param  {Objct} skill  skill to edit
        */
       $scope.editSkill = function(skill) {
-        $log.info('edit' + JSON.stringify(skill));
+        $scope.availableLinks = Link.query();
         $scope.skill = skill;
         $('.skill-form input')[0].focus();
       }
@@ -182,19 +182,28 @@
         }).error(function() {
           toaster.pop('error', 'Error', 'Error removing skill ' + skill.title);
         });
-        if ($scope.skill) {
-          $scope.skill = {links:[]};
-        }
+        $scope.skill = {links:[]};
         $scope.skills.splice(idx, 1);        
+      }      
+
+      /**
+       * Selects link from available
+       * @param  {Object} link link to be selected
+       * @param  {int} idx  skills links index
+       */
+      $scope.selectSkillLink = function(link, idx) {
+        $scope.skill.links[idx] = link;
       }
 
       /**
        * Add new link to skill
        * @param {Object} skill skill to add link to
        */
-      $scope.addLink = function(skill) {        
+      $scope.newSkillLink = function(skill) { 
+        $scope.availableLinks = Link.query();       
         skill.links.push($scope.link);
         $scope.link = {};
+        $('.link-url').on
       }
 
       /**
@@ -203,7 +212,7 @@
        * @param  {Object} link  link to delete
        * @param  {int}    idx   idx in link array
        */
-      $scope.removeLink = function(skill, link, idx) {
+      $scope.removeSkillLink = function(skill, link, idx) {
         skill.links.splice(idx, 1);
       }
 
@@ -227,6 +236,88 @@
         return $scope.shownIdx === skillsIdx;
       }
   }]);
+
+  geadenControllers.controller('LinksCtrl', [
+      '$scope',
+      'Link',
+      '$http',
+      'toaster',
+      '$log', function($scope, Link, $http, toaster, $log) {
+        $scope.link = {};
+
+        $scope.links = Link.query();
+
+        /**
+         * Creates new link
+         * @param  {Object} link the link to be created      
+         */
+        $scope.newLink = function (link) {
+          var index = $scope.links.map(function(l) {
+            return l.url;
+          }).indexOf(link.url);
+          var action = 'updated'
+          if (index == -1) {
+              action = 'added'              
+          }
+          $http.post('/links', link).success(function(data) {
+            if (action == 'added') {
+              $scope.links.push(link);
+            }
+            toaster.pop('success', 'Link ' + action, 'Link ' + link.url + ' ' + action);
+          }).error(function(error) {
+            toaster.pop('error', 'Error: ' + error);
+          })
+          $scope.link = {};
+        }
+
+        /**
+         * Start editing link
+         * @param  {Object} link link to edit
+         */
+        $scope.editLink = function (link) {
+          $scope.link = link;
+          $('.link-form input')[0].focus();
+        }
+
+        /**
+         * Removes link
+         * @param  {Object} link the link to be deleted
+         * @param  {int} idx  index of link
+         */
+        $scope.removeLink = function (link, idx) {
+          $scope.links.splice(idx, 1);
+          toaster.pop('info', 'Link removed', 'Link ' + link.url + ' removed.');
+        }
+
+        $scope.resetLink = function () {
+          $scope.link = {};
+        }
+  }]);
+
+  geadenControllers.controller('SkillsTabsCtrl', [
+      '$scope',
+      '$log', function($scope, $log) {
+        $scope.tabIndex = 0;
+        $scope.tabs = ['Skills', 'Links'];
+
+        /**
+         * Selectes tab
+         * @param  {ind} idx tab index
+         */
+        $scope.selectTab = function (idx) {
+          $scope.tabIndex = idx;
+        }
+
+        /**
+         * Is tab is current
+         * @param  {int} idx tab index to check
+         * @return {Boolean} whether tab is current
+         */
+        $scope.currentTab = function (idx) {
+          return $scope.tabIndex === idx;
+        }
+      }
+    ])
 
   geadenControllers.controller('EducationCtrl', [
     '$scope', 

@@ -1,0 +1,34 @@
+<!-- Live Preview -->
+<p ng-show="link.title || link.url" class="skills-links">
+  <a href="{{ link.url }}" class="skills-links">{{ link.title}}</a>
+</p>
+<!-- Link Form -->
+<form class="link-form" name="linkForm" ng-submit="linkForm.$valid && newLink(link)" novalidate>
+<!--  Link Form -->
+  <h3>Add Link</h3>
+  <fieldset class="form-group">
+    <label for="link-title">Link title: </label>
+    <input id="link-title" ng-model="link.title" type="text" class="form-control" placeholder="My Github" required/>
+  </fieldset>
+  <fieldset class="form-group">
+    <label for="link-url">Url: </label>
+    <input id="link-url" type="text" ng-model="link.url" class="form-control" placeholder="http://www.github.com/" required />
+  </fieldset>   
+  <fieldset class="form-group">
+    <input type="submit" class="link-submit" value="Submit Link"/>
+    <button type="button" class="btn" ng-click="resetLink()">Reset form</button>
+  </fieldset>
+</form>
+<ul>
+  <li ng-repeat="link in links" class="skill-link">
+    <p class="right">      
+      <a href="javascript:void(0);" class="skill-control" ng-click="editLink(link)">
+        <i class="fa fa-pencil"></i></a>
+      <a href="javascript:void(0);" class="skill-control" ng-click="removeLink(link, $index)">
+        <i class="fa fa-trash-o"></i></a>
+    </p>
+    <p class="skills-links">
+      <a href="{{ link.url }}">{{ link.title}}</a>
+    </p>
+  </li> 
+</ul>
