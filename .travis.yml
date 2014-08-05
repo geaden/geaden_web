@@ -16,4 +16,4 @@ before_script:
 
 install: pip install -r requirements.txt
 script: ./run_tests.sh
-script: karma start --browsers Phantom.js --single-run config/karma.conf.js
+script: ./node_modules/.bin/karma start --browsers Phantom.js --single-run config/karma.conf.js
