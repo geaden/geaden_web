@@ -8,6 +8,11 @@ class Link(ndb.Model):
     url = ndb.StringProperty()
     title = ndb.StringProperty()
 
+    def to_dict(self):
+        d = super(Link, self).to_dict()
+        d.update({'_id': self.key.id()})
+        return d
+
 
 class Skill(ndb.Model):
     """Models an individual Skill entry with title and desc, approved and link."""
@@ -22,6 +27,11 @@ class Skill(ndb.Model):
         Approves skill
         """
         self.approved += 1
+
+    def to_dict(self):
+        d = super(Skill, self).to_dict()
+        d.update({'_id': self.key.id()})
+        return d
 
     @classmethod
     def delete(cls, skill_id):

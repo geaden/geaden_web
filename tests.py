@@ -54,6 +54,7 @@ class PageTestCase(BaseTestCase):
         self.assertEquals(response.content_type, 'application/json')
         data = json.loads(response.normal_body)
         self.assertEquals(4, len(data))
+        print data
         # Approve skill
         skill = Skill(title="Math").put()
         response = self.testapp.post_json('/skills/approve/', {'_id': skill.id()})
@@ -111,6 +112,12 @@ class ModelsTestCase(BaseTestCase):
         skill.put()
         s = Skill.get(skill.id)
         self.assertEquals(skill.id, s_key.id())
+
+    def testLinkModel(self):
+        link = Link(url="http://www.github.com",
+            title="My Github")
+        link.put()
+        print link.to_dict()
 
     def testDeleteSkill(self):
         skill = Skill(title='foo').put()

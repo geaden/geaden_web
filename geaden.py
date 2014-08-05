@@ -78,10 +78,44 @@ class SkillsJSONHandler(webapp2.RequestHandler):
         self.response.headers.add_header("Content-type", "application/json")
         resp = []
         for skill in Skill.all():
-            skill_dict = skill.to_dict();
-            skill_dict.update({'_id': skill.key.id()})
+            skill_dict = skill.to_dict();            
             resp.append(skill_dict)      
         self.response.out.write(json.dumps(resp, default=date_handler, indent=4))
+
+    def insert_or_update(self, data):
+        """
+        Inserts or updates skill
+        """
+        self.response.headers.add_header('Content-type', 'application/json')
+        if 'data' in data:
+            skill_data = data['data']
+            status = 201
+            if '_id' in skill_data:
+                # update
+                skill = Skill.get(skill_data['_id'])
+                skill.title = skill_data['title']
+                skill.desc = skill_data['desc']
+                if 'links' in skill_data:                
+                    for link in skill_data['links']:
+                        if '_id' in link:
+                            link = Link.get_by_id(link['_id'])
+                        else:
+                            link = Link(title=link['title'], url=link['url'])
+                status = 200              
+            else:
+                # insert
+                skill = Skill(title=skill_data['title'], 
+                    desc=skill_data['desc']) 
+                if 'links' in skill_data:
+                    skill.links = [Link(title=link['title'],
+                        url=link['url']) for link in skill_data['links']]
+            skill_key = skill.put();
+            skill_dict = skill.to_dict()
+            skill_dict.update({'_id': skill_key.id()})
+            self.response.set_status(status)
+            return self.response.out.write(
+                json.dumps(skill_dict, default=date_handler, indent=4))
+        return self.error(400)
 
     def post(self, *args, **kwargs):
         allowed_actions = ['delete', 'update', 'new'];        
@@ -94,8 +128,7 @@ class SkillsJSONHandler(webapp2.RequestHandler):
                 self.response.set_status(200)
                 return  
             if action == 'new':
-                if 'data' in data:
-                    self.response.headers.add_header('Content-type', 'application/json')
+                if 'data' in data:                    
                     skill_data = data['data']
                     skill = Skill(title=skill_data['title'], 
                         desc=skill_data['desc']) 
@@ -104,7 +137,6 @@ class SkillsJSONHandler(webapp2.RequestHandler):
                             url=link['url']) for link in skill_data['links']]
                     skill_key = skill.put();
                     skill_dict = skill.to_dict()
-                    skill_dict.update({'_id': skill_key.id()})
                     self.response.set_status(201)
                     return self.response.out.write(
                         json.dumps(skill_dict, default=date_handler, indent=4))
