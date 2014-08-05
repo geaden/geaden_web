@@ -20,4 +20,4 @@ install: pip install -r requirements.txt
 
 script:
 - ./run_tests.sh
-- ./node_modules/karma/bin/karma start --single-run --browswers PhantomJS config/karma.conf.js
+- ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS config/karma.conf.js
