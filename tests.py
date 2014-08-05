@@ -41,6 +41,8 @@ class PageTestCase(BaseTestCase):
         super(PageTestCase, self).setUp()
         # Wrap the app with WebTest’s TestApp.
         self.testapp = webtest.TestApp(geaden.app)
+        self.testbed.init_mail_stub()
+        self.mail_stub = self.testbed.get_stub(testbed.MAIL_SERVICE_NAME)
 
     def testMainPage(self):
         response = self.testapp.get('/')
@@ -115,6 +117,19 @@ class PageTestCase(BaseTestCase):
         response = self.testapp.get('/edit')
         self.assertEquals(response.status_int, 200)
 
+    def testContacHandler(self):
+        response = self.testapp.post_json('/email',
+            {'email': 'test@test.com',
+             'subject': 'foo',
+             'message': 'bar'})
+        self.assertEquals(response.status_int, 200)
+        self.assertEquals(response.content_type, 'application/json')        
+        messages = self.mail_stub.get_sent_messages(sender=geaden.DEFAULT_EMAIL_ADDRESS)
+        self.assertEqual(1, len(messages))
+        self.assertIn('test@test.com', messages[0].body.decode())
+        self.assertIn('<h1>foo</h1>', messages[0].html.decode())
+        self.assertEqual(geaden.DEFAULT_EMAIL_ADDRESS, messages[0].sender)
+
 
 class ModelsTestCase(BaseTestCase):
     """
@@ -150,5 +165,3 @@ class ModelsTestCase(BaseTestCase):
         s.enabled = False
         s.put()
         self.assertEquals(0, len(Skill.all()))
-
-

@@ -1,0 +1,12 @@
+{
+  "name": "geaden-web",
+  "description": "Geaden web site source code",
+  "author": "Gennady Denisov <denisovgena@gmail.com.com>",
+  "devDependencies": {
+    "karma": "^0.12.19",    
+    "karma-phantomjs-launcher": "^0.1.4"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/karma start --browsers Firefox --single-run config/karma.conf.js"
+  }
+}

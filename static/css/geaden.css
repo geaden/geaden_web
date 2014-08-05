@@ -15,6 +15,7 @@ html, body {
 
 body {
   background-image:url('/static/img/bg.jpg');
+  height: 100%;
 }
 
 header {
@@ -51,7 +52,9 @@ hr {
 }
 
 .content {
-  width: 50%;
+  width: 60%;
+  height: 100%;
+  min-height:100%;
   margin: 0 auto;
   font-family: 'Roboto', sans-serif; 
   font-weight: 300;
@@ -350,6 +353,34 @@ a.skills-title {
 }
 /** End Education & Experience **/
 
+/** Contacts **/
+#contacts ul {
+  text-shadow: 0 0 5px #c0c0c0;
+  width: 100%;
+  margin: 0 auto;
+}
+
+#contacts i {
+  font-size: 2em;
+}
+
+#contacts ul p {
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+#contacts ul li {
+  display: inline-block;
+  text-align: center;
+  padding: 15px;
+  border-right: 1px solid #c0c0c0;
+}
+
+#contacts ul li:last-of-type {
+  border: none;
+}
+
+/** End Contacts **/
+
 /** Skills Edit **/
 #skills-edit section {
   margin: 20px 0;
@@ -374,7 +405,7 @@ a.skills-title {
 
 /** Form **/
 fieldset {
-  padding: 15px 0;
+  padding: 8px 0;
 }
 
 .btn,
@@ -405,6 +436,7 @@ input:focus, textarea:focus {
   border-color: #C9C9C9; 
 } 
  
+.email-form label,
 .link-form label,  
 .skill-form label,
 .skill-form p.links { 
@@ -420,6 +452,7 @@ input:focus, textarea:focus {
   margin-bottom: 10px;
 }
    
+.email-submit input,
 .link-submit input,
 .skill-submit input { 
   width: auto; 
@@ -478,35 +511,16 @@ input:focus, textarea:focus {
   font-family: 'Roboto Condensed', sans-serif;
   line-height: 1.2em;
 }
+/** End Toaster **/
 
-/** Dialog box **/
-.dialog-box {
-  font-family: 'Roboto Condensed', sans-serif;
-  position: fixed;  
-  top: 50%;
-  left: 50%; 
-  width: 200px;
-  min-height: 200px;
-  transform: translate(-50%, -50%);
-  border-radius: 20px;
-  background-color: #ffffff;
-  padding: 15px;
-  box-shadow: 0 0 10px #c0c0c0;
-  transition: all 0.4s ease; /* prefix me */
-  z-index: 999999;
-}
-
-.dialog-box button {
-  padding: 10px;
-  border: 1px solid #c0c0c0;
-  border-radius: 3px;
-  background-color: #ffffff;
-  box-shadow: 0 0 10px inset #c0c0c0;
-}
-
-.dialogBoxOpened {
-  /* Blur and de-color */
-  -webkit-filter: blur(5px) grayscale(50%);
+/** Footer **/
+.footer {
+  border-top: 1px solid #c9c9c9;  
+  padding-top: 10px;
+  width: 100%;
+  margin: 10px 0 auto;
+  line-height: 1.5em;
+  font-size: 0.6em;
 }
 
 /* Smartphones (portrait and landscape) ----------- */
@@ -514,7 +528,7 @@ input:focus, textarea:focus {
 and (min-device-width : 320px) 
 and (max-device-width : 480px) {
   .content {
-    width: auto;
+    width: auto;    
   }
 
   #info {
@@ -545,4 +559,3 @@ and (max-device-width : 480px) {
     display: block;   
   }
 }
-

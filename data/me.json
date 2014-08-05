@@ -1,6 +1,6 @@
 {
 	"name": "Gennady Denisov",
 	"pic": "/static/img/me.jpg",
-	"age": 27,
+	"birthDay": "1987-05-11",
 	"location": "Moscow, Russia"
 }

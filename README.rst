@@ -1,6 +1,10 @@
-Official web site
-=================
+Welcome!
+========
 
-Gennady Denisov's official web site source code.
+.. image:: https://travis-ci.org/geaden/geaden_web.svg?branch=master
+    :target: https://travis-ci.org/geaden/geaden_web
 
-Feel free to copy or distribute it as it's not under any license at all.
+This is my official web site source code `Geaden 
+<http://www.geaden.com/>`_.
+
+Feel free to distribute or use ;)

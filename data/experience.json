@@ -21,7 +21,7 @@
         "url": "http://www.rls.ru/",
         "company": "Roslab System",
         "position": "Python Developer",
-        "summary": "Developing REST API for laboratory system, CouchDB, Flask"
+        "summary": "Developed REST API for laboratory system using Python, CouchDB, Flask"
     },
     {
         "start": "April, 2008",
@@ -29,6 +29,6 @@
         "url": "http://www.adandzo.com",
         "company": "ADANDZO",
         "position": "System administrator, IT Consultant, Django Developer",
-        "summary": "Manage company IT infrastructure, Python automation, internal company start up developer"
+        "summary": "Manage company IT infrastructure, automate sys admin routins with python scripts, Windows administration as well as Linux, internal company start up developer"
     }
 ]

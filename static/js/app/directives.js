@@ -49,6 +49,14 @@
     }
   }]);
 
+  app.directive("contactsList", function () {
+    return {
+      restrict: 'E',
+      templateUrl: '/templates/contacts-list.html',
+      controller: 'ContactsCtrl'
+    }
+  });
+
   app.directive("educationList", ['$log', '$http', function ($log, $http) {
     return {
       restrict: 'E',

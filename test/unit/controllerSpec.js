@@ -18,7 +18,7 @@ describe('Geaden controllers', function() {
     beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
       $httpBackend = _$httpBackend_;
       $httpBackend.expectGET('/data/me.json').
-        respond({name: 'John Doe', age: 27, pic: '/foo/bar.png'});
+        respond({name: 'John Doe', birthDay: '1987-05-10', pic: '/foo/bar.png'});
       scope = $rootScope.$new();
       ctrl = $controller('MyCtrl', {$scope: scope});
     }));
@@ -27,7 +27,8 @@ describe('Geaden controllers', function() {
       expect(scope.info).toEqualData({});
       $httpBackend.flush();    
       expect(scope.info.name).toBe('John Doe');
-      expect(scope.info.age).toBe(27);
+      var age = scope.age()
+      expect(age).toBe(27);
       expect(scope.info.pic).toBe('/foo/bar.png');
     });
   });
@@ -249,6 +250,35 @@ describe('Geaden controllers', function() {
       $httpBackend.flush();
       expect(scope.educationList.length).toBe(1);
       expect(scope.educationList[0].school).toBe('Foo');
+    });
+  });
+
+  describe('ContactsCtrl', function() {
+    var scope, ctrl, $httpBackend;
+
+    beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
+      $httpBackend = _$httpBackend_;
+      $httpBackend.expectGET('/data/contacts.json').
+        respond(
+          [
+            {
+              url: 'http://www.google.com', 
+              icon: 'google'              
+            },
+            {
+              url: 'http://www.google.com', 
+              icon: 'google'              
+            }                                
+          ]);
+      scope = $rootScope.$new();
+      ctrl = $controller('ContactsCtrl', {$scope: scope});
+    }));
+
+    it('should create "eductiona" model', function() {
+      expect(scope.contacts.length).toBe(0);
+      $httpBackend.flush();
+      expect(scope.contacts.length).toBe(2);
+      expect(scope.contacts[0].icon).toBe('google');
     });
   });
 });

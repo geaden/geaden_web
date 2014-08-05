@@ -1,0 +1,22 @@
+[
+    {
+        "url": "https://ru.linkedin.com/in/denisovgena/",
+        "icon": "linkedin",
+        "title": "Linkedin"
+    },
+    {
+        "url": "https://plus.google.com/+GennadyDenisov/posts",
+        "title": "Google+",
+        "icon": "google-plus"
+    },
+    {
+        "url": "https://www.facebook.com/geaden",
+        "title": "Facebook",
+        "icon": "facebook"
+    },
+    {
+        "url": "https://www.twitter.com/geaden",
+        "title": "Twitter",
+        "icon": "twitter"
+    }
+]

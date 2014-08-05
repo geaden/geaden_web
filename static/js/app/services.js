@@ -39,6 +39,13 @@
       });
   }]);
 
+  geadenServices.factory('Contact', ['$resource',
+    function($resource) {
+      return $resource('/data/contacts.json', {}, {
+        query: {method: 'GET', isArray: true}
+      });
+  }]);
+
   geadenServices.factory('Education', ['$resource',
     function($resource) {
       return $resource('/data/education.json', {}, {

@@ -17,6 +17,7 @@ module.exports = function(config) {
     files: [
       'static/js/lib/jquery.min.js',
       'static/js/lib/bloodhound.js',
+      'static/js/lib/moment.min.js',
       'static/js/lib/angular.js',
       'static/js/lib/angular-*.js',
       'static/js/lib/toaster.js',
@@ -59,6 +60,11 @@ module.exports = function(config) {
 
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
+
+    plugins: [
+      'karma-jasmine', 
+      'karma-phantomjs-launcher'
+    ],
 
 
     // start these browsers

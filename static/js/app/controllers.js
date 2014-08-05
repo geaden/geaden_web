@@ -2,30 +2,42 @@
 
 /* Controllers */
 (function () {
-  var geadenControllers = angular.module('geadenControllers', ['geadenServices', 'toaster']);
+  var geadenControllers = angular.module('geadenControllers', ['geadenServices', 'toaster', 'angularMoment']);
 
-  geadenControllers.controller('MyCtrl', ['$scope', 'Me', '$log', function ($scope, Me, $log) {  
-    $scope.info = Me.query();    
+  geadenControllers.controller('MyCtrl', 
+    [
+      '$scope', 
+      'Me',
+      'moment',
+      '$log', 
+    function ($scope, Me, moment, $log) {  
+      $scope.info = Me.query();
 
-    $(window).scroll(function() {
-      if ($(this).scrollTop() >= 100) {   // If page is scrolled more than 50px
-        $('#up').fadeIn(400);               // Fade in the arrow
-      } else {
-        $('#up').fadeOut(400);              // Else fade out the arrow
+      $scope.age = function () {
+        var bday = new Date($scope.info.birthDay);
+        var age = moment().diff(moment(bday));
+        return 27;
       }
-    });
 
-    $('#up').click(function() {             // When arrow is clicked
-      $('body,html').animate({
-        scrollTop : 0                       // Scroll to top of body
-      }, 500);
-    });
+      $(window).scroll(function() {
+        if ($(this).scrollTop() >= 100) {     // If page is scrolled more than 50px
+          $('#up').fadeIn(400);               // Fade in the arrow
+        } else {
+          $('#up').fadeOut(400);              // Else fade out the arrow
+        }
+      });
 
-    // Show content when loading finished
-    Pace.once('done', function() {
-      $('.content').fadeIn(1000);
-      $('.content').removeClass('loading');
-    });  
+      $('#up').click(function() {             // When arrow is clicked
+        $('body,html').animate({
+          scrollTop : 0                       // Scroll to top of body
+        }, 500);
+      });
+
+      // Show content when loading finished
+      Pace.once('done', function() {
+        $('.content').fadeIn(1000);
+        $('.content').removeClass('loading');
+      });  
   }]);
 
   geadenControllers.controller('QuotesCtrl', [
@@ -364,4 +376,38 @@
     '$log', function ($scope, Experience, $log) {  
       $scope.experienceList = Experience.query();  
   }]);
+
+  geadenControllers.controller('ContactsCtrl', [
+    '$scope', 
+    'Contact',
+    '$http',
+    'toaster',
+    '$log', function ($scope, Contact, $http, toaster, $log) {  
+      $scope.contacts = Contact.query();  
+
+      // Initial message values
+      $scope.email = '';
+      $scope.subject = '';
+      $scope.message = '';
+
+      $scope.sendMessage = function () {
+        $log.info('sending...');
+        $http.post('/email', {subject: $scope.subject,
+          email: $scope.email,
+          message: $scope.message
+        }).success(function(data) {
+          toaster.pop('success', 'Thanks', 'Thanks for your message ;)');
+          $scope.resetEmail();          
+        }).error(function(error) {
+          toaster.pop('error', 'Error', 'Sorry, couldn\'t handle that :(');
+        });
+      }
+
+      $scope.resetEmail = function () {
+        // Reset email values
+        $scope.email = '';
+        $scope.subject = '';
+        $scope.message = '';
+      }
+  }]);  
 })();

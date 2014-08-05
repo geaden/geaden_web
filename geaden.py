@@ -18,8 +18,11 @@
 import webapp2
 
 import json
+import datetime
 
 from jinja import JINJA_ENVIRONMENT as jinja_env
+
+from google.appengine.api import mail
 
 from models import Skill, Link
 
@@ -146,6 +149,34 @@ class SkillsJSONHandler(webapp2.RequestHandler):
         return self.error(400)
 
 
+DEFAULT_EMAIL_ADDRESS = 'denisovgena@gmail.com'
+
+
+class ContactsJSONHandler(webapp2.RequestHandler):
+    """
+    Sends email
+    """
+    def post(self, *args, **kwargs):
+        self.response.headers['Content-Type'] = 'application/json'
+        data = json.loads(self.request.body)
+        email = data.get('email', None)
+        subject = data['subject']
+        msg = data['message']
+        # Cannot send from unauthorized senders
+        message = mail.EmailMessage(sender=DEFAULT_EMAIL_ADDRESS,
+                                    subject=subject)
+        message.to = DEFAULT_EMAIL_ADDRESS
+        email_body = jinja_env.get_template('email/email_body.txt')
+        # TODO: send message to user as well!
+        template_attrs = {'email': email,
+                          'subject': subject,
+                          'message': msg}
+        message.body = email_body.render(template_attrs)
+        email_html = jinja_env.get_template('email/email_body.html')
+        message.html = email_html.render(template_attrs)
+        message.send()
+
+
 class SkillsApproverHandler(webapp2.RequestHandler):
     """
     Approves skill
@@ -171,13 +202,20 @@ class MainPage(MainHandler):
     Main page handler
     """
     def get(self):
-        self.render('index.html')
+        self.render('index.html',
+            **{
+                'gae_version': '1.9.8',
+                'python_version': '2.7',
+                'angular_version': '1.2.21',
+                'last_updated': datetime.datetime(2014, 8, 5, 20, 33)
+            })
 
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/skills/?', SkillsJSONHandler),
     ('/links/?', LinksJSONHandler),
-    ('/edit', EditPageHandler),
+    ('/edit/?', EditPageHandler),
+    ('/email/?', ContactsJSONHandler),
     ('/skills/approve/?', SkillsApproverHandler)
 ], debug=True)
