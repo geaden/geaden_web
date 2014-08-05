@@ -1,8 +1,12 @@
+Section
+=======
+
+contacts - contacts section with feedback form
+
 Pages
 =====
 /quotes - favourite quotes
 /certificates - certificates manage page
-/skills - skills manage page
 /experience - experience manage page
 /education - education manage page
 /hobby - my hobby
@@ -15,3 +19,5 @@ Karma tests
 Python tests
 Skills Approving
 / - main page
+/skills/edit - edit skills page as well as links
+
