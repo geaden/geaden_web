@@ -1,7 +1,4 @@
-Section
-=======
-
-contacts - contacts section with feedback form
+Add source code link to technical information
 
 Pages
 =====
@@ -19,5 +16,6 @@ Karma tests
 Python tests
 Skills Approving
 / - main page
-/skills/edit - edit skills page as well as links
+/edit - edit skills page as well as links
+contacts - contacts section with feedback form
 
