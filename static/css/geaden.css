@@ -523,6 +523,11 @@ input:focus, textarea:focus {
   font-size: 0.6em;
 }
 
+.footer a {
+  color: #9999FF;
+  text-decoration: underline;
+}
+
 /* Smartphones (portrait and landscape) ----------- */
 @media only screen 
 and (min-device-width : 320px) 

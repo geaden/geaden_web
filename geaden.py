@@ -207,7 +207,7 @@ class MainPage(MainHandler):
                 'gae_version': '1.9.8',
                 'python_version': '2.7',
                 'angular_version': '1.2.21',
-                'last_updated': datetime.datetime(2014, 8, 5, 20, 33)
+                'last_updated': datetime.datetime(2014, 8, 6, 10, 54)
             })
 
 
