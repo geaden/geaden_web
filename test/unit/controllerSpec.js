@@ -16,20 +16,35 @@ describe('Geaden controllers', function() {
     var scope, ctrl, $httpBackend;
 
     beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
-      $httpBackend = _$httpBackend_;
-      $httpBackend.expectGET('/data/me.json').
-        respond({name: 'John Doe', birthDay: '1987-05-10', pic: '/foo/bar.png'});
+      $httpBackend = _$httpBackend_;   
+      $httpBackend.whenGET('/data/me.json')
+        .respond({name: 'John Doe', birthDay: '1987-05-10', pic: '/foo/bar.png'});     
+      $httpBackend.whenGET('/data/versions.json')
+        .respond(function (method, url, data) {
+          return [200, {libs: [], last_update: '2014-08-06T12:34:43'}, {}];
+        });  
       scope = $rootScope.$new();
-      ctrl = $controller('MyCtrl', {$scope: scope});
+      ctrl = $controller('MyCtrl', {$scope: scope});      
     }));
 
-    it('should create "me" model', function() { 
+    afterEach(function() {
+      $httpBackend.verifyNoOutstandingExpectation();
+      $httpBackend.verifyNoOutstandingRequest();
+      $httpBackend.resetExpectations();
+    });
+
+    it('should create "me" model', function() {       
       expect(scope.info).toEqualData({});
-      $httpBackend.flush();    
+      $httpBackend.flush();
       expect(scope.info.name).toBe('John Doe');
-      var age = scope.age()
-      expect(age).toBe(27);
+      var age = scope.age();
+      expect(scope.age()).toBe(27);
       expect(scope.info.pic).toBe('/foo/bar.png');
+    });
+
+    it('should create "versionInfo" model', function() {
+      $httpBackend.flush();
+      expect(scope.versionInfo.last_update).toBe('Aug 6, 2014 12:34:43');
     });
   });
 
@@ -107,6 +122,8 @@ describe('Geaden controllers', function() {
               ]
             }          
           ]);
+      $httpBackend.whenGET('/links')
+        .respond([]);
       scope = $rootScope.$new();
       ctrl = $controller('SkillsCtrl', {$scope: scope});
     }));

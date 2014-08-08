@@ -31,7 +31,8 @@
     <a href="/"><img class="beta" src="/static/img/beta.png" alt="beta" /></a>
     <toaster-container></toaster-container>     
     <header>       
-    </header>            
+    </header> 
+    {% block error %}{% endblock %}           
     <div class="content loading">
       {% block content %}{% endblock %}
       {% block footer %}{% endblock %}

@@ -1,0 +1,13 @@
+{
+    "libs": [
+        {
+            "version": "1.9.8", 
+            "lib": "Google App Engine"
+        }, 
+        {
+            "version": "2.7.6", 
+            "lib": "Python"
+        }
+    ], 
+    "last_update": "2014-08-08T10:59:53.794310"
+}

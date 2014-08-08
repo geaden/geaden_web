@@ -8,15 +8,28 @@
     [
       '$scope', 
       'Me',
+      '$http',
       'moment',
       '$log', 
-    function ($scope, Me, moment, $log) {  
+    function ($scope, Me, $http, moment, $log) {  
       $scope.info = Me.query();
+      
+      // Version info
+      $scope.versionInfo = {};
+
+      $http.get('/data/versions.json')
+        .success(function(data) {
+          $log.info(data);
+          $scope.versionInfo = data;
+          // Append AngularJS version
+          $scope.versionInfo.libs.push({lib: 'AngularJS', version: angular.version.full});
+          $scope.versionInfo.last_update = moment(
+            $scope.versionInfo.last_update).format('MMM D, YYYY HH:mm:ss');
+      });      
 
       $scope.age = function () {
         var bday = new Date($scope.info.birthDay);
-        var age = moment().diff(moment(bday));
-        return 27;
+        return moment().diff(moment(bday), 'years');
       }
 
       $(window).scroll(function() {
@@ -181,7 +194,6 @@
        * @param  {Objct} skill  skill to edit
        */
       $scope.editSkill = function(skill) {
-        $scope.availableLinks = Link.query();
         $scope.skill = skill;
         $('.skill-form input')[0].focus();
       }

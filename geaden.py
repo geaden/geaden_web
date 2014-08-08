@@ -15,10 +15,10 @@
 # limitations under the License.
 #
 
-import webapp2
-
+import os
 import json
-import datetime
+
+import webapp2
 
 from jinja import JINJA_ENVIRONMENT as jinja_env
 
@@ -116,14 +116,18 @@ class SkillsJSONHandler(webapp2.RequestHandler):
                 skill = Skill.get(skill_data['_id'])
                 skill.title = skill_data['title']
                 skill.desc = skill_data['desc']
-                status = 200              
+                status = 200
             else:
                 # insert
-                skill = Skill(title=skill_data['title'], 
-                    desc=skill_data['desc'])                 
-            if 'links' in skill_data:                
-                    skill.links = [link['url'] 
-                        for link in skill_data['links']]
+                skill = Skill(title=skill_data['title'],
+                    desc=skill_data['desc'])
+            if 'links' in skill_data:
+                skill.links = []
+                for link in skill_data['links']:
+                    skill.links.append(link['url'])
+                    l = Link.get_by_id(link['url'])
+                    if l is None:
+                        Link(title=link['title'], id=link['url']).put()
             skill_key = skill.put();
             skill_dict = skill_key.get().to_dict()
             self.response.set_status(status)
@@ -164,7 +168,7 @@ class ContactsJSONHandler(webapp2.RequestHandler):
         msg = data['message']
         # Cannot send from unauthorized senders
         message = mail.EmailMessage(sender=DEFAULT_EMAIL_ADDRESS,
-                                    subject=subject)
+                                    subject='geaden.com: {0}'.format(subject))
         message.to = DEFAULT_EMAIL_ADDRESS
         email_body = jinja_env.get_template('email/email_body.txt')
         # TODO: send message to user as well!
@@ -197,18 +201,21 @@ class EditPageHandler(MainHandler):
         self.render('edit.html')
 
 
+class NotFoundPageHandler(MainHandler):
+    """
+    404 error handler
+    """
+    def get(self):
+        self.response.set_status(404)
+        self.render('404.html')
+
+
 class MainPage(MainHandler):
     """
     Main page handler
     """
     def get(self):
-        self.render('index.html',
-            **{
-                'gae_version': '1.9.8',
-                'python_version': '2.7',
-                'angular_version': '1.2.21',
-                'last_updated': datetime.datetime(2014, 8, 6, 10, 54)
-            })
+        self.render('index.html')
 
 
 app = webapp2.WSGIApplication([
@@ -217,5 +224,6 @@ app = webapp2.WSGIApplication([
     ('/links/?', LinksJSONHandler),
     ('/edit/?', EditPageHandler),
     ('/email/?', ContactsJSONHandler),
-    ('/skills/approve/?', SkillsApproverHandler)
-], debug=True)
+    ('/skills/approve/?', SkillsApproverHandler),
+    ('/.*', NotFoundPageHandler)
+], debug=True if os.environ.get('DEBUG', False) == 'True' else False)

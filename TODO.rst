@@ -2,6 +2,7 @@ Add source code link to technical information
 
 Pages
 =====
+auto deploy - automatically deploy and update time and versions
 /quotes - favourite quotes
 /certificates - certificates manage page
 /experience - experience manage page
