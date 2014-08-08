@@ -7,6 +7,9 @@ branches:
   only:
     - master
 
+env:
+  secure: "1sV8+z4sglPk7nAotOVauJRXIfph6d6wSbKo+5KVn9sa/B/qIOG9Ka9MkXB3FfuaZ97o1WWRcA6sk12roZXiOFKPPAGuJ1pBVbMlMzADxMIOjZr/yvjt4tBi7oXM2Rqfzp3Y5zC+zbTcLjvxHPzopDgzIkGAmh3IGb9fYtx0zx0="
+
 before_script:
 - wget https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.8.zip -nv
 - unzip -q google_appengine_1.9.8.zip
@@ -24,4 +27,4 @@ script:
 
 after_success:
 - python update.py
-- /usr/local/google_appengine/appcfg.py --env_variable=DEBUG:False --oauth2 --noauth_local_webserver update .
+- /usr/local/google_appengine/appcfg.py --env_variable=DEBUG:False --oauth2_refresh_token=$GAE_OAUTH_TOKEN update .
