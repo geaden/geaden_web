@@ -8,7 +8,7 @@ branches:
     - master
 
 env:
-  secure: "1sV8+z4sglPk7nAotOVauJRXIfph6d6wSbKo+5KVn9sa/B/qIOG9Ka9MkXB3FfuaZ97o1WWRcA6sk12roZXiOFKPPAGuJ1pBVbMlMzADxMIOjZr/yvjt4tBi7oXM2Rqfzp3Y5zC+zbTcLjvxHPzopDgzIkGAmh3IGb9fYtx0zx0="
+  secure: "BX2cDXNfN3TfiBeWuEvPZ9iA9mtL4FZXaAeUP22mwChlWRFCDPdfO+MP8KbdM7xLGcKsPVIk10gqij+I+l79K3QPZoaKc118EhyGAsk2BFJI/tdYCrTHkFzQ7s0xBw2AClxRk/qaWNhCzwIjXRABG6rcXggRvh8XWFbhDCc0B54="
 
 before_script:
 - wget https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.8.zip -nv
