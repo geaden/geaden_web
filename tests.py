@@ -114,7 +114,6 @@ class PageTestCase(BaseTestCase):
         self.assertEquals(len(skill.links), 1)
         self.assertEquals(skill.title, 'Noob')
 
-
     def testLinksHandler(self):
         load()
         response = self.testapp.get('/links')
@@ -135,7 +134,14 @@ class PageTestCase(BaseTestCase):
         # Quantaty of links doesn't change
         self.assertEquals(len(Link.query().fetch()), before + 1)
         link = Link.get_by_id('http://www.foo.bar')
-        self.assertEquals(link.title, 'Foo Bar')            
+        self.assertEquals(link.title, 'Foo Bar')   
+        # Delete link
+        before = len(Link.query().fetch())
+        response = self.testapp.post_json('/links', {'action': 'delete','title': 'Foo Bar',
+            'url': 'http://www.foo.bar'});
+        self.assertEquals(response.status_int, 200);
+        self.assertEquals(before - 1, len(Link.query().fetch()))
+
 
     def testEditorHandler(self):
         load();

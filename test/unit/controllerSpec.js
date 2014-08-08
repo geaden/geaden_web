@@ -189,6 +189,16 @@ describe('Geaden controllers', function() {
       expect(scope.links.length).toBe(2);
       expect(scope.links[0].url).toBe('http://www.github.com/geaden');
     });
+
+    it('should remove link', function() {
+      expect(scope.links.length).toBe(0);
+      $httpBackend.flush();
+      expect(scope.links.length).toBe(2);
+      scope.links[0]['action'] = 'delete';
+      $httpBackend.expectPOST('/links', scope.links[0]).respond('');
+      scope.removeLink(scope.links[0], 0);
+      expect(scope.links.length).toBe(1);
+    })
   });
 
   describe('ExperienceCtrl', function() {
