@@ -14,10 +14,8 @@
 {% endblock %}
 {% block footer %}
 <div class="footer">
-  <p>Google App Engine: <#= gae_version #></p>
-  <p>Python: <#= python_version #></p>
-  <p>AngularJS: <#= angular_version #></p>
-  <p>Last updated: <#= last_updated.strftime('%b, %d %Y %H:%M:%S') #></p>
+  <p ng-repeat="vInfo in versionInfo.libs">{{ vInfo.lib }}: {{ vInfo.version }}</p>  
+  <p>Last updated: {{ versionInfo.last_update }}</p>
   <p>Source: <a href="http://www.github.com/geaden/geaden_web">http://www.github.com/geaden/geaden_web</a></p>
 </div>
 {% endblock %}

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0">
+    <title>Geaden | Not Found Page</title>
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,300italic|Roboto+Condensed:300&subset=latin,cyrillic-ext' rel='stylesheet' type='text/css'>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"
+    type="text/css">  
+    <style>    
+     h1, h2 {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: 4em;          
+     }
+
+     h3 {
+      font-size: 2em;
+     }
+
+     body {
+      background-image: url(/static/img/bg.jpg);
+     }
+
+     #error_body {
+      width: 80%;
+      margin: 40px auto;
+      text-align: center;
+     }
+
+     .btn {
+      font-family: 'Roboto Condensed', sans-serif;
+      padding: 15px;
+      border-radius: 5px;
+      background-color: #ffffff;
+      border: 1px solid #c0c0c0;
+      font-size: 1.3em;
+      text-align: center;
+      margin: 20px;
+     }
+
+     /* Smartphones (portrait and landscape) ----------- */
+      @media only screen 
+      and (min-device-width : 320px) 
+      and (max-device-width : 480px) {
+        #error_body {
+          margin: 20px;          
+        }
+
+        h1 {
+          font-size: 2em;
+        }
+
+        h2 {
+          font-size: 1.5em;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="error_body">
+      <h1>Sorry...</h1>
+      <h2>The page you have requested not found or not created yet :(</h2>
+      <button class="btn" onclick="window.history.back()"><i class="fa fa-arrow-left"></i>&nbsp;Back</button>
+    </div>
+  </body>
+</html>

@@ -89,6 +89,31 @@ class PageTestCase(BaseTestCase):
             })
         self.assertEquals(response.status_int, 200)
         self.assertEquals(before - 1, len(Skill.all()))
+        # Updte skill
+        links_before = len(Link.query().fetch())
+        skill = Skill(title='Foo', desc='Bar').put()
+        response = self.testapp.post_json('/skills',
+            {
+                'action': 'update',
+                'data': {
+                    '_id': skill.id(),
+                    'title': 'Noob',
+                    'desc': 'Noob!',
+                    'links': [
+                        {
+                            'url': 'http://www.noob.com',
+                            'title': 'Noob Com'                            
+                        }
+                    ]
+                }                
+            })
+        self.assertEquals(200, response.status_int)        
+        self.assertEquals(links_before + 1, len(Link.query().fetch()),
+            msg="Should create new link.")
+        skill = Skill.get(skill.id())
+        self.assertEquals(len(skill.links), 1)
+        self.assertEquals(skill.title, 'Noob')
+
 
     def testLinksHandler(self):
         load()
@@ -117,7 +142,7 @@ class PageTestCase(BaseTestCase):
         response = self.testapp.get('/edit')
         self.assertEquals(response.status_int, 200)
 
-    def testContacHandler(self):
+    def testContactsHandler(self):
         response = self.testapp.post_json('/email',
             {'email': 'test@test.com',
              'subject': 'foo',
@@ -129,6 +154,11 @@ class PageTestCase(BaseTestCase):
         self.assertIn('test@test.com', messages[0].body.decode())
         self.assertIn('<h1>foo</h1>', messages[0].html.decode())
         self.assertEqual(geaden.DEFAULT_EMAIL_ADDRESS, messages[0].sender)
+
+    def testNotFoundPageHandler(self):
+        response = self.testapp.get('/asdf', status=404)
+        self.assertEquals(response.status_int, 404)
+        self.assertIn('Sorry...', response.normal_body)
 
 
 class ModelsTestCase(BaseTestCase):

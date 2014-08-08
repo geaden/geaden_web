@@ -21,3 +21,7 @@ install: pip install -r requirements.txt
 script:
 - ./run_tests.sh
 - ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS config/karma.conf.js
+
+after_success:
+- python update.py
+- /usr/local/google_appengine/appcfg.py --env_variable=DEBUG:False --oauth2 --noauth_local_webserver update .

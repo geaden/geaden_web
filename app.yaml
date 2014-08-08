@@ -1,8 +1,11 @@
 application: geaden-main
-version: stage
+version: test
 runtime: python27
 api_version: 1
 threadsafe: yes
+
+env_variables:
+  DEBUG: True
 
 handlers:
 - url: /favicon\.ico
@@ -21,6 +24,9 @@ handlers:
 - url: /edit
   script: geaden.app
   login: admin
+
+- url: /
+  script: geaden.app
 
 - url: .*
   script: geaden.app
