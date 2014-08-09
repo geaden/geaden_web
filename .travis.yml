@@ -27,4 +27,4 @@ script:
 
 after_success:
 - python update.py
-- /usr/local/google_appengine/appcfg.py --env_variable=DEBUG:False --oauth2_refresh_token=$GAE_OAUTH_TOKEN --version=prod update geaden/geaden_web
+- /usr/local/google_appengine/appcfg.py --env_variable=DEBUG:False --oauth2_refresh_token=$GAE_OAUTH_TOKEN --version=prod update .
