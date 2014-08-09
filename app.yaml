@@ -21,6 +21,10 @@ handlers:
 - url: /static
   static_dir: static
 
+- url: /(.*\.(gif|ico|jpeg|jpg|png))
+  static_files: static/\1
+  upload: static/(.*\.(gif|ico|jpeg|jpg|png))
+
 - url: /edit
   script: geaden.app
   login: admin
