@@ -43,6 +43,8 @@ skip_files:
 - ^\.travis.yml$
 - ^\.git$
 - ^libs$
+- ^(.*/)?\.zip$
+- ^google_appengine$
 - ^node_modules$
 
 builtins:
