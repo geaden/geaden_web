@@ -152,7 +152,9 @@ img.beta {
   line-height: 1.5em;
 }
 
-#info img {
+#info .pic {
+  height: 160px;
+  width: 150px;
   padding: 2px;
   border: 1px solid #c0c0c0;
   border-radius: 3px;

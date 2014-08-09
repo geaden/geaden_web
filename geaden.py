@@ -31,6 +31,9 @@ import logging
 __author__ = 'geaden'
 
 
+DEBUG = True if os.environ.get('DEBUG', False) == 'True' else False
+
+
 class MainHandler(webapp2.RequestHandler):
     """
     Basic handler for web application.
@@ -46,6 +49,8 @@ class MainHandler(webapp2.RequestHandler):
         Rendering provided kwargs into template
         """
         t = jinja_env.get_template(template)
+        # Add DEBUG parameter
+        params['DEBUG'] = DEBUG
         return t.render(params)
 
     def render(self, template, **kwargs):
@@ -230,4 +235,4 @@ app = webapp2.WSGIApplication([
     ('/email/?', ContactsJSONHandler),
     ('/skills/approve/?', SkillsApproverHandler),
     ('/.*', NotFoundPageHandler)
-], debug=True if os.environ.get('DEBUG', False) == 'True' else False)
+], debug=DEBUG)

@@ -39,6 +39,7 @@ libraries:
 
 skip_files:
 - ^(.*/)?\.DS_Store$
+- ^(.*/)?\.xcf$
 - ^\.gitignore$
 - ^\.travis.yml$
 - ^\.git$
