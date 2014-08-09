@@ -31,11 +31,14 @@
        * Changes picture on mouse enter       
        */
       $scope.changePic = function () {
-        $scope.origPic = $scope.info.pic;
         $scope.changePicTimer = $timeout(function() {
            $('#info img').fadeOut(400, function() {
-              $('#info img').attr('src', $scope.info.altPic);
-              $('#info img').fadeIn(400);
+              var altPic = new Image();
+              altPic.src = $scope.info.altPic;
+              altPic.onload = function() {
+                $('#info img').attr('src', this.src);
+                $('#info img').fadeIn(400);
+              }                            
           });          
         }, 1000);
       }     
