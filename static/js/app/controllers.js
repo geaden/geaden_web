@@ -10,8 +10,9 @@
       'Me',
       '$http',
       'moment',
+      '$timeout',
       '$log', 
-    function ($scope, Me, $http, moment, $log) {  
+    function ($scope, Me, $http, moment, $timeout, $log) {  
       $scope.info = Me.query();
       
       // Version info
@@ -19,13 +20,36 @@
 
       $http.get('/data/versions.json')
         .success(function(data) {
-          $log.info(data);
           $scope.versionInfo = data;
           // Append AngularJS version
           $scope.versionInfo.libs.push({lib: 'AngularJS', version: angular.version.full});
           $scope.versionInfo.last_update = moment(
             $scope.versionInfo.last_update).format('MMM D, YYYY HH:mm:ss');
-      });      
+      });       
+
+      /**
+       * Changes picture on mouse enter       
+       */
+      $scope.changePic = function () {
+        $scope.changePicTimer = $timeout(function() {
+           $('#info img').fadeOut(400, function() {
+              var altPic = new Image();
+              altPic.src = $scope.info.altPic;
+              altPic.onload = function() {
+                $('#info img').attr('src', this.src);
+                $('#info img').fadeIn(400);
+              }                            
+          });          
+        }, 1000);
+      }     
+
+      /**
+       * Reverts picture back
+       */
+      $scope.revertPic = function() {      
+        $timeout.cancel($scope.changePicTimer);
+        $('#info img').attr('src', $scope.info.pic);
+      }
 
       $scope.age = function () {
         var bday = new Date($scope.info.birthDay);
@@ -261,7 +285,6 @@
 
       $scope.queryLink = function (link, q) {
         availableLinks.get(q, function(suggestions) {
-          $log.info(suggestions);
           $scope.availableLinks = suggestions;
           link.showAvailableLinks = true;            
         });  
@@ -406,7 +429,6 @@
       $scope.message = '';
 
       $scope.sendMessage = function () {
-        $log.info('sending...');
         $http.post('/email', {subject: $scope.subject,
           email: $scope.email,
           message: $scope.message

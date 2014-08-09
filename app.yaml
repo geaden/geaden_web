@@ -1,5 +1,5 @@
 application: geaden-main
-version: test
+version: dev
 runtime: python27
 api_version: 1
 threadsafe: yes
@@ -21,6 +21,10 @@ handlers:
 - url: /static
   static_dir: static
 
+- url: /(.*\.(gif|ico|jpeg|jpg|png))
+  static_files: static/\1
+  upload: static/(.*\.(gif|ico|jpeg|jpg|png))
+
 - url: /edit
   script: geaden.app
   login: admin
@@ -39,6 +43,7 @@ libraries:
 
 skip_files:
 - ^(.*/)?\.DS_Store$
+- ^(.*/)?\.xcf$
 - ^\.gitignore$
 - ^\.travis.yml$
 - ^\.git$

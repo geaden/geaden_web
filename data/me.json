@@ -1,6 +1,7 @@
 {
 	"name": "Gennady Denisov",
 	"pic": "/static/img/me.jpg",
+	"altPic": "/static/img/me_sumbrerro.jpg",
 	"birthDay": "1987-05-11",
 	"location": "Moscow, Russia"
 }

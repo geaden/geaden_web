@@ -14,7 +14,8 @@ class Link(ndb.Model):
 
 
 class Skill(ndb.Model):
-    """Models an individual Skill entry with title and desc, approved and link."""
+    """Models an individual Skill entry with title and desc,
+    approved and link."""
     title = ndb.StringProperty()
     desc = ndb.StringProperty()
     approved = ndb.IntegerProperty(default=0)
@@ -31,7 +32,7 @@ class Skill(ndb.Model):
 
     def to_dict(self):
         d = super(Skill, self).to_dict()
-        d.update({'_id': self.key.id()})        
+        d.update({'_id': self.key.id()})
         if d['links']:
             links = []
             for link in d['links']:
@@ -51,4 +52,4 @@ class Skill(ndb.Model):
 
     @classmethod
     def all(cls):
-        return cls.query(Skill.enabled == True).fetch()
+        return cls.query(Skill.enabled == True).order(-cls.approved).fetch()

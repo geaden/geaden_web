@@ -152,7 +152,9 @@ img.beta {
   line-height: 1.5em;
 }
 
-#info img {
+#info .pic {
+  height: 160px;
+  width: 150px;
   padding: 2px;
   border: 1px solid #c0c0c0;
   border-radius: 3px;
@@ -530,8 +532,8 @@ input:focus, textarea:focus {
 
 /* Smartphones (portrait and landscape) ----------- */
 @media only screen 
-and (min-device-width : 320px) 
-and (max-device-width : 480px) {
+and (min-width : 320px)
+and (max-width : 600px) {
   .content {
     width: auto;    
   }
