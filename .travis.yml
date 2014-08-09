@@ -4,8 +4,8 @@ python:
 - '2.7'
 
 branches:
-  only:
-    - master
+  only:    
+    - stage
 
 env:
   secure: "tpoIGJNJKWvlvTHCO/Uz1YeOMDqHinuCXxgl6muOI6tejS5mC7gObNv0d4DfNIH5q9Q6nV0gg3Dj95IJ1PKRJHDRxPO62NSqOO0kycfDRCj9/pAsAsDy9EISz9r5Q8Pd24PDl0b4CN4797vNqHYpyeLhl4nbLVxO2fYIlB07uJM="
@@ -27,4 +27,5 @@ script:
 
 after_success:
 - python update.py
-- /usr/local/google_appengine/appcfg.py --env_variable=DEBUG:False --oauth2_refresh_token=$GAE_OAUTH_TOKEN --version=prod update .
+- ./compress.sh
+- /usr/local/google_appengine/appcfg.py --env_variable=DEBUG:False --oauth2_refresh_token=$GAE_OAUTH_TOKEN --version=stage update .
