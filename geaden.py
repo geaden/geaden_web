@@ -82,6 +82,10 @@ class LinksJSONHandler(webapp2.RequestHandler):
         link_id = link_data['url']
         link = Link.get_by_id(link_id)
         if link:
+            if 'action' in link_data:
+                if link_data['action'] == 'delete':
+                    link.key.delete()
+                    return
             # update link
             link.title = link_data['title']
             self.response.set_status(200)

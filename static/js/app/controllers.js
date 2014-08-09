@@ -342,7 +342,10 @@
          */
         $scope.removeLink = function (link, idx) {
           $scope.links.splice(idx, 1);
-          toaster.pop('info', 'Link removed', 'Link ' + link.url + ' removed.');
+          var data = link['action'] = 'delete';
+          $http.post('/links', link).success(function(data) {
+            toaster.pop('info', 'Link removed', 'Link ' + link.url + ' removed.');
+          });
         }
 
         $scope.resetLink = function () {
