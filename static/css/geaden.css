@@ -177,6 +177,17 @@ img.beta {
   text-shadow: 0 2px 5px #c0c0c0;
 }
 
+.quotes-control i:hover {
+  -ms-transform: scale(1.2, 1.2); /* IE 9 */
+  -moz-transition: scale(1.2, 1.2);
+  -webkit-transform: scale(1.2, 1.2); /* Chrome, Safari, Opera */
+  transform: scale(1.2, 1.2);
+  -webkit-transition: -webkit-transform 0.1s linear; /* For Safari 3.1 to 6.0 */
+  -moz-transition: -moz-transform 0.1s linear;
+  -o-transition: -o-transform 0.1s linear;
+  transition: transform 0.1s linear;
+}
+
 .quotes-carousel {
   position: relative;
   width: 80%; 
@@ -217,13 +228,22 @@ img.beta {
 
 a.quotes-indicators {
   margin-top: 20px;
-  color: #000000;
+  color: rgba(0, 0, 0);
   text-decoration: none;
-  font-size: 0.5em;
+  font-size: 0.7em;
+  padding: 0 2px;
+  -webkit-transition: color 500ms ease-out 0.2s;
+  -moz-transition: color 500ms ease-out 0.2s;
+  -o-transition: color 500ms ease-out 0.2s;
+  transition: color 500ms ease-out 0.2s;
 }
 
-a.quotes-indicators.current {
-  color: #6666CC;
+a.quotes-indicators {
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+a.quotes-indicators.current { 
+  color: #6666CC;  
 }
 /** End of Quotes **/
 

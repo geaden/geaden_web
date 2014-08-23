@@ -72,10 +72,10 @@ class PageTestCase(BaseTestCase):
                     'links': [
                         {
                             'url': 'http://www.github.com',
-                            'title': 'My Github'                            
+                            'title': 'My Github'
                         }
                     ]
-                }                
+                }
             })
         self.assertEquals(response.status_int, 201)
         self.assertEquals(response.content_type, 'application/json')
@@ -105,7 +105,7 @@ class PageTestCase(BaseTestCase):
                             'title': 'Noob Com'                            
                         }
                     ]
-                }                
+                }
             })
         self.assertEquals(200, response.status_int)        
         self.assertEquals(links_before + 1, len(Link.query().fetch()),
@@ -171,13 +171,13 @@ class ModelsTestCase(BaseTestCase):
     """
     Models Test Case
     """
-    def testSkillModel(self):             
+    def testSkillModel(self):
         load()
-        skill = Skill(title='Python', desc='Cool', 
+        skill = Skill(title='Python', desc='Cool',
             links=['http://www.github.com/'])
         skill.approve()
-        self.assertEquals(skill.approved, 1)        
-        skills = Skill.all()        
+        self.assertEquals(skill.approved, 1)
+        skills = Skill.all()
         self.assertEquals(len(skills), 4)
         s_key = skill.put()
         skill.id = s_key.id()
