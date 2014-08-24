@@ -12,5 +12,9 @@
     {
         "author": "Albert Einstein",
         "content": "If you can't explain it to a six year old, you don't understand it yourself."
+    },
+    {
+        "author": "Bill Gates",
+        "content": "Automation does not fix errors, it just makes them happen quicker."
     }
 ]

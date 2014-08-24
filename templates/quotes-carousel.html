@@ -8,14 +8,12 @@
     <i class="fa fa-angle-right fa-2x"></i>
   </a>
   <!-- Quotes content -->
-  <div class="quotes-carousel">
-    <section ng-repeat="quote in quotes">
-      <div class="quotes-item animate" ng-show="isCurrent($index)">
-        <p>{{ quote.content }}</p>
-        <cite>&ndash;&nbsp;{{ quote.author }}</cite>
-      </div>      
-    </section>    
-  </div>
+  <ul class="quotes-carousel">
+    <li ng-repeat="quote in quotes" ng-class="{ active: isCurrent($index) }">      
+      <blockquote><p>{{ quote.content }}</p></blockquote>
+      <cite>&mdash; {{ quote.author }}</cite>
+    </li>    
+  </ul>
   <!-- Indicators -->
   <div>
     <a href="javascript:void(0)" ng-repeat="quote in quotes" class="quotes-indicators" ng-class="{ current: isCurrent($index) }" ng-click="selectQuote($index)">
