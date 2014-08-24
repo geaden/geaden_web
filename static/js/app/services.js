@@ -52,4 +52,11 @@
         query: {method: 'GET', isArray: true}
       });
   }]);
+
+  geadenServices.factory('Goal', ['$resource',
+    function($resource) {
+      return $resource('/goals/data/', {}, {
+        query: {method: 'GET', isArray: true}
+      });
+  }]);
 })();

@@ -1,0 +1,2 @@
+Hello,
+New Goal has been added: <#= goal #>

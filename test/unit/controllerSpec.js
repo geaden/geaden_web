@@ -272,7 +272,7 @@ describe('Geaden controllers', function() {
       ctrl = $controller('EducationCtrl', {$scope: scope});
     }));
 
-    it('should create "eductiona" model', function() {
+    it('should create "eductioan" model', function() {
       expect(scope.educationList.length).toBe(0);
       $httpBackend.flush();
       expect(scope.educationList.length).toBe(1);
@@ -301,11 +301,56 @@ describe('Geaden controllers', function() {
       ctrl = $controller('ContactsCtrl', {$scope: scope});
     }));
 
-    it('should create "eductiona" model', function() {
+    it('should create "contact" model', function() {
       expect(scope.contacts.length).toBe(0);
       $httpBackend.flush();
       expect(scope.contacts.length).toBe(2);
       expect(scope.contacts[0].icon).toBe('google');
     });
+  });
+
+  describe('GoalsCtrl', function() {
+    var scope, ctrl, $httpBackend;
+
+    beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
+      $httpBackend = _$httpBackend_;
+      $httpBackend.expectGET('/goals/data').
+        respond(
+          [
+            {
+              title: 'Build a house', 
+              votes: 1,
+              done: false
+            },
+            {
+              title: 'Plant a tree', 
+              votes: 1,
+              done: false
+            },
+            {
+              title: 'Have a son', 
+              votes: 1,
+              done: false
+            },           
+          ]);
+      scope = $rootScope.$new();
+      ctrl = $controller('GoalsCtrl', {$scope: scope});
+    }));
+
+    it('should create "goal" model', function() {
+      expect(scope.goals.length).toBe(0);
+      $httpBackend.flush();
+      expect(scope.goals.length).toBe(3);
+      expect(scope.goals[0].title).toBe('Build a house');
+    });
+
+    it('should add new goals', function() {
+      expect(scope.goals.length).toBe(0);
+      scope.newGoal = 'Do Great Things';
+      $httpBackend.expectPOST('/goals/data').respond({_id: 1, title: scope.newGoal});      
+      scope.addGoal(scope.newGoal);
+      $httpBackend.flush();      
+      expect(scope.goals.length).toBe(4);
+    })
   });
 });

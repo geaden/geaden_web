@@ -71,13 +71,13 @@
         $('body,html').animate({
           scrollTop : 0                       // Scroll to top of body
         }, 500);
-      });
+      });      
 
-      // Show content when loading finished
+      // Show content when loading finished      
       Pace.once('done', function() {
         $('.content').fadeIn(1000);
         $('.content').removeClass('loading');
-      });  
+      });   
   }]);
 
   geadenControllers.controller('QuotesCtrl', [
@@ -468,5 +468,83 @@
         $scope.subject = '';
         $scope.message = '';
       }
-  }]);  
+  }]);
+
+  geadenControllers.controller('GoalsCtrl', [
+    '$scope', 
+    'Goal',
+    '$http',
+    'toaster',
+    '$log', function ($scope, Goal, $http, toaster, $log) {
+      $scope.editedGoal = null;
+
+      $scope.goals = Goal.query();
+
+      $scope.editGoal = function (goal) {
+        $scope.editedGoal = goal;
+        // Clone the original goal to restore it on demand.
+        $scope.originalGoal = angular.extend({}, goal);
+      };
+
+      $scope.addGoal = function () {
+        var newGoal = $scope.newGoal.trim();
+        if (!newGoal.length) {
+          return;
+        }      
+
+        $http.post('/goals/data', {title: newGoal}).success(function(data) {
+          $scope.goals.push(data);
+          toaster.pop('success', 'Goal Added', 'Goal with id ' + data._id + ' successfully added.');
+        }).error(function(error) {
+          toaster.pop('error', 'Failed to add goal', 'Can\'t add new goal. Error: ' + error);
+        });
+
+        $scope.newGoal = '';
+      };
+
+      $scope.doneEditing = function (goal) {
+        $scope.editedGoal = null;
+        goal.title = goal.title.trim();
+        if (goal.title != $scope.originalGoal.title) {
+          $http.post('/goals/data', {'_id': goal._id, 'title': goal.title, 'action': 'update'})
+          .success(function(data) {
+            goal = data;
+            toaster.pop('success', 'Goal Updated', 'Goal with id ' + goal._id + ' successfully updated.'); 
+          }).error(function(error) {
+            $scope.revertEditing(goal);
+            toaster.pop('error', 'Failed to update goal', 'Can\'t update goal. Error: ' + error);
+          })
+        }   
+        return true;         
+      };
+
+      $scope.accomplish = function(goal) {
+        $http.post('/goals/data', {'_id': goal._id, 'done': goal.done, 'action': 'accomplish'})
+          .success(function(data) {
+            goal = data;
+            var action = goal.done ? 'accomplished' : 'set';
+            toaster.pop('success', 'Goal ' + action, 'Goal with id ' + goal._id 
+              + ' successfully ' + action + '.'); 
+          }).error(function(error) {
+            goal.done = !goal.done;
+            toaster.pop('error', 'Failed to accomplish goal', 'Can\'t accomplish goal. Error: ' + error);
+          });
+      }
+
+      $scope.revertEditing = function (goal) {
+        $scope.goals[$scope.goals.indexOf(goal)] = $scope.originalGoal;
+        $scope.doneEditing($scope.originalGoal);
+        return true;
+      };
+
+      $scope.removeGoal = function (goal) {        
+        $http.post('/goals/data', {'_id': goal._id, 'action': 'delete'})
+         .success(function() {
+          $scope.goals.splice($scope.goals.indexOf(goal), 1);
+          toaster.pop('info', 'Goal Deleted', 'Goal with id ' + goal._id + ' deleted.');
+         }).error(function(error) {
+          toaster.pop('error', 'Failed to delete goal', 'Can\'t delete goal. Error: ' + error);
+         })
+      };
+  }]);
 })();

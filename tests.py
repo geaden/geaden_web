@@ -10,10 +10,8 @@ from google.appengine.ext import testbed
 import webtest
 
 import geaden
-
-from models import Skill, Link
-
-from load_data import load
+from models import Skill, Link, Goal
+from load_data import load, load_goals
 
 
 class BaseTestCase(unittest.TestCase):
@@ -23,6 +21,9 @@ class BaseTestCase(unittest.TestCase):
     def setUp(self):
         # First, create an instance of the Testbed class.
         self.testbed = testbed.Testbed()
+        # Set user stub
+        self.testbed.setup_env(
+            USER_EMAIL='usermail@gmail.com', USER_ID='1', USER_IS_ADMIN='1')        
         # Then activate the testbed, which prepares the service stubs for use.
         self.testbed.activate()
         # Next, declare which service stubs you want to use.
@@ -42,7 +43,8 @@ class PageTestCase(BaseTestCase):
         # Wrap the app with WebTest’s TestApp.
         self.testapp = webtest.TestApp(geaden.app)
         self.testbed.init_mail_stub()
-        self.mail_stub = self.testbed.get_stub(testbed.MAIL_SERVICE_NAME)
+        self.testbed.init_user_stub()
+        self.mail_stub = self.testbed.get_stub(testbed.MAIL_SERVICE_NAME)        
 
     def testMainPage(self):
         response = self.testapp.get('/')
@@ -137,11 +139,11 @@ class PageTestCase(BaseTestCase):
         self.assertEquals(link.title, 'Foo Bar')   
         # Delete link
         before = len(Link.query().fetch())
-        response = self.testapp.post_json('/links', {'action': 'delete','title': 'Foo Bar',
+        response = self.testapp.post_json('/links', 
+            {'action': 'delete', 'title': 'Foo Bar',
             'url': 'http://www.foo.bar'});
         self.assertEquals(response.status_int, 200);
         self.assertEquals(before - 1, len(Link.query().fetch()))
-
 
     def testEditorHandler(self):
         load();
@@ -160,6 +162,51 @@ class PageTestCase(BaseTestCase):
         self.assertIn('test@test.com', messages[0].body.decode())
         self.assertIn('<h1>foo</h1>', messages[0].html.decode())
         self.assertEqual(geaden.DEFAULT_EMAIL_ADDRESS, messages[0].sender)
+
+    def testGoalsHandler(self):
+        response = self.testapp.get('/goals')
+        self.assertEquals(response.status_int, 200)
+
+    def testGoalsDataHandler(self):
+        load_goals()
+        # List goals
+        response = self.testapp.get('/goals/data')
+        self.assertEquals(response.status_int, 200)
+        self.assertEquals(response.content_type, 'application/json')
+        data = json.loads(response.normal_body)
+        self.assertEquals(len(data), 3)
+        # Add goal
+        response = self.testapp.post_json('/goals/data', 
+            {'title': 'Do Great Things'})
+        self.assertEquals(response.status_int, 200)
+        self.assertEquals(len(Goal.all()), 4)
+        messages = self.mail_stub.get_sent_messages(sender=geaden.DEFAULT_EMAIL_ADDRESS)
+        self.assertEqual(1, len(messages))
+        self.assertIn('Do Great Things', messages[0].html.decode())
+        self.assertEqual(geaden.DEFAULT_EMAIL_ADDRESS, messages[0].sender)
+        # Complete goal
+        goal = Goal.all()[0]
+        self.assertFalse(goal.done)
+        response = self.testapp.post_json('/goals/data', 
+            {'_id': goal.key.id(), 'done': True, 'action': 'accomplish'})
+        self.assertEquals(response.status_int, 200)
+        goal = Goal.get(goal.key.id())
+        self.assertTrue(goal.done)
+        # Update goal
+        response = self.testapp.post_json('/goals/data',
+            {
+                '_id': goal.key.id(), 
+                'action': 'update', 
+                'title': 'Do What Matters'}
+            )
+        self.assertEquals(response.status_int, 200)
+        goal = Goal.get(goal.key.id())
+        self.assertEquals(goal.title, 'Do What Matters')
+        # Remove goal
+        response = self.testapp.post_json('/goals/data', 
+            {'_id': goal.key.id(), 'action': 'delete'})
+        self.assertEquals(response.status_int, 200)
+        self.assertEquals(3, len(Goal.all()))
 
     def testNotFoundPageHandler(self):
         response = self.testapp.get('/asdf', status=404)
@@ -201,3 +248,11 @@ class ModelsTestCase(BaseTestCase):
         s.enabled = False
         s.put()
         self.assertEquals(0, len(Skill.all()))
+
+    def testGoalModel(self):
+        goal = Goal(title="Do Great things")
+        goal_key = goal.put()
+        self.assertEquals(len(Goal.all()), 1)
+        g = Goal.get(goal_key.id())
+        self.assertEquals(g.title, "Do Great things")
+        self.assertFalse(g.done)

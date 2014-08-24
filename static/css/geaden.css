@@ -165,6 +165,27 @@ img.beta {
 }
 /** End Info **/
 
+/** Navigation menu **/
+#nav-menu {
+  margin: 10px 20px 0;
+  line-height: 1.2em;
+  font-size: 1em;
+}
+
+#nav-menu ul {
+  list-style-type: square;
+}
+
+#nav-menu li:hover {
+  color: #B8860B;
+}
+
+#nav-menu a {
+  color: #6666CC;
+}
+
+/** End of Navigation menu **/
+
 /** Quotes **/
 #quotes {
   text-align: center;  
@@ -199,7 +220,7 @@ img.beta {
   list-style: none; 
   width: 80%;
   height: 80px;
-  margin: 0 auto;
+  margin: 10px auto;
 }
 
 .quotes-carousel > li {
@@ -439,7 +460,7 @@ img.beta {
 }
 
 .quotes-carousel cite {
-  margin: 20px 0;
+  padding: 20px 0;
   font-size: 0.8em;
 }
 
