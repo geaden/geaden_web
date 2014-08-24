@@ -15,6 +15,7 @@ html, body {
 
 body {
   background-image:url('/static/img/bg.jpg');
+  background-attachment: fixed;
   height: 100%;
 }
 
@@ -122,12 +123,12 @@ img.beta {
   background-color: #ffffff;
   margin-top: 5px;
   border-radius: 4px;
-  border: 1px solid #c0c0c0;
   box-shadow: 0 0 5px #c0c0c0;
 }
 
 .dropdown li {
   font-family: 'Roboto Condensed', sans-serif;
+  border-radius: 4px;
   padding: 10px;
 }
 
@@ -164,6 +165,27 @@ img.beta {
 }
 /** End Info **/
 
+/** Navigation menu **/
+#nav-menu {
+  margin: 10px 20px 0;
+  line-height: 1.2em;
+  font-size: 1em;
+}
+
+#nav-menu ul {
+  list-style-type: square;
+}
+
+#nav-menu li:hover {
+  color: #B8860B;
+}
+
+#nav-menu a {
+  color: #6666CC;
+}
+
+/** End of Navigation menu **/
+
 /** Quotes **/
 #quotes {
   text-align: center;  
@@ -172,59 +194,296 @@ img.beta {
   line-height: 4em;  
 }
 
+
+/** Quotes carousel **/
 .quotes-control {
   margin: 0 15px;
   text-shadow: 0 2px 5px #c0c0c0;
 }
 
+/** Thanks to http://agelber.com/blog/looping-carousel/ **/
+
+.quotes-control i:hover {
+  -webkit-transform: scale(1.2, 1.2); /* Chrome, Safari, Opera */
+     -moz-transform: scale(1.2, 1.2);  
+      -ms-transform: scale(1.2, 1.2); /* IE 9 */  
+       -o-transform: scale(1.2, 1.2);
+          transform: scale(1.2, 1.2);
+  -webkit-transition: -webkit-transform 0.1s linear; /* For Safari 3.1 to 6.0 */
+     -moz-transition: -moz-transform 0.1s linear;
+       -o-transition: -o-transform 0.1s linear;
+          transition: transform 0.1s linear;
+}
+
 .quotes-carousel {
   position: relative;
-  width: 80%; 
-  margin: 0 auto;
-  height: 80px;  
+  list-style: none; 
+  width: 80%;
+  height: 80px;
+  margin: 10px auto;
 }
 
-.quotes-carousel section {  
-  position: absolute;
-  width: auto;
+.quotes-carousel > li {
+  position: absolute;  
+  text-align: center;
+  line-height: 1.4em;
 }
 
-.quotes-item {
-  line-height: 1.2em;
+.quotes-carousel > li:not(.active) {
+  display: none;
 }
 
-.quotes-item cite {
-  font-size: 0.8em;
+/** Animation **/
+.quotes-carousel > li.next-in {
+  -webkit-animation: next-in 0.5s;
+     -moz-animation: next-in 0.5s;
+       -o-animation: next-in 0.5s;
+          animation: next-in 0.5s;
+}
+
+.quotes-carousel > li.next-out {
+  -webkit-animation: next-out 0.5s;
+     -moz-animation: next-out 0.5s;
+       -o-animation: next-out 0.5s;
+          animation: next-out 0.5s;
+}
+
+.quotes-carousel > li.prev-in {
+  -webkit-animation: prev-in 0.5s;
+     -moz-animation: prev-in 0.5s;
+       -o-animation: prev-in 0.5s;
+          animation: prev-in 0.5s;
+}
+
+.quotes-carousel > li.prev-out {
+  -webkit-animation: prev-out 0.5s;
+     -moz-animation: prev-out 0.5s;
+       -o-animation: prev-out 0.5s;
+          animation: prev-out 0.5s;
+}
+  
+@-webkit-keyframes next-in {
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+
+@-mox-keyframes next-in {
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+
+@-o-keyframes next-in {
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+
+@keyframes next-in {
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+
+@-webkit-keyframes next-out {
+  0% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }  
+}
+
+@-moz-keyframes next-out {
+  0% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }  
+}
+
+@-o-keyframes next-out {
+  0% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }  
+}
+
+@keyframes next-out {
+  0% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+}
+
+@-webkit-keyframes prev-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+
+@-moz-keyframes prev-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+
+@-o-keyframes prev-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+
+@keyframes prev-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+
+@-webkit-keyframes prev-out {
+  0% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+}
+
+@-moz-keyframes prev-out {
+  0% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+}
+
+@-o-keyframes prev-out {
+  0% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+}
+
+@keyframes prev-out {
+  0% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+}
+/** End of Animation **/
+
+.quotes-carousel blockquote {
+  font-family: 'Roboto-Condensed', sans-serif;
   font-style: italic;
+  padding: 0.5em 10px;
+  quotes: "\201C""\201D""\2018""\2019";
 }
 
-/** Animate quotes appereance **/
-.quotes-item.animate {
-  opacity: 1;
+.quotes-carousel blockquote:before {
+  color: #ccc;
+  content: open-quote;
+  font-size: 4em;
+  line-height: 0.1em;
+  margin-right: 0.25em;
+  vertical-align: -0.4em;
 }
 
-.quotes-item.animate.ng-hide-add, 
-.quotes-item.animate.ng-hide-remove {
-  -webkit-transition:all linear 0.5s;
-  transition:all linear 0.5s;
+.quotes-carousel blockquote p {
+  display: inline;
 }
 
-.quotes-item.animate.ng-hide {
-  margin-right: -100%;
-  opacity: 0;
+.quotes-carousel cite {
+  padding: 20px 0;
+  font-size: 0.8em;
 }
-/** End animate quote appereance **/
 
 a.quotes-indicators {
   margin-top: 20px;
-  color: #000000;
+  color: rgba(0, 0, 0);
   text-decoration: none;
-  font-size: 0.5em;
+  font-size: 0.7em;
+  padding: 0 2px;
+  -webkit-transition: color 500ms ease-out 0.2s;
+  -moz-transition: color 500ms ease-out 0.2s;
+  -o-transition: color 500ms ease-out 0.2s;
+  transition: color 500ms ease-out 0.2s;
 }
 
-a.quotes-indicators.current {
-  color: #6666CC;
+a.quotes-indicators {
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
 }
+
+a.quotes-indicators.current { 
+  color: #6666CC;  
+}
+/** End of Quotes carousel **/
 /** End of Quotes **/
 
 /** Skills **/

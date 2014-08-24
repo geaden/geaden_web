@@ -1,0 +1,17 @@
+[
+    {
+        "title": "Build a house",
+        "votes": 1,
+        "done": false
+    },
+    {
+        "title": "Plant a tree",
+        "votes": 1,
+        "done": false
+    },
+    {
+        "title": "Have a son",
+        "votes": 1,
+        "done": false
+    }
+]

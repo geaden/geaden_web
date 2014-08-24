@@ -53,3 +53,31 @@ class Skill(ndb.Model):
     @classmethod
     def all(cls):
         return cls.query(Skill.enabled == True).order(-cls.approved).fetch()
+
+
+class Goal(ndb.Model):
+    """
+    Goal Model
+    """
+    title = ndb.StringProperty()
+    done = ndb.BooleanProperty(default=False)
+    votes = ndb.IntegerProperty(default=0)
+    enabled = ndb.BooleanProperty(default=True)
+
+    def to_dict(self):
+        d = super(Goal, self).to_dict()
+        d.update({'_id': self.key.id()})
+        return d
+
+    def delete(self):
+        self.enabled = False
+        self.put()
+
+    @classmethod
+    def all(cls):
+        return cls.query(Goal.enabled == True).order(-cls.votes).fetch()
+
+    @classmethod
+    def get(cls, goal_id):
+        return cls.get_by_id(int(goal_id))
+

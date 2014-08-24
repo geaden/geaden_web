@@ -28,20 +28,23 @@
       });       
 
       /**
-       * Changes picture on mouse enter       
+       * Changes picture on mouse enter
        */
-      $scope.changePic = function () {
-        $scope.changePicTimer = $timeout(function() {
-           $('#info img').fadeOut(400, function() {
+      $scope.changePic = function () {        
+        var $myPic = $('#info img');
+        if ($myPic.attr('src') == $scope.info.pic) {
+          $scope.changePicTimer = $timeout(function() {
+           $myPic.fadeOut(400, function() {
               var altPic = new Image();
               altPic.src = $scope.info.altPic;
               altPic.onload = function() {
-                $('#info img').attr('src', this.src);
-                $('#info img').fadeIn(400);
-              }                            
-          });          
-        }, 1000);
-      }     
+                $myPic.attr('src', this.src);
+                $myPic.fadeIn(400);
+              }
+            });
+          }, 1000);
+        }        
+      }
 
       /**
        * Reverts picture back
@@ -68,13 +71,13 @@
         $('body,html').animate({
           scrollTop : 0                       // Scroll to top of body
         }, 500);
-      });
+      });      
 
-      // Show content when loading finished
+      // Show content when loading finished      
       Pace.once('done', function() {
         $('.content').fadeIn(1000);
         $('.content').removeClass('loading');
-      });  
+      });   
   }]);
 
   geadenControllers.controller('QuotesCtrl', [
@@ -82,8 +85,9 @@
     'Quote',
     '$timeout', 
     '$log', 
-    function ($scope, Quote, $timeout, $log) {   
-      $scope.currentQuoteIndex = 0;
+    function ($scope, Quote, $timeout, $log) {
+      var loopTimeout = 8000;
+      $scope.currentQuoteIndex = 0;      
 
       $scope.quotes = Quote.query();    
 
@@ -91,14 +95,35 @@
        * Selects next quote        
        */
       $scope.nextQuote = function () {
-        $scope.selectQuote(++$scope.currentQuoteIndex % $scope.quotes.length);
-      }
+        $scope.selectQuote(($scope.currentQuoteIndex + 1) % $scope.quotes.length, true);      
+      }      
 
       /**
        * Selects desired quote
+       * @param {Integer} [index] [index of selected quote]
+       * @return {Boolean} [javascript specific return]
        */
-      $scope.selectQuote = function (index) {        
-        $scope.currentQuoteIndex = index;                  
+      $scope.selectQuote = function (index, isNext, isPrev) {
+        var prevQuoteIndex = $scope.currentQuoteIndex;
+
+        if (!(isNext || isPrev)) {
+          isNext = $scope.currentQuoteIndex < index;
+        }
+
+        var $currentQuote = $('.quotes-carousel > li.active');
+        var $nextQuote = $('.quotes-carousel > li:eq(' + index + ')');
+
+        $currentQuote.addClass(isNext ? 'next-out' : 'prev-out');
+        $nextQuote.addClass(isNext ? 'next-in' : 'prev-in');
+
+        // Stop animation
+        $nextQuote.one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function() {          
+          $(this).removeClass('next-in prev-in');
+          $currentQuote.removeClass('next-out prev-out');
+        });
+
+        $scope.currentQuoteIndex = index;
+        return false;
       }
 
       /**
@@ -118,7 +143,7 @@
         if (!up) {
           $scope.currentQuoteIndex = $scope.quotes.length;            
         }
-        $scope.selectQuote(--$scope.currentQuoteIndex);
+        $scope.selectQuote($scope.currentQuoteIndex - 1, false, true);
       }
 
       /**
@@ -130,17 +155,15 @@
         $scope.quotes.push({'author': author, 'quote': content});
       };
 
-      var looptTimeout = 8000;        
-
       /**
        * Loop over quotes
        */
       var quotesLoop = function() { 
         $scope.nextQuote();         
-        $timeout(quotesLoop, looptTimeout);
+        $scope.quoteLoopTimeout = $timeout(quotesLoop, loopTimeout);
       }
-
-      $timeout(quotesLoop, looptTimeout);
+    
+      $scope.quoteLoopTimeout = $timeout(quotesLoop, loopTimeout);
   }]);
 
   geadenControllers.controller('SkillsCtrl', [
@@ -254,7 +277,6 @@
         $scope.availableLinks = Link.query();       
         skill.links.push($scope.link);
         $scope.link = {};
-        $('.link-url').on
       }
 
       /**
@@ -446,5 +468,83 @@
         $scope.subject = '';
         $scope.message = '';
       }
-  }]);  
+  }]);
+
+  geadenControllers.controller('GoalsCtrl', [
+    '$scope', 
+    'Goal',
+    '$http',
+    'toaster',
+    '$log', function ($scope, Goal, $http, toaster, $log) {
+      $scope.editedGoal = null;
+
+      $scope.goals = Goal.query();
+
+      $scope.editGoal = function (goal) {
+        $scope.editedGoal = goal;
+        // Clone the original goal to restore it on demand.
+        $scope.originalGoal = angular.extend({}, goal);
+      };
+
+      $scope.addGoal = function () {
+        var newGoal = $scope.newGoal.trim();
+        if (!newGoal.length) {
+          return;
+        }      
+
+        $http.post('/goals/data', {title: newGoal}).success(function(data) {
+          $scope.goals.push(data);
+          toaster.pop('success', 'Goal Added', 'Goal with id ' + data._id + ' successfully added.');
+        }).error(function(error) {
+          toaster.pop('error', 'Failed to add goal', 'Can\'t add new goal. Error: ' + error);
+        });
+
+        $scope.newGoal = '';
+      };
+
+      $scope.doneEditing = function (goal) {
+        $scope.editedGoal = null;
+        goal.title = goal.title.trim();
+        if (goal.title != $scope.originalGoal.title) {
+          $http.post('/goals/data', {'_id': goal._id, 'title': goal.title, 'action': 'update'})
+          .success(function(data) {
+            goal = data;
+            toaster.pop('success', 'Goal Updated', 'Goal with id ' + goal._id + ' successfully updated.'); 
+          }).error(function(error) {
+            $scope.revertEditing(goal);
+            toaster.pop('error', 'Failed to update goal', 'Can\'t update goal. Error: ' + error);
+          })
+        }   
+        return true;         
+      };
+
+      $scope.accomplish = function(goal) {
+        $http.post('/goals/data', {'_id': goal._id, 'done': goal.done, 'action': 'accomplish'})
+          .success(function(data) {
+            goal = data;
+            var action = goal.done ? 'accomplished' : 'set';
+            toaster.pop('success', 'Goal ' + action, 'Goal with id ' + goal._id 
+              + ' successfully ' + action + '.'); 
+          }).error(function(error) {
+            goal.done = !goal.done;
+            toaster.pop('error', 'Failed to accomplish goal', 'Can\'t accomplish goal. Error: ' + error);
+          });
+      }
+
+      $scope.revertEditing = function (goal) {
+        $scope.goals[$scope.goals.indexOf(goal)] = $scope.originalGoal;
+        $scope.doneEditing($scope.originalGoal);
+        return true;
+      };
+
+      $scope.removeGoal = function (goal) {        
+        $http.post('/goals/data', {'_id': goal._id, 'action': 'delete'})
+         .success(function() {
+          $scope.goals.splice($scope.goals.indexOf(goal), 1);
+          toaster.pop('info', 'Goal Deleted', 'Goal with id ' + goal._id + ' deleted.');
+         }).error(function(error) {
+          toaster.pop('error', 'Failed to delete goal', 'Can\'t delete goal. Error: ' + error);
+         })
+      };
+  }]);
 })();

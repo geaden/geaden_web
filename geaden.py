@@ -1,19 +1,4 @@
 #!/usr/bin/env python
-#
-# Copyright 2007 Google Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
 import os
 import json
@@ -23,12 +8,14 @@ import webapp2
 from jinja import JINJA_ENVIRONMENT as jinja_env
 
 from google.appengine.api import mail
+from google.appengine.ext import ndb
+from google.appengine.api import users
 
-from models import Skill, Link
+from models import Skill, Link, Goal
 
 import logging
 
-__author__ = 'geaden'
+__author__ = 'Gennady Denisov <denisovgena@gmail.com>'
 
 
 DEBUG = True if os.environ.get('DEBUG', False) == 'True' else False
@@ -109,7 +96,8 @@ class SkillsJSONHandler(webapp2.RequestHandler):
     def get(self):        
         self.response.headers.add_header("Content-type", "application/json")
         resp = [skill.to_dict() for skill in Skill.all()]    
-        self.response.out.write(json.dumps(resp, default=date_handler, indent=4))
+        self.response.out.write(
+            json.dumps(resp, default=date_handler, indent=4))
 
     def insert_or_update(self, data):
         """
@@ -210,6 +198,82 @@ class EditPageHandler(MainHandler):
         self.render('edit.html')
 
 
+class GoalsPageHandler(MainHandler):
+    """
+    Goals Handler
+    """
+    def get(self):
+        self.render('goals.html')
+
+
+class GoalsJSONHandler(webapp2.RequestHandler):
+    ACCOMPLISH = 'accomplish'
+    UPDATE = 'update'
+    DELETE = 'delete'
+
+    def get(self):
+        self.response.headers.add_header('Content-Type', 'application/json')
+        goals = Goal.all()
+        return self.response.out.write(
+            json.dumps([g.to_dict() for g in goals], indent=4))
+
+    def action_allowed(self):
+        """Checks user authentiction"""
+        user = users.get_current_user()
+        if user:
+            if users.is_current_user_admin():
+                return True
+        else:            
+            return False
+
+    def post(self):
+        self.response.headers.add_header('Content-Type', 'application/json')        
+        goal_data = json.loads(self.request.body)        
+        if 'action' in goal_data:
+            if not self.action_allowed():
+                self.response.body = 'Sorry you are not allowed to do it for me.'
+                self.response.set_status(403)
+                return 
+            if goal_data['action'] in [self.ACCOMPLISH, self.UPDATE, 
+                self.DELETE]:
+                # Modify goal
+                if '_id' in goal_data:
+                    if goal_data['action'] == self.ACCOMPLISH:
+                        goal = Goal.get(goal_data['_id'])
+                        goal.done = goal_data['done']
+                        goal.put()
+                        return self.response.out.write(
+                            json.dumps(goal.to_dict(), 
+                            indent=4))                       
+                    elif goal_data['action'] == self.UPDATE:                        
+                        title = goal_data['title']
+                        goal = Goal.get(goal_data['_id'])
+                        goal.title = title
+                        goal.put()
+                        return self.response.out.write(
+                            json.dumps(goal.to_dict(), 
+                            indent=4))                        
+                    elif goal_data['action'] == self.DELETE:
+                        goal = Goal.get(goal_data['_id'])
+                        goal.delete()
+                        return
+                return self.error(400)
+            else:
+                return self.error(400)
+        goal_key = Goal(title=goal_data['title']).put() 
+        message = mail.EmailMessage(sender=DEFAULT_EMAIL_ADDRESS,
+                                    subject='geaden.com: New Goal')
+        message.to = DEFAULT_EMAIL_ADDRESS
+        email_body = jinja_env.get_template('email/email_goal.txt')
+        template_attrs = {'goal': goal_data['title']}
+        message.body = email_body.render(template_attrs)
+        email_html = jinja_env.get_template('email/email_goal.html')
+        message.html = email_html.render(template_attrs)
+        message.send()        
+        return self.response.out.write(json.dumps(goal_key.get().to_dict(), 
+            indent=4))
+
+
 class NotFoundPageHandler(MainHandler):
     """
     404 error handler
@@ -232,6 +296,8 @@ app = webapp2.WSGIApplication([
     ('/skills/?', SkillsJSONHandler),
     ('/links/?', LinksJSONHandler),
     ('/edit/?', EditPageHandler),
+    ('/goals/?', GoalsPageHandler),
+    ('/goals/data/?', GoalsJSONHandler),
     ('/email/?', ContactsJSONHandler),
     ('/skills/approve/?', SkillsApproverHandler),
     ('/.*', NotFoundPageHandler)
