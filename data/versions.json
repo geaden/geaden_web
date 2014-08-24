@@ -1,7 +1,7 @@
 {
     "libs": [
         {
-            "version": "1.9.9", 
+            "version": "1.9.8", 
             "lib": "Google App Engine"
         }, 
         {
@@ -9,5 +9,6 @@
             "lib": "Python"
         }
     ], 
-    "last_update": "2014-08-08T10:59:53.794310"
+    "hash": "c23b8a3057328243ae61877452a5b594e62673c7", 
+    "last_update": "2014-08-24T09:56:30.533993"
 }

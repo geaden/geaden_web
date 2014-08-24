@@ -18,6 +18,7 @@
 <div class="footer">
   <p ng-repeat="vInfo in versionInfo.libs">{{ vInfo.lib }}: {{ vInfo.version }}</p>  
   <p>Last updated: {{ versionInfo.last_update }}</p>
-  <p>Source: <a href="http://www.github.com/geaden/geaden_web">http://www.github.com/geaden/geaden_web</a></p>
+  <p>Source: <a href="https://www.github.com/geaden/geaden_web">https://www.github.com/geaden/geaden_web</a></p>
+  <p>Changeset: <a href="https://github.com/geaden/geaden_web/commit/{{ versionInfo.hash }}">{{ versionInfo.hash }}</a>
 </div>
 {% endblock %}
