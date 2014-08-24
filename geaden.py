@@ -150,7 +150,7 @@ class SkillsJSONHandler(webapp2.RequestHandler):
         return self.error(400)
 
 
-DEFAULT_EMAIL_ADDRESS = 'me@geaden.com'
+DEFAULT_EMAIL_ADDRESS = 'denisovgena@gmail.com'
 
 
 class ContactsJSONHandler(webapp2.RequestHandler):
