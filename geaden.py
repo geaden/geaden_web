@@ -2,6 +2,7 @@
 
 import os
 import json
+import datetime
 
 import webapp2
 
@@ -23,8 +24,10 @@ DEBUG = True if os.environ.get('DEBUG', False) == 'True' else False
 
 class MainHandler(webapp2.RequestHandler):
     """
-    Basic handler for web application.
+    Basic handler for web application.    
     """
+    template = None
+
     def write(self, *args, **kwargs):
         """
         Write out in response provided args and kwargs
@@ -40,17 +43,32 @@ class MainHandler(webapp2.RequestHandler):
         params['DEBUG'] = DEBUG
         return t.render(params)
 
-    def render(self, template, **kwargs):
+    def get_kwargs(self):
+        kwargs = {}
+        user = users.get_current_user()
+        if user:
+            if users.is_current_user_admin():
+                kwargs['user'] = user
+                kwargs['logout_url'] = users.create_logout_url('/')
+        return kwargs
+
+    def render(self, **kwargs):
         """
         Render page
         """
-        return self.write(self.render_str(template, **kwargs))
+        if self.template is None:
+            raise ValueError('No template!')
+        return self.write(self.render_str(self.template, **kwargs))
 
     def initialize(self, *args, **kwargs):
         """
         Initializing Main Handler.
         """
         webapp2.RequestHandler.initialize(self, *args, **kwargs)
+
+    def get(self):
+        kwargs = self.get_kwargs()
+        self.render(**kwargs)
 
 
 def date_handler(obj):
@@ -171,7 +189,8 @@ class ContactsJSONHandler(webapp2.RequestHandler):
         # TODO: send message to user as well!
         template_attrs = {'email': email,
                           'subject': subject,
-                          'message': msg}
+                          'message': msg,
+                          'now': datetime.datetime.now()}
         message.body = email_body.render(template_attrs)
         email_html = jinja_env.get_template('email/email_body.html')
         message.html = email_html.render(template_attrs)
@@ -194,22 +213,22 @@ class EditPageHandler(MainHandler):
     """
     Editor Handler
     """
-    def get(self):
-        self.render('edit.html')
+    template = 'edit.html'
 
 
 class GoalsPageHandler(MainHandler):
     """
     Goals Handler
     """
-    def get(self):
-        self.render('goals.html')
+    template = 'goals.html'
 
 
 class GoalsJSONHandler(webapp2.RequestHandler):
     ACCOMPLISH = 'accomplish'
     UPDATE = 'update'
     DELETE = 'delete'
+    PURGE = 'purge'
+    RESTORE = 'restore'
 
     def get(self):
         self.response.headers.add_header('Content-Type', 'application/json')
@@ -217,29 +236,20 @@ class GoalsJSONHandler(webapp2.RequestHandler):
         return self.response.out.write(
             json.dumps([g.to_dict() for g in goals], indent=4))
 
-    def action_allowed(self):
-        """Checks user authentiction"""
-        user = users.get_current_user()
-        if user:
-            if users.is_current_user_admin():
-                return True
-        else:            
-            return False
-
     def post(self):
         self.response.headers.add_header('Content-Type', 'application/json')        
         goal_data = json.loads(self.request.body)        
         if 'action' in goal_data:
-            if not self.action_allowed():
-                self.response.body = 'Sorry you are not allowed to do it for me.'
-                self.response.set_status(403)
-                return 
-            if goal_data['action'] in [self.ACCOMPLISH, self.UPDATE, 
-                self.DELETE]:
+            if goal_data['action'] in [
+                    self.ACCOMPLISH, 
+                    self.UPDATE, 
+                    self.DELETE, 
+                    self.PURGE,
+                    self.RESTORE]:
                 # Modify goal
                 if '_id' in goal_data:
+                    goal = Goal.get(goal_data['_id'])
                     if goal_data['action'] == self.ACCOMPLISH:
-                        goal = Goal.get(goal_data['_id'])
                         goal.done = goal_data['done']
                         goal.put()
                         return self.response.out.write(
@@ -247,29 +257,28 @@ class GoalsJSONHandler(webapp2.RequestHandler):
                             indent=4))                       
                     elif goal_data['action'] == self.UPDATE:                        
                         title = goal_data['title']
-                        goal = Goal.get(goal_data['_id'])
                         goal.title = title
                         goal.put()
                         return self.response.out.write(
                             json.dumps(goal.to_dict(), 
                             indent=4))                        
                     elif goal_data['action'] == self.DELETE:
-                        goal = Goal.get(goal_data['_id'])
                         goal.delete()
+                        return self.response.out.write(
+                            json.dumps(goal.to_dict(), 
+                            indent=4))
+                    elif goal_data['action'] == self.RESTORE:
+                        goal.restore()
+                        return self.response.out.write(
+                            json.dumps(goal.to_dict(), 
+                            indent=4))
+                    elif goal_data['action'] == self.PURGE:
+                        goal.purge()
                         return
                 return self.error(400)
             else:
                 return self.error(400)
-        goal_key = Goal(title=goal_data['title']).put() 
-        message = mail.EmailMessage(sender=DEFAULT_EMAIL_ADDRESS,
-                                    subject='geaden.com: New Goal')
-        message.to = DEFAULT_EMAIL_ADDRESS
-        email_body = jinja_env.get_template('email/email_goal.txt')
-        template_attrs = {'goal': goal_data['title']}
-        message.body = email_body.render(template_attrs)
-        email_html = jinja_env.get_template('email/email_goal.html')
-        message.html = email_html.render(template_attrs)
-        message.send()        
+        goal_key = Goal(title=goal_data['title']).put();        
         return self.response.out.write(json.dumps(goal_key.get().to_dict(), 
             indent=4))
 
@@ -278,23 +287,32 @@ class NotFoundPageHandler(MainHandler):
     """
     404 error handler
     """
+    template = '404.html'
+
     def get(self):
         self.response.set_status(404)
-        self.render('404.html')
+        self.render()
 
 
 class MainPage(MainHandler):
     """
     Main page handler
     """
-    def get(self):
-        self.render('index.html')
+    template = 'index.html'
+
+
+class HoopsPage(MainHandler):
+    """
+    Hoops page handler
+    """
+    template = 'hoops.html'
 
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
+    ('/hoops/?', HoopsPage),
     ('/skills/?', SkillsJSONHandler),
-    ('/links/?', LinksJSONHandler),
+    ('/links/?', LinksJSONHandler),    
     ('/edit/?', EditPageHandler),
     ('/goals/?', GoalsPageHandler),
     ('/goals/data/?', GoalsJSONHandler),

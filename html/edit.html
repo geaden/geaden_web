@@ -1,4 +1,12 @@
 {% extends 'layout.html' %}
+{% block ext_head %}
+<link href="/static/css/goals.css" rel="stylesheet" type="text/css" />
+<style>
+  img.beta {
+    display: none;
+  }
+</style>
+{% endblock %}
 {% block title %}Edit Skills{% endblock %}
 {% block content %}
 <edit-tabs></edit-tabs>

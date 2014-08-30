@@ -1,3 +1,11 @@
+{% set navigation_bar = [
+    ('/', 'home', 'Home'),
+    ('#', 'wiki', 'Wiki'),
+    ('http://blog.geaden.com', 'blog', 'Blog'),
+    ('/goals', 'goals', 'Goals'),
+    ('/hoops', 'hoops', 'Hoops')
+] -%}
+{% set active_page = active_page|default('home') -%}
 <!DOCTYPE html>
 <html ng-app="geaden">
   <head>    
@@ -31,11 +39,36 @@
     </script>
   </head>
   <body ng-controller="MyCtrl"> 
+    {% if user %}
+      <nav role="menu" id="nav-admin-menu">
+        <ul>
+          <li><a href="/"><i class="fa fa-home"></i></a></li>
+          <li><a href="/edit"><i class="fa fa-pencil"></i> Edit</a></li> 
+          <li><a href="<#= logout_url #>">Logout</a></li>         
+        </ul>        
+      </nav>
+    {% endif %}
     <a href="/"><img class="beta" src="/static/img/beta.png" alt="beta" /></a>
     <toaster-container></toaster-container>     
-    <header></header> 
-    {% block error %}{% endblock %}          
+    <header></header>    
+    {% block error %}{% endblock %}           
     <div class="content loading">
+      <nav role="menu" id="nav-menu">
+        <a href="javascript:void(0);" id="nav-toggle-menu"><i class="fa fa-bars fa-2"></i> Menu</a>
+        <ul>
+          {% for href, id, caption in navigation_bar %}
+            <li{% if id == active_page %} class="active"{% endif %}>
+              <a href="<#= href|e #>">
+                {% if id == 'home' %}
+                  <i class="fa fa-home"></i>
+                {% else %}
+                  <#= caption|e #> {% if id == 'hoops' %}<sup>FIBA 2014</sup>{% endif %}
+                {% endif %}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </nav>       
       {% block content %}{% endblock %}
       {% block footer %}{% endblock %}
     </div>    
@@ -58,6 +91,6 @@
     <script type="text/javascript" src="/static/js/app/app.{% if not DEBUG %}min.{% endif %}js"></script>
     <script type="text/javascript" src="/static/js/app/controllers.{% if not DEBUG %}min.{% endif %}js"></script>
     <script type="text/javascript" src="/static/js/app/services.{% if not DEBUG %}min.{% endif %}js"></script>    
-    <script type="text/javascript" src="/static/js/app/directives.{% if not DEBUG %}min.{% endif %}js"></script>            
+    <script type="text/javascript" src="/static/js/app/directives.{% if not DEBUG %}min.{% endif %}js"></script>          
   </body>
 </html>
