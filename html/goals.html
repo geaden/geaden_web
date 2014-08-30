@@ -2,7 +2,7 @@
 {% set active_page = 'goals' -%}
 {% block title %}Goals{% endblock %}
 {% block ext_head %}
-<link href="/static/css/goals.css" rel="stylesheet" type="text/css" />
+<link href="/static/css/goals.{% if not DEBUG %}min.{% endif %}css" rel="stylesheet" type="text/css" />
 <style>
 	html, body {
 		height: 100%;
