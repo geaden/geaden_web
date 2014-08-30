@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% set active_page = 'hoops' -%}
+{% block title %}Hoops{% endblock %}
+{% block ext_head %}
+<style type="text/css">
+  iframe[id^='twitter-widget-']{ width:100% !important;}
+</style>
+{% endblock %}
+{% block content %}
+<div id="hoops">
+  <h3>FIBA 2014 World Cup</h3>
+  <p>August 30, 2014 &ndash; September 14, 2014</p>
+  <a class="twitter-timeline" href="https://twitter.com/hashtag/fiba2014" data-widget-id="505610606766866432" width="100%"data-chrome="noborders transparent">#fiba2014 Tweets</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script> 
+</div>
+{% endblock %}

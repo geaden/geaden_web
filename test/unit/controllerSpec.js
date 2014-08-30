@@ -247,7 +247,7 @@ describe('Geaden controllers', function() {
     }));
 
     it('should create "skills tabs" model', function() {
-      expect(scope.tabs.length).toBe(2);      
+      expect(scope.tabs.length).toBe(3);      
     });
   });
 
@@ -318,16 +318,19 @@ describe('Geaden controllers', function() {
         respond(
           [
             {
+              _id: '123',
               title: 'Build a house', 
               votes: 1,
               done: false
             },
             {
+              _id: '456',
               title: 'Plant a tree', 
               votes: 1,
               done: false
             },
             {
+              _id: '789',
               title: 'Have a son', 
               votes: 1,
               done: false
@@ -349,8 +352,42 @@ describe('Geaden controllers', function() {
       scope.newGoal = 'Do Great Things';
       $httpBackend.expectPOST('/goals/data').respond({_id: 1, title: scope.newGoal});      
       scope.addGoal(scope.newGoal);
-      $httpBackend.flush();      
+      $httpBackend.flush();
       expect(scope.goals.length).toBe(4);
+    });
+
+    it('should delete a goal', function() {
+      expect(scope.goals.length).toBe(0);
+      $httpBackend.flush();
+      var beforeLength = scope.goals.length;
+      var goal = scope.goals[0];
+      $httpBackend.expectPOST('/goals/data').respond(
+        {_id: 1, title: goal.title, enabled: false}); 
+      scope.removeGoal(goal);
+      $httpBackend.flush();
+      expect(scope.goals.length).toBe(beforeLength);
+      expect(scope.goals[0].enabled).toBe(false);
+    });
+
+    it('should restore a goal', function() {
+      $httpBackend.flush();
+      var goal = scope.goals[0];
+      $httpBackend.expectPOST('/goals/data').respond(
+        {_id: 1, title: goal.title, enabled: true}); 
+      scope.restoreGoal(goal);
+      $httpBackend.flush();
+      expect(scope.goals[0].enabled).toBe(true);
     })
+
+    it('should purge a goal', function() {
+      expect(scope.goals.length).toBe(0);
+      $httpBackend.flush();
+      var beforeLength = scope.goals.length;
+      var goal = scope.goals[0];
+      $httpBackend.expectPOST('/goals/data').respond({_id: 1, title: scope.newGoal}); 
+      scope.purgeGoal(goal);
+      $httpBackend.flush();
+      expect(scope.goals.length).toBe(beforeLength - 1)
+    });
   });
 });

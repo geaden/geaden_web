@@ -1,25 +1,27 @@
 {% extends 'layout.html' %}
+{% set active_page = 'goals' -%}
 {% block title %}Goals{% endblock %}
 {% block ext_head %}
 <link href="/static/css/goals.css" rel="stylesheet" type="text/css" />
+<style>
+	html, body {
+		height: 100%;
+	}
+	
+	.content {
+		height: 100%;
+	} 
+</style>
 {% endblock %}
 {% block content %}
-<h3>My Goals</h3>
-<p class="goals-desc">Feel free to suggest me a goal :)</p>
-<div id="goals" ng-controller="GoalsCtrl">
-  <form id="goal-form" ng-submit="addGoal()">
-    <input id="new-goal" placeholder="Suggest me a goal" ng-model="newGoal" autofocus>
-  </form>  
+<h3>Goals</h3>
+<div id="goals" ng-controller="GoalsCtrl"> 
   <ul id="goals-list" ng-show="goals.length">    
-    <li ng-repeat="goal in goals" ng-class="{ done: goal.done, editing: goal == editedGoal }">
+    <li ng-repeat="goal in goals" ng-class="{ done: goal.done }" ng-show="goal.enabled">
       <div class="goal-view">
-        <input class="toggle" type="checkbox" ng-model="goal.done" ng-change="accomplish(goal)">
-        <label ng-dblclick="editGoal(goal)">{{ goal.title}}</label>
-        <button class="destroy" ng-click="removeGoal(goal)"></button>
+        <input class="toggle" type="checkbox" ng-model="goal.done" disabled="disabled">
+        <label>{{ goal.title}}</label>        
       </div>
-      <form ng-submit="doneEditing(goal)">
-        <input class="edit" ng-trim="false" ng-model="goal.title" goal-escape="revertEditing(goal)" goal-focus="goal == editedGoal">
-      </form>
     </li>
   </ul>
 </div>

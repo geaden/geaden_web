@@ -179,11 +179,7 @@ class PageTestCase(BaseTestCase):
         response = self.testapp.post_json('/goals/data', 
             {'title': 'Do Great Things'})
         self.assertEquals(response.status_int, 200)
-        self.assertEquals(len(Goal.all()), 4)
-        messages = self.mail_stub.get_sent_messages(sender=geaden.DEFAULT_EMAIL_ADDRESS)
-        self.assertEqual(1, len(messages))
-        self.assertIn('Do Great Things', messages[0].html.decode())
-        self.assertEqual(geaden.DEFAULT_EMAIL_ADDRESS, messages[0].sender)
+        self.assertEquals(len(Goal.all()), 4)        
         # Complete goal
         goal = Goal.all()[0]
         self.assertFalse(goal.done)
@@ -202,11 +198,24 @@ class PageTestCase(BaseTestCase):
         self.assertEquals(response.status_int, 200)
         goal = Goal.get(goal.key.id())
         self.assertEquals(goal.title, 'Do What Matters')
-        # Remove goal
+        # Disable goal
         response = self.testapp.post_json('/goals/data', 
             {'_id': goal.key.id(), 'action': 'delete'})
+        data = json.loads(response.normal_body)
         self.assertEquals(response.status_int, 200)
-        self.assertEquals(3, len(Goal.all()))
+        self.assertEquals(4, len(Goal.all()))
+        self.assertFalse(data['enabled'])
+        # Restore goal
+        response = self.testapp.post_json('/goals/data', 
+            {'_id': goal.key.id(), 'action': 'restore'})
+        data = json.loads(response.normal_body)
+        self.assertEquals(response.status_int, 200)
+        self.assertEquals(4, len(Goal.all()))
+        self.assertTrue(data['enabled'])
+
+    def testHoopsPageHandler(self):
+        response = self.testapp.get('/hoops')
+        self.assertEquals(response.status_int, 200)
 
     def testNotFoundPageHandler(self):
         response = self.testapp.get('/asdf', status=404)
@@ -256,3 +265,13 @@ class ModelsTestCase(BaseTestCase):
         g = Goal.get(goal_key.id())
         self.assertEquals(g.title, "Do Great things")
         self.assertFalse(g.done)
+        # Delete goal
+        g.delete()
+        self.assertEquals(len(Goal.all()), 1)
+        self.assertFalse(g.enabled)
+        # Restroe goal
+        g.restore()
+        self.assertTrue(g.enabled)
+        # Purge goal
+        g.purge()
+        self.assertEquals(len(Goal.all()), 0)

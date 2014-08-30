@@ -1,9 +1,30 @@
 <div id="tabs">
   <div ng-repeat="tab in tabs" class="tab" ng-click="selectTab($index)" ng-class="{ active : currentTab($index) }"><a href="javascript:void(0)">{{ tab }}</a></div>
   <div class="tab-content" id="skills" ng-show="currentTab(0)">
-  	<skills-edit></skills-edit>
+    <skills-edit></skills-edit>
   </div>
   <div class="tab-content" id="links" ng-show="currentTab(1)">
-  	<links-edit></links-edit>
+    <links-edit></links-edit>
+  </div>
+  <div class="tab-content" id="goals" ng-show="currentTab(2)">
+    <div id="goals" ng-controller="GoalsCtrl">
+    <form id="goal-form" ng-submit="addGoal()">
+      <input id="new-goal" placeholder="Suggest me a goal" ng-model="newGoal" autofocus>
+    </form>  
+    <ul id="goals-list" ng-show="goals.length">    
+      <li ng-repeat="goal in goals" ng-class="{ done: goal.done, editing: goal == editedGoal, disabled: !goal.enabled }">
+        <div class="goal-view">
+          <input class="toggle" type="checkbox" ng-model="goal.done" ng-change="accomplish(goal)">
+          <label ng-dblclick="editGoal(goal)">{{ goal.title}}</label>
+          <button class="restore" ng-show="!goal.enabled" ng-click="restoreGoal(goal)"></button>
+          <button class="purge" ng-show="!goal.enabled" ng-click="purgeGoal(goal)"></button>
+          <button class="destroy" ng-click="removeGoal(goal)" ng-show="goal.enabled"></button>          
+        </div>
+        <form ng-submit="doneEditing(goal)">
+          <input class="edit" ng-trim="false" ng-model="goal.title" goal-escape="revertEditing(goal)" goal-focus="goal == editedGoal">
+        </form>
+      </li>
+    </ul>
+  </div>
   </div>
 </div>

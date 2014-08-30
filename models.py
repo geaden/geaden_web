@@ -73,9 +73,16 @@ class Goal(ndb.Model):
         self.enabled = False
         self.put()
 
+    def restore(self):
+        self.enabled = True
+        self.put()
+
+    def purge(self):
+        self.key.delete()
+
     @classmethod
     def all(cls):
-        return cls.query(Goal.enabled == True).order(-cls.votes).fetch()
+        return cls.query().order(-cls.votes).fetch()
 
     @classmethod
     def get(cls, goal_id):

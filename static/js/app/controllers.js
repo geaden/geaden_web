@@ -77,7 +77,45 @@
       Pace.once('done', function() {
         $('.content').fadeIn(1000);
         $('.content').removeClass('loading');
-      });   
+      });
+
+      // Admin menu
+      var $adminMenu = $('#nav-admin-menu');
+      if ($adminMenu) {
+        var adminMenuShown = false;
+        $(window).mousemove(function(e) {          
+          if (e.clientX < 10 && e.clientY < 100) {            
+            $adminMenu.stop().animate({
+              top: 0,
+              opacity: .8
+            }, 'fast', function() {
+              $adminMenu.one('mouseleave touchend', function(e) {
+                $adminMenu.stop().animate({
+                  top: '-50px',
+                  opacity: 0
+                }, 'fast');
+                return true;
+              });
+            });
+          };
+        });
+      }
+
+      // Toggle menu
+      var $toggleMenu = $('#nav-toggle-menu');
+      $toggleMenu.click(function() {
+        $('#nav-menu > ul').slideToggle('slow');
+      });
+
+      // Show menu if size is large enough
+      $(window).resize(function() {        
+        var $navMenu = $('#nav-menu > ul');
+        if (!$navMenu.is(':visible')) {
+          if ($(window).width() > 600) {
+            $navMenu.show();
+          }
+        }
+      });
   }]);
 
   geadenControllers.controller('QuotesCtrl', [
@@ -400,16 +438,17 @@
 
   geadenControllers.controller('TabsCtrl', [
       '$scope',
-      '$log', function($scope, $log) {
+      '$location',
+      '$log', function($scope, $location, $log) {
         $scope.tabIndex = 0;
-        $scope.tabs = ['Skills', 'Links'];
+        $scope.tabs = ['Skills', 'Links', 'Goals'];
 
         /**
          * Selectes tab
          * @param  {ind} idx tab index
          */
         $scope.selectTab = function (idx) {
-          $scope.tabIndex = idx;
+          $scope.tabIndex = idx;          
         }
 
         /**
@@ -539,12 +578,32 @@
 
       $scope.removeGoal = function (goal) {        
         $http.post('/goals/data', {'_id': goal._id, 'action': 'delete'})
+         .success(function(data) {
+          $scope.goals[$scope.goals.indexOf(goal)] = data;
+          toaster.pop('info', 'Goal Disabled', 'Goal with id ' + goal._id + ' disabled.');
+         }).error(function(error) {
+          toaster.pop('error', 'Failed to disable goal', 'Can\'t disable goal. Error: ' + error);
+         });
+      };
+
+      $scope.restoreGoal = function (goal) {
+        $http.post('/goals/data', {'_id': goal._id, 'action': 'restore'})
+         .success(function(data) {
+          $scope.goals[$scope.goals.indexOf(goal)] = data;
+          toaster.pop('success', 'Goal Restored', 'Goal with id ' + goal._id + ' restored.');
+         }).error(function(error) {
+          toaster.pop('error', 'Failed to restore goal', 'Can\'t restore goal. Error: ' + error);
+         });
+      };
+
+      $scope.purgeGoal = function (goal) {        
+        $http.post('/goals/data', {'_id': goal._id, 'action': 'purge'})
          .success(function() {
           $scope.goals.splice($scope.goals.indexOf(goal), 1);
-          toaster.pop('info', 'Goal Deleted', 'Goal with id ' + goal._id + ' deleted.');
+          toaster.pop('info', 'Goal Purged', 'Goal with id ' + goal._id + ' purged.');
          }).error(function(error) {
-          toaster.pop('error', 'Failed to delete goal', 'Can\'t delete goal. Error: ' + error);
-         })
+          toaster.pop('error', 'Failed to purge goal', 'Can\'t purge goal. Error: ' + error);
+         });
       };
   }]);
 })();

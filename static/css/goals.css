@@ -1,14 +1,11 @@
-/** Goals list style **/
-html, body {
-  height: 100%;
-}
+/** Typicons **/
+@import url(http://weloveiconfonts.com/api/?family=typicons);
 
-.content {
-  height: 100%;
-}
-
-button,
-input {
+button.restore,
+button.destroy, 
+button.purge,
+input[type="checkbox"] {
+  outline: none;
   background: none;
   -webkit-box-shadow: none;
      -mox-box-shadow: none;
@@ -16,52 +13,20 @@ input {
           box-shadow: none;
 }
 
-button,
-input[type="checkbox"] {
-  outline: none;
-}
-
-button {
+button.restore,
+button.destroy,
+button.purge {
+  background: none;
   border: none;
-}
-
-#goals {
-  margin: 20px auto;
-  z-index: 99999;
 }
 
 #new-goal {
-  border-radius: 2px;
-  padding: 16px 16px 16px 60px;
-  border: none;
-  background: rgba(0, 0, 0, 0.02);
-  z-index: 2;
-  box-shadow: none;
-  position: relative;
-  margin: 0;
-  width: 100%;
-  font-size: 16px;
-  font-family: inherit;
-  line-height: 1.4em;
-  border: 0;
-  outline: none;
-  color: inherit;
-  padding: 6px;
-  border: 1px solid #999;
-  box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
-  -moz-box-sizing: border-box;
-   -ms-box-sizing: border-box;
-    -o-box-sizing: border-box;
-       box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-     -moz-font-smoothing: antialiased;
-      -ms-font-smoothing: antialiased;
-       -o-font-smoothing: antialiased;
-          font-smoothing: antialiased;
+  width: 90%;
 }
 
 .goals-desc {
   margin: 20px auto;
+  text-align: center;
 }
 
 #goals-list {
@@ -144,7 +109,17 @@ button {
   margin: 0 0 0 43px;
 }
 
-#goals-list li .destroy {
+#goals-list li.disabled {
+  border: none;
+  color: #ffffff;
+  background-color: #FF3333;
+  box-shadow: 0 0 4px rgb(136,0,0);
+  margin: 5px 0;
+}
+
+#goals-list li .purge,
+#goals-list li .destroy, 
+#goals-list li .restore {
   display: none;
   position: absolute;
   top: 0;
@@ -159,7 +134,18 @@ button {
   transition: all 0.2s;
 }
 
-#goals-list li .destroy:hover {
+#goals-list li .restore {
+  right: 45px;
+}
+
+#goals-list li .purge,
+#goals-list li .restore {
+  color: #c0c0c0;
+}
+
+#goals-list li .purge:hover, 
+#goals-list li .destroy:hover, 
+#goals-list li .restore:hover {
   text-shadow: 0 0 1px #000,
          0 0 10px rgba(199, 107, 107, 0.8);
   -webkit-transform: scale(1.3);
@@ -167,21 +153,22 @@ button {
   transform: scale(1.3);
 }
 
+#goals-list li .purge:before {  
+  content: ']';
+  font-family: 'Typicons', sans-serif;
+}
+
+#goals-list li .restore:before {  
+  content: '@';
+  font-family: 'Typicons', sans-serif;
+}
+
 #goals-list li .destroy:after {
   content: '✖';
 }
 
-#goals-list li:hover .destroy {
+#goals-list li:hover .purge,
+#goals-list li:hover .destroy,
+#goals-list li:hover .restore {
   display: block;
-}
-
-/* Smartphones (portrait and landscape) ----------- */
-@media only screen 
-and (min-width : 320px)
-and (max-width : 600px) {
-  #goals {
-    margin-top: 80px;
-    width: 80%;
-  }  
-
 }

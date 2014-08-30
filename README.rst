@@ -7,4 +7,6 @@ Welcome!
 This is my official web site source code `Geaden 
 <http://www.geaden.com/>`_.
 
-Feel free to distribute or use ;)
+Feel free to distribute or use it but for your own risk ;)
+
+Any suggestions are appreciated.
