@@ -864,8 +864,15 @@ and (max-width : 600px) {
 
   #nav-menu li {
     display: block;
-    border-right: none;
     border-bottom: 1px dotted #c0c0c0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  #nav-menu li:hover,
+  #nav-menu li.active {
+    border-radius: 5px;
+    border-bottom: none;
   }
 
   .content {
