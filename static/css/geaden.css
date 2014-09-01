@@ -196,6 +196,7 @@ img.beta {
 
 #nav-menu li:hover, #nav-menu li.active {
   background-color: #D0D0D0;
+  box-shadow: 2px 2px 0 #c0c0c0 inset;
 }
 
 #nav-menu li:hover a, #nav-menu li.active a {
