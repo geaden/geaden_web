@@ -104,6 +104,7 @@
       // Toggle menu
       var $toggleMenu = $('#nav-toggle-menu');
       $toggleMenu.click(function() {
+        $('.nav-icon').toggleClass('active');
         $('#nav-menu > ul').slideToggle('slow');
       });
 

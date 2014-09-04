@@ -53,8 +53,13 @@
     <header></header>    
     {% block error %}{% endblock %}           
     <div class="content loading">
-      <nav role="menu" id="nav-menu">
-        <a href="javascript:void(0);" id="nav-toggle-menu"><i class="fa fa-bars fa-2"></i> Menu</a>
+      <nav role="menu" id="nav-menu">        
+        <a href="javascript:void(0);" id="nav-toggle-menu">
+          <div class="nav-icon">
+            <div></div>
+          </div>
+          <span>Menu</span>
+        </a>
         <ul>
           {% for href, id, caption in navigation_bar %}
             <li{% if id == active_page %} class="active"{% endif %}>

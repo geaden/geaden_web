@@ -165,6 +165,50 @@ img.beta {
 }
 /** End Info **/
 
+/** Nav icon **/
+/** Credits to: http://w3bits.com/demo/animated-menu-icon-css/ **/
+.nav-icon {
+  width: 16px;
+  display: inline-block;
+}
+
+.nav-icon:after, 
+.nav-icon:before, 
+.nav-icon div {
+  background-color: #6666CC;
+  -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+      -ms-border-radius: 3px;
+       -o-border-radius: 3px;
+          border-radius: 3px;
+  content: '';
+  display: block;
+  height: 2px;
+  margin: 3px 0 0 0;
+  -webkit-transition: all .2s ease-in-out;
+     -moz-transition: all .2s ease-in-out;
+          transition: all .2s ease-in-out;
+}
+
+.nav-icon.active:before {
+  -webkit-transform: translateY(5px) rotate(135deg);
+     -moz-transform: translateY(5px) rotate(135deg);
+          transform: translateY(5px) rotate(135deg);
+}
+
+.nav-icon.active:after {
+  -webkit-transform: translateY(-5px) rotate(-135deg);
+     -moz-transform: translateY(-5px) rotate(-135deg);
+          transform: translateY(-5px) rotate(-135deg);
+}
+
+.nav-icon.active div {
+  -webkit-transform: scale(0);
+     -moz-transform: scale(0);
+          transform: scale(0);
+}
+/** End Nav icon **/
+
 /** Navigation menu **/
 #nav-toggle-menu {
   display: none;
@@ -274,7 +318,8 @@ img.beta {
   list-style: none; 
   width: 80%;
   height: 80px;
-  margin: 10px auto;
+  margin: 5px auto;
+  margin-bottom: 20px;
 }
 
 .quotes-carousel > li {
