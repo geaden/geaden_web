@@ -1,7 +1,7 @@
 {
     "libs": [
         {
-            "version": "1.9.8", 
+            "version": "1.9.17", 
             "lib": "Google App Engine"
         }, 
         {
