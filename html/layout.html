@@ -1,6 +1,5 @@
 {% set navigation_bar = [
     ('/', 'home', 'Home'),
-    ('#', 'wiki', 'Wiki'),
     ('http://blog.geaden.com', 'blog', 'Blog'),
     ('/goals', 'goals', 'Goals'),
     ('/hoops', 'hoops', 'Hoops')
@@ -39,6 +38,7 @@
     </script>
   </head>
   <body ng-controller="MyCtrl"> 
+    <canvas class="snow" width="1280" height="150"></canvas>
     {% if user %}
       <nav role="menu" id="nav-admin-menu">
         <ul>
