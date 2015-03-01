@@ -1,5 +1,13 @@
 /** Typicons **/
 @import url(http://weloveiconfonts.com/api/?family=typicons);
+/*
+html, body {
+  height: 100%;
+}
+
+.content {
+  height: 100%;
+} */
 
 button.restore,
 button.destroy, 

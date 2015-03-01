@@ -13,19 +13,7 @@
       '$timeout',
       '$log',
       function ($scope, Me, $http, moment, $timeout, $log) {
-        $scope.info = Me.query();
-
-        // Version info
-        $scope.versionInfo = {};
-
-        $http.get('/data/versions.json')
-          .success(function(data) {
-            $scope.versionInfo = data;
-            // Append AngularJS version
-            $scope.versionInfo.libs.push({lib: 'AngularJS', version: angular.version.full});
-            $scope.versionInfo.last_update = moment(
-              $scope.versionInfo.last_update).format('MMM D, YYYY HH:mm:ss');
-        });       
+        $scope.info = Me.query();            
 
         /**
          * Changes picture on mouse enter
@@ -106,8 +94,7 @@
             
             ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
             ctx.beginPath();
-            for(var i = 0; i < mp; i++)
-            {
+            for (var i = 0; i < mp; i++) {
               var p = particles[i];
               ctx.moveTo(p.x, p.y);
               ctx.arc(p.x, p.y, p.r, 0, Math.PI*2, true);
@@ -119,8 +106,7 @@
           //Function to move the snowflakes
           //angle will be an ongoing incremental flag. Sin and Cos functions will be applied to it to create vertical and horizontal movements of the flakes
           var angle = 0;
-          function update()
-          {
+          function update() {
             angle += 0.01;
             for(var i = 0; i < mp; i++)
             {
@@ -168,7 +154,7 @@
           $('.content').removeClass('loading');
           // Let the snow start only if it's winter time
           if ([11, 0, 1].indexOf(moment().month()) !== -1) {
-            $('body').addClass('snows', 1000, 'ease');          
+            $(document.body).addClass('snows', 1000, 'ease');          
             snow();
           }
           // TODO: make more fancy backgrounds
@@ -194,24 +180,7 @@
               });
             }
           });
-        }
-
-        // Toggle menu
-        var $toggleMenu = $('#nav-toggle-menu');
-        $toggleMenu.click(function() {
-          $('.nav-icon').toggleClass('active');
-          $('#nav-menu > ul').slideToggle('slow');
-        });
-
-        // Show menu if size is large enough
-        $(window).resize(function() {        
-          var $navMenu = $('#nav-menu > ul');
-          if (!$navMenu.is(':visible')) {
-            if ($(window).width() > 600) {
-              $navMenu.show();
-            }
-          }
-        });
+        }        
     }]);
 
     geadenControllers.controller('QuotesCtrl', [
@@ -472,6 +441,7 @@
         };
     }]);
 
+    /** Links Controller */
     geadenControllers.controller('LinksCtrl', [
         '$scope',
         'Link',
@@ -572,6 +542,7 @@
         $scope.experienceList = Experience.query();  
     }]);
 
+    /** Contacts controller */
     geadenControllers.controller('ContactsCtrl', [
       '$scope', 
       'Contact',
@@ -605,6 +576,80 @@
         };
     }]);
 
+    /** Navigation Controller */
+    geadenControllers.controller('MenuCtrl', [
+      '$scope',
+      '$location',
+      '$http', function($scope, $location, $http) {
+        $scope.nav = [
+          {href: '#/', id: 'home', title: 'Home'},
+          {href: 'http://blog.geaden.com', id: 'blog', title: 'Blog'},
+          {href: '#/goals', id: 'goals', title: 'Goals'},
+          {href: '#/hoops', id: 'hoops', title: 'Hoops'}
+        ];
+
+        /**
+         * Detects whether current path is active menu item
+         * @param  {Object}  menu item to detect
+         * @return {Boolean} current menu item is active
+         */
+        $scope.isActive = function(menuItem) {
+          if ($location.path() === menuItem.href.substring(1, menuItem.href.length)) {
+            return true;
+          }
+          return false;
+        };
+
+        // Toggle menu
+        var $toggleMenu = $('#nav-toggle-menu');
+        $toggleMenu.click(function() {
+          $('.nav-icon').toggleClass('active');
+          $('#nav-menu > ul').slideToggle('slow');
+        });
+
+        // Show menu if size is large enough
+        $(window).resize(function() {        
+          var $navMenu = $('#nav-menu > ul');
+          if (!$navMenu.is(':visible')) {
+            if ($(window).width() > 600) {
+              $navMenu.show();
+            }
+          }
+        });
+      }
+    ]);
+
+    /** Version Controller */
+    geadenControllers.controller('VersionCtrl', [
+      '$scope',
+      '$http', function($scope, $http) {
+        // Version info
+        $scope.versionInfo = {};
+
+        $http.get('/data/versions.json')
+          .success(function(data) {
+            $scope.versionInfo = data;
+            // Append AngularJS version
+            $scope.versionInfo.libs.push({lib: 'AngularJS', version: angular.version.full});
+            $scope.versionInfo.last_update = moment(
+              $scope.versionInfo.last_update).format('MMM D, YYYY HH:mm:ss');
+        });      
+    }]);
+
+    /** Hoops Controller */
+    geadenControllers.controller('HoopsCtrl', [
+      '$scope', function ($scope) {
+        $scope.fibaShown = false;
+
+        /**
+         * Toggles showing FIBA
+         */
+        $scope.toggleFiba = function() {
+          $scope.fibaShown = !$scope.fibaShown;
+        }
+    }])
+
+    /** Goals Controller */
     geadenControllers.controller('GoalsCtrl', [
       '$scope', 
       'Goal',

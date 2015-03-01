@@ -6,10 +6,9 @@ import datetime
 
 import webapp2
 
-from jinja import JINJA_ENVIRONMENT as jinja_env
+from jinja import JINJA_ENVIRONMENT
 
 from google.appengine.api import mail
-from google.appengine.ext import ndb
 from google.appengine.api import users
 
 from models import Skill, Link, Goal
@@ -24,7 +23,7 @@ DEBUG = True if os.environ.get('DEBUG', False) == 'True' else False
 
 class MainHandler(webapp2.RequestHandler):
     """
-    Basic handler for web application.    
+    Basic handler for web application.
     """
     template = None
 
@@ -38,7 +37,7 @@ class MainHandler(webapp2.RequestHandler):
         """
         Rendering provided kwargs into template
         """
-        t = jinja_env.get_template(template)
+        t = JINJA_ENVIRONMENT.get_template(template)
         # Add DEBUG parameter
         params['DEBUG'] = DEBUG
         return t.render(params)
@@ -101,7 +100,7 @@ class LinksJSONHandler(webapp2.RequestHandler):
             self.response.set_status(200)
         else:
             link = Link(title=link_data['title'],
-                id=link_data['url'])
+                        id=link_data['url'])
             self.response.set_status(201)
         link.put()
         return self.response.out.write(json.dumps(link.to_dict()))
@@ -111,9 +110,9 @@ class SkillsJSONHandler(webapp2.RequestHandler):
     """
     Skills JSON Handler
     """
-    def get(self):        
+    def get(self):
         self.response.headers.add_header("Content-type", "application/json")
-        resp = [skill.to_dict() for skill in Skill.all()]    
+        resp = [skill.to_dict() for skill in Skill.all()]
         self.response.out.write(
             json.dumps(resp, default=date_handler, indent=4))
 
@@ -135,7 +134,7 @@ class SkillsJSONHandler(webapp2.RequestHandler):
             else:
                 # insert
                 skill = Skill(title=skill_data['title'],
-                    desc=skill_data['desc'])
+                              desc=skill_data['desc'])
             if 'links' in skill_data:
                 skill.links = []
                 for link in skill_data['links']:
@@ -143,7 +142,7 @@ class SkillsJSONHandler(webapp2.RequestHandler):
                     l = Link.get_by_id(link['url'])
                     if l is None:
                         Link(title=link['title'], id=link['url']).put()
-            skill_key = skill.put();
+            skill_key = skill.put()
             skill_dict = skill_key.get().to_dict()
             self.response.set_status(status)
             return self.response.out.write(
@@ -151,7 +150,7 @@ class SkillsJSONHandler(webapp2.RequestHandler):
         return self.error(400)
 
     def post(self, *args, **kwargs):
-        allowed_actions = ['delete', 'update', 'new'];        
+        allowed_actions = ['delete', 'update', 'new']
         data = json.loads(self.request.body)
         action = data['action']
         if action in allowed_actions:
@@ -160,7 +159,7 @@ class SkillsJSONHandler(webapp2.RequestHandler):
                 skill.enabled = False
                 skill.put()
                 self.response.set_status(200)
-                return  
+                return
             if action == 'new':
                 return self.insert_or_update(data)
             if action == 'update':
@@ -185,14 +184,14 @@ class ContactsJSONHandler(webapp2.RequestHandler):
         message = mail.EmailMessage(sender=DEFAULT_EMAIL_ADDRESS,
                                     subject='geaden.com: {0}'.format(subject))
         message.to = DEFAULT_EMAIL_ADDRESS
-        email_body = jinja_env.get_template('email/email_body.txt')
+        email_body = JINJA_ENVIRONMENT.get_template('email/email_body.txt')
         # TODO: send message to user as well!
         template_attrs = {'email': email,
                           'subject': subject,
                           'message': msg,
                           'now': datetime.datetime.now()}
         message.body = email_body.render(template_attrs)
-        email_html = jinja_env.get_template('email/email_body.html')
+        email_html = JINJA_ENVIRONMENT.get_template('email/email_body.html')
         message.html = email_html.render(template_attrs)
         message.send()
 
@@ -237,13 +236,13 @@ class GoalsJSONHandler(webapp2.RequestHandler):
             json.dumps([g.to_dict() for g in goals], indent=4))
 
     def post(self):
-        self.response.headers.add_header('Content-Type', 'application/json')        
-        goal_data = json.loads(self.request.body)        
+        self.response.headers.add_header('Content-Type', 'application/json')
+        goal_data = json.loads(self.request.body)
         if 'action' in goal_data:
             if goal_data['action'] in [
-                    self.ACCOMPLISH, 
-                    self.UPDATE, 
-                    self.DELETE, 
+                    self.ACCOMPLISH,
+                    self.UPDATE,
+                    self.DELETE,
                     self.PURGE,
                     self.RESTORE]:
                 # Modify goal
@@ -253,34 +252,34 @@ class GoalsJSONHandler(webapp2.RequestHandler):
                         goal.done = goal_data['done']
                         goal.put()
                         return self.response.out.write(
-                            json.dumps(goal.to_dict(), 
-                            indent=4))                       
-                    elif goal_data['action'] == self.UPDATE:                        
+                            json.dumps(goal.to_dict(),
+                                       indent=4))
+                    elif goal_data['action'] == self.UPDATE:
                         title = goal_data['title']
                         goal.title = title
                         goal.put()
                         return self.response.out.write(
-                            json.dumps(goal.to_dict(), 
-                            indent=4))                        
+                            json.dumps(goal.to_dict(),
+                                       indent=4))
                     elif goal_data['action'] == self.DELETE:
                         goal.delete()
                         return self.response.out.write(
-                            json.dumps(goal.to_dict(), 
-                            indent=4))
+                            json.dumps(goal.to_dict(),
+                                       indent=4))
                     elif goal_data['action'] == self.RESTORE:
                         goal.restore()
                         return self.response.out.write(
-                            json.dumps(goal.to_dict(), 
-                            indent=4))
+                            json.dumps(goal.to_dict(),
+                                       indent=4))
                     elif goal_data['action'] == self.PURGE:
                         goal.purge()
                         return
                 return self.error(400)
             else:
                 return self.error(400)
-        goal_key = Goal(title=goal_data['title']).put();        
-        return self.response.out.write(json.dumps(goal_key.get().to_dict(), 
-            indent=4))
+        goal_key = Goal(title=goal_data['title']).put()
+        return self.response.out.write(json.dumps(goal_key.get().to_dict(),
+                                                  indent=4))
 
 
 class NotFoundPageHandler(MainHandler):
@@ -312,9 +311,9 @@ app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/hoops/?', HoopsPage),
     ('/skills/?', SkillsJSONHandler),
-    ('/links/?', LinksJSONHandler),    
+    ('/links/?', LinksJSONHandler),
     ('/edit/?', EditPageHandler),
-    ('/goals/?', GoalsPageHandler),
+    # ('/goals/?', GoalsPageHandler),
     ('/goals/data/?', GoalsJSONHandler),
     ('/email/?', ContactsJSONHandler),
     ('/skills/approve/?', SkillsApproverHandler),

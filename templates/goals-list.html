@@ -1,0 +1,11 @@
+<h3>Goals</h3>
+<div id="goals"> 
+  <ul id="goals-list" ng-show="goals.length">    
+    <li ng-repeat="goal in goals" ng-class="{ done: goal.done }" ng-show="goal.enabled">
+      <div class="goal-view">
+        <input class="toggle" type="checkbox" ng-model="goal.done" disabled="disabled">
+        <label>{{ goal.title}}</label>        
+      </div>
+    </li>
+  </ul>
+</div>

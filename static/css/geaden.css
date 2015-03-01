@@ -10,10 +10,11 @@ a {
 
 html, body {
   width: 100%;
-  height: auto;
+  min-height: 100% !important;
+  height: 100%;
 }
 
-body {  
+body {
   background-image:url('/static/img/bg.jpg');
   background-color: #527A00;
   background-attachment: fixed;
@@ -58,9 +59,44 @@ hr {
   font-size: 0.6em;
 }
 
+/** Navigation animation http://dfsq.github.io/ngView-animation-effects/app/#/code */
+.page {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  opacity: 1;
+}
+
+.page.ng-enter,
+.page.ng-leave {
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  transition: all 1s ease;
+}
+
+.page.ng-enter {  
+  opacity: 0;
+}
+
+.page.ng-enter-active {
+  opacity: 1;
+}
+
+.page.ng-leave {
+  opacity: 1;
+}
+
+.page.ng-leave-active {
+  display: none;
+  opacity: 0;
+}
+/** End of navigation animation */
+
 .content {
   width: 60%;
-  height: 100%;
+  /*height: 100%;*/
   min-height:100%;
   margin: 0 auto;
   font-family: 'Roboto', sans-serif; 
@@ -884,6 +920,32 @@ input:focus, textarea:focus {
   padding: 15px 0;
 }
 
+iframe[id^='twitter-widget-']{ width:100% !important;}
+
+.fiba-animate {
+  line-height: 20px;
+  opacity: 1;
+  padding: 10px;
+}
+
+.fiba-animate.ng-hide-add.ng-hide-add-active,
+.fiba-animate.ng-hide-remove.ng-hide-remove-active {
+  -webkit-transition: all linear 0.5s;
+  transition: all linear 0.5s;
+}
+
+.fiba-animate.ng-hide {
+  line-height: 0;
+  opacity: 0;
+  padding: 0 10px;
+}
+
+#fiba-archive a {
+  color:  #9999CF;
+  font-size: 12px;
+  border-bottom: 1px dotted #c9c9c9;
+}
+
 /** End Hoops **/
 
 /** Footer **/
@@ -937,6 +999,7 @@ and (max-width : 600px) {
   }
 
   .content {
+    position: relative;
     width: auto;    
   }
 

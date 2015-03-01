@@ -12,11 +12,50 @@ describe('Geaden controllers', function() {
     });
   });
 
+  describe('VersionCtrl', function() {
+    var scope, ctrl, $httpBackend;
+
+    beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
+      $httpBackend = _$httpBackend_;
+      $httpBackend.whenGET('/data/versions.json')
+        .respond(function (method, url, data) {
+          return [200, {libs: [], last_update: '2014-08-06T12:34:43'}, {}];
+        });
+      scope = $rootScope.$new();
+      ctrl = $controller('VersionCtrl', {$scope: scope});
+    }));
+
+    afterEach(function() {
+      $httpBackend.verifyNoOutstandingExpectation();
+      $httpBackend.verifyNoOutstandingRequest();
+      $httpBackend.resetExpectations();
+    });
+
+    it('should create "versionInfo" model', function() {
+      $httpBackend.flush();
+      expect(scope.versionInfo.last_update).toBe('Aug 6, 2014 12:34:43');
+    });
+  });
+
+  describe('MenuCtrl', function() {
+    var scope, ctrl;
+
+    beforeEach(inject(function($rootScope, $controller) {
+      scope = $rootScope.$new();
+      ctrl = $controller('MenuCtrl', {$scope: scope});
+    }));
+
+    it('should get active item', function() {
+      var active = scope.isActive({href: '/', id: 'home', title: 'Home'});
+      expect(active).toBe(true);
+    });
+  });
+
   describe('MyCtrl', function() {    
     var scope, ctrl, $httpBackend;
 
     beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
-      $httpBackend = _$httpBackend_;   
+      $httpBackend = _$httpBackend_;
       $httpBackend.whenGET('/data/me.json')
         .respond({name: 'John Doe', birthDay: '1987-05-10', pic: '/foo/bar.png'});     
       $httpBackend.whenGET('/data/versions.json')
@@ -40,11 +79,6 @@ describe('Geaden controllers', function() {
       var age = scope.age();
       expect(scope.age()).toBe(27);
       expect(scope.info.pic).toBe('/foo/bar.png');
-    });
-
-    it('should create "versionInfo" model', function() {
-      $httpBackend.flush();
-      expect(scope.versionInfo.last_update).toBe('Aug 6, 2014 12:34:43');
     });
   });
 
@@ -156,7 +190,7 @@ describe('Geaden controllers', function() {
       $httpBackend.flush();
       var before = scope.skills.length;
       var skill = {title: 'Python', desc: 'Love it!'};
-      skill['_id'] = 5;
+      skill._id = 5;
       $httpBackend.expectPOST('/skills/', {data: skill, action: 'new'}).respond(201, skill);
       scope.addSkill(skill);      
     }); 
@@ -194,11 +228,11 @@ describe('Geaden controllers', function() {
       expect(scope.links.length).toBe(0);
       $httpBackend.flush();
       expect(scope.links.length).toBe(2);
-      scope.links[0]['action'] = 'delete';
+      scope.links[0].action = 'delete';
       $httpBackend.expectPOST('/links', scope.links[0]).respond('');
       scope.removeLink(scope.links[0], 0);
       expect(scope.links.length).toBe(1);
-    })
+    });
   });
 
   describe('ExperienceCtrl', function() {
@@ -377,7 +411,7 @@ describe('Geaden controllers', function() {
       scope.restoreGoal(goal);
       $httpBackend.flush();
       expect(scope.goals[0].enabled).toBe(true);
-    })
+    });
 
     it('should purge a goal', function() {
       expect(scope.goals.length).toBe(0);
@@ -387,7 +421,7 @@ describe('Geaden controllers', function() {
       $httpBackend.expectPOST('/goals/data').respond({_id: 1, title: scope.newGoal}); 
       scope.purgeGoal(goal);
       $httpBackend.flush();
-      expect(scope.goals.length).toBe(beforeLength - 1)
+      expect(scope.goals.length).toBe(beforeLength - 1);
     });
   });
 });

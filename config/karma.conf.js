@@ -18,7 +18,7 @@ module.exports = function(config) {
       'static/js/lib/jquery.min.js',
       'static/js/lib/bloodhound.js',
       'static/js/lib/moment.min.js',
-      'static/js/lib/angular.js',
+      'static/js/lib/angular.min.js',
       'static/js/lib/angular-*.js',
       'static/js/lib/toaster.js',
       'static/js/lib/pace.min.js',
