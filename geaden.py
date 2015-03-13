@@ -307,6 +307,13 @@ class HoopsPage(MainHandler):
     template = 'hoops.html'
 
 
+class PiDayPageHandler(MainHandler):
+    """
+    Pi Day page handler
+    """
+    template = 'pi_day.html'
+
+
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/hoops/?', HoopsPage),
@@ -314,6 +321,7 @@ app = webapp2.WSGIApplication([
     ('/links/?', LinksJSONHandler),
     ('/edit/?', EditPageHandler),
     # ('/goals/?', GoalsPageHandler),
+    ('/pi/?', PiDayPageHandler),
     ('/goals/data/?', GoalsJSONHandler),
     ('/email/?', ContactsJSONHandler),
     ('/skills/approve/?', SkillsApproverHandler),

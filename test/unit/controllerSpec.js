@@ -424,4 +424,18 @@ describe('Geaden controllers', function() {
       expect(scope.goals.length).toBe(beforeLength - 1);
     });
   });
+
+  describe('AnnouncementCtrl', function() {
+    var scope, ctrl, $httpBackend;
+
+    beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
+      scope = $rootScope.$new();
+      ctrl = $controller('AnnouncementCtrl', {$scope: scope}); 
+    }));
+
+    it('should get announcement', function() {
+      scope.announcement = 'Test announcement';
+      expect(scope.getAnnouncement()).not.toBe(null);
+    });
+  });
 });

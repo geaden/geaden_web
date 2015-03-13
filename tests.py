@@ -205,6 +205,11 @@ class PageTestCase(BaseTestCase):
         self.assertEquals(response.status_int, 404)
         self.assertIn('Sorry...', response.normal_body)
 
+    def test_pi_page_handler(self):
+        response = self.testapp.get('/pi')
+        self.assertEquals(response.status_int, 200)
+        self.assertIn('&pi;', response.normal_body)
+
 
 class ModelsTestCase(BaseTestCase):
     """

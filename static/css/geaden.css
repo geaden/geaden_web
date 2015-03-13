@@ -106,6 +106,32 @@ hr {
   background-color: rgb(240,240,240);
 }
 
+.announcement {
+  border: 1px solid;  
+  background-color: #D8E3F6;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  padding: 15px;
+  margin: 10px 0;
+  box-shadow: 0 0 5px #c0c0c0;
+}
+
+.announcement.info {
+  border-color: #01A462;
+  background-color: #DCEDC8;
+}
+
+.announcement span {
+  font-size: 18px;
+  font-weight: 700px;
+}
+
+.announcement a {
+  color: #9999CF;
+  text-decoration: underline;
+}
+
 /** Up arrow */
 #up {
   position: fixed;

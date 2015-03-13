@@ -4,6 +4,33 @@
 (function () {
   var geadenControllers = angular.module('geadenControllers', ['geadenServices', 'toaster', 'angularMoment']);
 
+  /** Announcements controller */
+  geadenControllers.controller('AnnouncementCtrl', 
+    [
+      '$scope',
+      '$sce',
+      '$http',
+      'moment', function($scope, $sce, $http, moment) {
+        $scope.announcement = null;
+
+        /** Gets announcement based on some event */
+        $scope.getAnnouncement = function() {
+          // PI day
+          var PI_MONTH = 3;
+          var PI_DATE = 14;
+          var m = moment();
+          if (PI_DATE === m.date() 
+            && PI_MONTH === m.month() + 1) {
+            $scope.announcement = {};
+            $scope.announcement.icon = '';
+            $scope.announcement.type = 'info';
+            $scope.announcement.text = $sce.trustAsHtml('It\'s a <span>&pi;</span> day! Visit \
+              calculation <a href="/pi">page</a>.');
+          }
+          return $scope.announcement;
+        };
+  }]);
+
   geadenControllers.controller('MyCtrl',
     [
       '$scope',
@@ -646,8 +673,8 @@
          */
         $scope.toggleFiba = function() {
           $scope.fibaShown = !$scope.fibaShown;
-        }
-    }])
+        };
+    }]);
 
     /** Goals Controller */
     geadenControllers.controller('GoalsCtrl', [

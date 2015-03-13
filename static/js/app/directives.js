@@ -79,6 +79,14 @@
     };
   });
 
+  app.directive('geadenAnnouncement', function() {
+    return {
+      restrict: 'E',
+      templateUrl: '/templates/geaden-announcement.html',
+      controller: 'AnnouncementCtrl'
+    }
+  });
+
   app.directive('goalFocus', function goalFocus($timeout) {
     'use strict';
 

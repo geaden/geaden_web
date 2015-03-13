@@ -17,6 +17,7 @@
   "jquery": true,
   "white": false,
   "unused": false,
+  "multistr": true,
   "predef": [
     "moment",
     "exports", 
