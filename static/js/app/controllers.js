@@ -2,7 +2,143 @@
 
 /* Controllers */
 (function () {
-  var geadenControllers = angular.module('geadenControllers', ['geadenServices', 'toaster', 'angularMoment']);
+  // Admin menu
+  var $adminMenu = $('#nav-admin-menu');
+  if ($adminMenu) {
+    var adminMenuShown = false;
+    $(window).mousemove(function(e) {
+      if (e.clientX < 10 && e.clientY < 100) {
+        $adminMenu.stop().animate({
+          top: 0,
+          opacity: 0.8
+        }, 'fast', function() {
+          $adminMenu.one('mouseleave touchend', function(e) {
+            $adminMenu.stop().animate({
+              top: '-50px',
+              opacity: 0
+            }, 'fast');
+            return true;
+          });
+        });
+      }
+    });
+  }
+
+  // Show content when loading finished
+  Pace.once('done', function() {
+    $('.content').fadeIn(1000);
+    $('.content').removeClass('loading');
+    // Let the snow start only if it's winter time
+    if ([11, 0, 1].indexOf(moment().month()) !== -1) {
+      $(document.body).addClass('snows', 1000, 'ease');
+      snow();
+    }
+    // TODO: make more fancy backgrounds
+  });
+
+  $(window).scroll(function() {
+    if ($(this).scrollTop() >= 100) {     // If page is scrolled more than 50px
+      $('#up').fadeIn(400);               // Fade in the arrow
+    } else {
+      $('#up').fadeOut(400);              // Else fade out the arrow
+    }
+  });
+
+  $('#up').click(function() {             // When arrow is clicked
+    $('body,html').animate({
+      scrollTop : 0                       // Scroll to top of body
+    }, 500);
+  });
+
+  /**
+   * Falling snow using html5
+   * Legacy of http://thecodeplayer.com/walkthrough/html5-canvas-snow-effect
+   */
+  var snow = function(){
+    //canvas init
+    var canvas = document.getElementsByTagName('canvas')[0];
+    var ctx = canvas.getContext('2d');
+
+    //canvas dimensions
+    var W = window.innerWidth;
+    var H = window.innerHeight;
+    canvas.width = W;
+    canvas.height = H;
+
+    //snowflake particles
+    var mp = 25; //max particles
+    var particles = [];
+    for(var i = 0; i < mp; i++) {
+      particles.push({
+        x: Math.random()*W, //x-coordinate
+        y: Math.random()*H, //y-coordinate
+        r: Math.random()*4+1, //radius
+        d: Math.random()*mp //density
+      });
+    }
+
+    //Lets draw the flakes
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+      ctx.beginPath();
+      for (var i = 0; i < mp; i++) {
+        var p = particles[i];
+        ctx.moveTo(p.x, p.y);
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2, true);
+      }
+      ctx.fill();
+      update();
+    }
+
+    //Function to move the snowflakes
+    //angle will be an ongoing incremental flag. Sin and Cos functions will be applied to it to create vertical and horizontal movements of the flakes
+    var angle = 0;
+    function update() {
+      angle += 0.01;
+      for(var i = 0; i < mp; i++)
+      {
+        var p = particles[i];
+        //Updating X and Y coordinates
+        //We will add 1 to the cos function to prevent negative values which will lead flakes to move upwards
+        //Every particle has its own density which can be used to make the downward movement different for each flake
+        //Lets make it more random by adding in the radius
+        p.y += Math.cos(angle+p.d) + 1 + p.r/2;
+        p.x += Math.sin(angle) * 2;
+
+        //Sending flakes back from the top when it exits
+        //Lets make it a bit more organic and let flakes enter from the left and right also.
+        if(p.x > W+5 || p.x < 0 || p.y > H)
+        {
+          if(i%3 > 0) //66.67% of the flakes
+          {
+            particles[i] = {x: Math.random()*W, y: -10, r: p.r, d: p.d};
+          }
+          else
+          {
+            //If the flake is exitting from the right
+            if(Math.sin(angle) > 0)
+            {
+              //Enter from the left
+              particles[i] = {x: -5, y: Math.random()*H, r: p.r, d: p.d};
+            }
+            else
+            {
+              //Enter from the right
+              particles[i] = {x: W+5, y: Math.random()*H, r: p.r, d: p.d};
+            }
+          }
+        }
+      }
+    }
+
+    //animation loop
+    setInterval(draw, 33);
+  };
+
+  var geadenControllers = angular.module('geadenControllers',
+    ['geadenServices', 'toaster', 'angularMoment']);
 
   /** Announcements controller */
   geadenControllers.controller('AnnouncementCtrl', 
@@ -73,141 +209,6 @@
           var bday = new Date($scope.info.birthDay);
           return moment().diff(moment(bday), 'years');
         };
-
-        $(window).scroll(function() {
-          if ($(this).scrollTop() >= 100) {     // If page is scrolled more than 50px
-            $('#up').fadeIn(400);               // Fade in the arrow
-          } else {
-            $('#up').fadeOut(400);              // Else fade out the arrow
-          }
-        });
-
-        $('#up').click(function() {             // When arrow is clicked
-          $('body,html').animate({
-            scrollTop : 0                       // Scroll to top of body
-          }, 500);
-        });
-
-        /**
-         * Falling snow using html5
-         * Legacy of http://thecodeplayer.com/walkthrough/html5-canvas-snow-effect       
-         */
-        var snow = function(){
-          //canvas init
-          var canvas = document.getElementsByTagName('canvas')[0];
-          var ctx = canvas.getContext('2d');
-          
-          //canvas dimensions
-          var W = window.innerWidth;
-          var H = window.innerHeight;
-          canvas.width = W;
-          canvas.height = H;
-          
-          //snowflake particles
-          var mp = 25; //max particles
-          var particles = [];
-          for(var i = 0; i < mp; i++) {
-            particles.push({
-              x: Math.random()*W, //x-coordinate
-              y: Math.random()*H, //y-coordinate
-              r: Math.random()*4+1, //radius
-              d: Math.random()*mp //density
-            });
-          }
-          
-          //Lets draw the flakes
-          function draw() {
-            ctx.clearRect(0, 0, W, H);
-            
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-            ctx.beginPath();
-            for (var i = 0; i < mp; i++) {
-              var p = particles[i];
-              ctx.moveTo(p.x, p.y);
-              ctx.arc(p.x, p.y, p.r, 0, Math.PI*2, true);
-            }
-            ctx.fill();
-            update();
-          }
-          
-          //Function to move the snowflakes
-          //angle will be an ongoing incremental flag. Sin and Cos functions will be applied to it to create vertical and horizontal movements of the flakes
-          var angle = 0;
-          function update() {
-            angle += 0.01;
-            for(var i = 0; i < mp; i++)
-            {
-              var p = particles[i];
-              //Updating X and Y coordinates
-              //We will add 1 to the cos function to prevent negative values which will lead flakes to move upwards
-              //Every particle has its own density which can be used to make the downward movement different for each flake
-              //Lets make it more random by adding in the radius
-              p.y += Math.cos(angle+p.d) + 1 + p.r/2;
-              p.x += Math.sin(angle) * 2;
-              
-              //Sending flakes back from the top when it exits
-              //Lets make it a bit more organic and let flakes enter from the left and right also.
-              if(p.x > W+5 || p.x < 0 || p.y > H)
-              {
-                if(i%3 > 0) //66.67% of the flakes
-                {
-                  particles[i] = {x: Math.random()*W, y: -10, r: p.r, d: p.d};
-                }
-                else
-                {
-                  //If the flake is exitting from the right
-                  if(Math.sin(angle) > 0)
-                  {
-                    //Enter from the left
-                    particles[i] = {x: -5, y: Math.random()*H, r: p.r, d: p.d};
-                  }
-                  else
-                  {
-                    //Enter from the right
-                    particles[i] = {x: W+5, y: Math.random()*H, r: p.r, d: p.d};
-                  }
-                }
-              }
-            }
-          }
-          
-          //animation loop
-          setInterval(draw, 33);
-        };
-
-        // Show content when loading finished      
-        Pace.once('done', function() {
-          $('.content').fadeIn(1000);
-          $('.content').removeClass('loading');
-          // Let the snow start only if it's winter time
-          if ([11, 0, 1].indexOf(moment().month()) !== -1) {
-            $(document.body).addClass('snows', 1000, 'ease');          
-            snow();
-          }
-          // TODO: make more fancy backgrounds
-        });
-
-        // Admin menu
-        var $adminMenu = $('#nav-admin-menu');
-        if ($adminMenu) {
-          var adminMenuShown = false;
-          $(window).mousemove(function(e) {          
-            if (e.clientX < 10 && e.clientY < 100) {            
-              $adminMenu.stop().animate({
-                top: 0,
-                opacity: 0.8
-              }, 'fast', function() {
-                $adminMenu.one('mouseleave touchend', function(e) {
-                  $adminMenu.stop().animate({
-                    top: '-50px',
-                    opacity: 0
-                  }, 'fast');
-                  return true;
-                });
-              });
-            }
-          });
-        }        
     }]);
 
     geadenControllers.controller('QuotesCtrl', [
@@ -350,7 +351,9 @@
               .success(function(data) {  
                 skill = data;            
                 toaster.pop('success', 'Skill updated', 'Skill with id ' + data._id + ' updated.');              
-            });          
+            }).error(function(error) {
+                toaster.pop('error', 'Error', 'Error: ' + error.error);
+            });
           }
           $scope.skill = {links:[]};        
         };
@@ -368,7 +371,7 @@
 
         /**
          * Force edit skill
-         * @param  {Objct} skill  skill to edit
+         * @param  {Object} skill  skill to edit
          */
         $scope.editSkill = function(skill) {
           $scope.skill = skill;
@@ -383,8 +386,9 @@
         $scope.removeSkill = function(skill, idx) {        
           $http.post('/skills/', {'_id': skill._id, 'action': 'delete'}).success(function() {
             toaster.pop('info', 'Skill removed!', 'Skill ' + skill.title + ' was removed.');
-          }).error(function() {
-            toaster.pop('error', 'Error', 'Error removing skill ' + skill.title);
+          }).error(function(error) {
+            toaster.pop('error', 'Error', 'Error removing skill ' + skill.title +
+             '. Error: ' + error.error);
           });
           $scope.skill = {links:[]};
           $scope.skills.splice(idx, 1);        
@@ -497,7 +501,7 @@
               }
               toaster.pop('success', 'Link ' + action, 'Link ' + link.url + ' ' + action);
             }).error(function(error) {
-              toaster.pop('error', 'Error: ' + error);
+              toaster.pop('error', 'Error: ' + error.error);
             });
             $scope.link = {};
           };
@@ -521,6 +525,9 @@
             var data = link.action = 'delete';
             $http.post('/links', link).success(function(data) {
               toaster.pop('info', 'Link removed', 'Link ' + link.url + ' removed.');
+            }).error(function(error) {
+              toaster.pop('error', 'Error', 'Failed to remove link '
+                + link.url + '. Error: ' + error.error);
             });
           };
 
@@ -703,7 +710,7 @@
             $scope.goals.push(data);
             toaster.pop('success', 'Goal Added', 'Goal with id ' + data._id + ' successfully added.');
           }).error(function(error) {
-            toaster.pop('error', 'Failed to add goal', 'Can\'t add new goal. Error: ' + error);
+            toaster.pop('error', 'Failed to add goal', 'Can\'t add new goal. Error: ' + error.error);
           });
 
           $scope.newGoal = '';
@@ -719,7 +726,7 @@
               toaster.pop('success', 'Goal Updated', 'Goal with id ' + goal._id + ' successfully updated.'); 
             }).error(function(error) {
               $scope.revertEditing(goal);
-              toaster.pop('error', 'Failed to update goal', 'Can\'t update goal. Error: ' + error);
+              toaster.pop('error', 'Failed to update goal', 'Can\'t update goal. Error: ' + error.error);
             });
           }   
           return true;         
@@ -734,7 +741,7 @@
                 ' successfully ' + action + '.'); 
             }).error(function(error) {
               goal.done = !goal.done;
-              toaster.pop('error', 'Failed to accomplish goal', 'Can\'t accomplish goal. Error: ' + error);
+              toaster.pop('error', 'Failed to accomplish goal', 'Can\'t accomplish goal. Error: ' + error.error);
             });
         };
 
@@ -750,7 +757,7 @@
             $scope.goals[$scope.goals.indexOf(goal)] = data;
             toaster.pop('info', 'Goal Disabled', 'Goal with id ' + goal._id + ' disabled.');
            }).error(function(error) {
-            toaster.pop('error', 'Failed to disable goal', 'Can\'t disable goal. Error: ' + error);
+            toaster.pop('error', 'Failed to disable goal', 'Can\'t disable goal. Error: ' + error.error);
            });
         };
 
@@ -760,7 +767,7 @@
             $scope.goals[$scope.goals.indexOf(goal)] = data;
             toaster.pop('success', 'Goal Restored', 'Goal with id ' + goal._id + ' restored.');
            }).error(function(error) {
-            toaster.pop('error', 'Failed to restore goal', 'Can\'t restore goal. Error: ' + error);
+            toaster.pop('error', 'Failed to restore goal', 'Can\'t restore goal. Error: ' + error.error);
            });
         };
 
@@ -770,7 +777,7 @@
             $scope.goals.splice($scope.goals.indexOf(goal), 1);
             toaster.pop('info', 'Goal Purged', 'Goal with id ' + goal._id + ' purged.');
            }).error(function(error) {
-            toaster.pop('error', 'Failed to purge goal', 'Can\'t purge goal. Error: ' + error);
+            toaster.pop('error', 'Failed to purge goal', 'Can\'t purge goal. Error: ' + error.error);
            });
         };
     }]);

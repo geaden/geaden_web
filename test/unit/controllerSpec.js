@@ -77,7 +77,7 @@ describe('Geaden controllers', function() {
       $httpBackend.flush();
       expect(scope.info.name).toBe('John Doe');
       var age = scope.age();
-      expect(scope.age()).toBe(27);
+      expect(scope.age()).toBe(28);
       expect(scope.info.pic).toBe('/foo/bar.png');
     });
   });

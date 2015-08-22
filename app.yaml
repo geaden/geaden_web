@@ -25,7 +25,7 @@ handlers:
   static_files: static/\1
   upload: static/(.*\.(gif|ico|jpeg|jpg|png))
 
-- url: /edit
+- url: /login
   script: geaden.app
   login: admin
 

@@ -87,6 +87,11 @@ class LinksJSONHandler(webapp2.RequestHandler):
 
     def post(self, *args, **kwargs):
         self.response.headers.add_header("Content-type", "application/json")
+        user = users.get_current_user()
+        if not user:
+            self.response.set_status(401)
+            return self.response.out.write(json.dumps({'error': 'Unauthorized'},
+                                           indent=4))
         link_data = json.loads(self.request.body)
         link_id = link_data['url']
         link = Link.get_by_id(link_id)
@@ -121,6 +126,11 @@ class SkillsJSONHandler(webapp2.RequestHandler):
         Inserts or updates skill
         """
         self.response.headers.add_header('Content-type', 'application/json')
+        user = users.get_current_user()
+        if not user:
+            self.response.set_status(401)
+            return self.response.out.write(json.dumps({'error': 'Unauthorized'},
+                                           indent=4))
         if 'data' in data:
             skill_data = data['data']
             status = 201
@@ -150,6 +160,12 @@ class SkillsJSONHandler(webapp2.RequestHandler):
         return self.error(400)
 
     def post(self, *args, **kwargs):
+        self.response.headers.add_header('Content-type', 'application/json')
+        user = users.get_current_user()
+        if not user:
+            self.response.set_status(401)
+            return self.response.out.write(json.dumps({'error': 'Unauthorized'},
+                                           indent=4))
         allowed_actions = ['delete', 'update', 'new']
         data = json.loads(self.request.body)
         action = data['action']
@@ -208,11 +224,13 @@ class SkillsApproverHandler(webapp2.RequestHandler):
         self.response.set_status(201)
 
 
-class EditPageHandler(MainHandler):
+class LoginPageHandler(webapp2.RequestHandler):
     """
-    Editor Handler
+    Login handler
     """
-    template = 'edit.html'
+
+    def get(self):
+        self.redirect("/")
 
 
 class GoalsPageHandler(MainHandler):
@@ -236,6 +254,11 @@ class GoalsJSONHandler(webapp2.RequestHandler):
             json.dumps([g.to_dict() for g in goals], indent=4))
 
     def post(self):
+        user = users.get_current_user()
+        if not user:
+            self.response.set_status(401)
+            return self.response.out.write(json.dumps({'error': 'Unauthorized'},
+                                           indent=4))
         self.response.headers.add_header('Content-Type', 'application/json')
         goal_data = json.loads(self.request.body)
         if 'action' in goal_data:
@@ -316,11 +339,9 @@ class PiDayPageHandler(MainHandler):
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
-    ('/hoops/?', HoopsPage),
     ('/skills/?', SkillsJSONHandler),
     ('/links/?', LinksJSONHandler),
-    ('/edit/?', EditPageHandler),
-    # ('/goals/?', GoalsPageHandler),
+    ('/login/?', LoginPageHandler),
     ('/pi/?', PiDayPageHandler),
     ('/goals/data/?', GoalsJSONHandler),
     ('/email/?', ContactsJSONHandler),

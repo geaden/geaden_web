@@ -11,16 +11,22 @@
   app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.
       when('/', {
-        templateUrl: 'templates/me.html',
+        templateUrl: '/templates/me.html',
         controller: 'MyCtrl'
       }).
       when('/hoops', {
-        templateUrl: 'templates/hoops.html',
+        templateUrl: '/templates/hoops.html',
         controller: 'HoopsCtrl'
       }).
       when('/goals', {
-        templateUrl: 'templates/goals-list.html',
+        templateUrl: '/templates/goals-list.html',
         controller: 'GoalsCtrl'
+      }).
+      when('/edit', {
+        templateUrl: '/templates/edit.html',
+        access: {
+            requiresLogin: true
+        }
       }).
       otherwise({
         redirectTo: '/'

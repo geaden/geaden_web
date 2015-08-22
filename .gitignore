@@ -3,4 +3,5 @@ node_modules
 *.py[c~]
 static/css/*.min.css
 static/js/app/*.min.js
+.idea
 

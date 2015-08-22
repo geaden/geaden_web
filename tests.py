@@ -116,7 +116,7 @@ class PageTestCase(BaseTestCase):
         response = self.testapp.post_json('/links', {'title': 'Foo Bar',
                                           'url': 'http://www.foo.bar'})
         self.assertEquals(response.status_int, 200)
-        # Quantaty of links doesn't change
+        # Quantity of links didn't change
         self.assertEquals(len(Link.query().fetch()), before + 1)
         link = Link.get_by_id('http://www.foo.bar')
         self.assertEquals(link.title, 'Foo Bar')
@@ -129,10 +129,10 @@ class PageTestCase(BaseTestCase):
         self.assertEquals(response.status_int, 200)
         self.assertEquals(before - 1, len(Link.query().fetch()))
 
-    def test_editor_handler(self):
+    def test_login_handler(self):
         load()
-        response = self.testapp.get('/edit')
-        self.assertEquals(response.status_int, 200)
+        response = self.testapp.get('/login')
+        self.assertEquals(response.status_int, 302, msg="Not redirected.")
 
     def test_contacts_handler(self):
         response = self.testapp.post_json('/email',
@@ -196,10 +196,6 @@ class PageTestCase(BaseTestCase):
         self.assertEquals(4, len(Goal.all()))
         self.assertTrue(data['enabled'])
 
-    def test_hoops_page_handler(self):
-        response = self.testapp.get('/hoops')
-        self.assertEquals(response.status_int, 200)
-
     def test_not_found_page_handler(self):
         response = self.testapp.get('/asdf', status=404)
         self.assertEquals(response.status_int, 404)
@@ -257,7 +253,7 @@ class ModelsTestCase(BaseTestCase):
         g.delete()
         self.assertEquals(len(Goal.all()), 1)
         self.assertFalse(g.enabled)
-        # Restroe goal
+        # Restore goal
         g.restore()
         self.assertTrue(g.enabled)
         # Purge goal

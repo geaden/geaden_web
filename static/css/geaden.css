@@ -428,6 +428,15 @@ img.beta {
        -o-animation: prev-out 0.5s;
           animation: prev-out 0.5s;
 }
+
+/** Hoops specific styles **/
+#hoops h3, #hoops h4 {
+  padding: 10px 0;
+}
+
+#hoops #fiba-archive {
+  padding: 10px 0;
+}
   
 @-webkit-keyframes next-in {
   0% {

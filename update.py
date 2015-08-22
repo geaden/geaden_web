@@ -18,7 +18,7 @@ def update():
     with open('data/versions.json', 'r') as f:
         versions = json.load(f)
     versions['libs'] = [
-        {'lib': 'Google App Engine', 'version': '1.9.18'},
+        {'lib': 'Google App Engine', 'version': '1.9.23'},
         {'lib': 'Python', 'version': sys.version.split(' ')[0]}]
     versions['last_update'] = datetime.datetime.now().isoformat()
     git_hash = sys.argv[1]
