@@ -5,7 +5,11 @@ python:
 
 branches:
   only:
+<<<<<<< HEAD
     - stage
+=======
+    - master
+>>>>>>> Fix Jinja2 vulnurability. Remove contact form
 
 env:
   secure: "tpoIGJNJKWvlvTHCO/Uz1YeOMDqHinuCXxgl6muOI6tejS5mC7gObNv0d4DfNIH5q9Q6nV0gg3Dj95IJ1PKRJHDRxPO62NSqOO0kycfDRCj9/pAsAsDy9EISz9r5Q8Pd24PDl0b4CN4797vNqHYpyeLhl4nbLVxO2fYIlB07uJM="
