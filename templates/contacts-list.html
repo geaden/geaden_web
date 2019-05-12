@@ -6,26 +6,7 @@
       <a href="{{ contact.url }}">
         <i class="fa fa-{{ contact.icon }}-square fa-x5"></i>
         <p>{{ contact.title }}</p>
-      </a>      
+      </a>
     </li>
   </ul>
-  <!-- Contact form -->
-  <form class="email-form" name="emailForm" ng-submit="emailForm.$valid && sendMessage()" novalidate>
-    <fieldset class="form-group">
-      <label for="email-subject">Subject:</label>
-      <input id="email-subject" ng-model="subject" type="text" class="form-control" placeholder="Subject" required/>
-    </fieldset>
-    <fieldset class="form-group">
-      <label for="email-it">Email:</label>
-      <input id="email-it" ng-model="email" type="text" class="form-control" placeholder="Email (Optional)" />
-    </fieldset>
-    <fieldset class="form-group">
-      <label for="email-message">Message:</label>
-      <textarea id="email-message" ng-model="message" class="form-control" placeholder="Leave me a message..." required></textarea>
-    </fieldset>    
-    <fieldset class="form-group">
-      <input type="submit" class="email-submit" value="Send email" />
-      <button type="button" class="btn" ng-click="resetEmail()">Reset form</button>
-    </fieldset>
-  </form>
 </div>

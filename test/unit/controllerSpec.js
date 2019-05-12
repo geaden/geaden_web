@@ -51,19 +51,19 @@ describe('Geaden controllers', function() {
     });
   });
 
-  describe('MyCtrl', function() {    
+  describe('MyCtrl', function() {
     var scope, ctrl, $httpBackend;
 
     beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
       $httpBackend = _$httpBackend_;
       $httpBackend.whenGET('/data/me.json')
-        .respond({name: 'John Doe', birthDay: '1987-05-10', pic: '/foo/bar.png'});     
+        .respond({name: 'John Doe', birthDay: '1987-05-10', pic: '/foo/bar.png'});
       $httpBackend.whenGET('/data/versions.json')
         .respond(function (method, url, data) {
           return [200, {libs: [], last_update: '2014-08-06T12:34:43'}, {}];
-        });  
+        });
       scope = $rootScope.$new();
-      ctrl = $controller('MyCtrl', {$scope: scope});      
+      ctrl = $controller('MyCtrl', {$scope: scope});
     }));
 
     afterEach(function() {
@@ -72,7 +72,7 @@ describe('Geaden controllers', function() {
       $httpBackend.resetExpectations();
     });
 
-    it('should create "me" model', function() {       
+    it('should create "me" model', function() {
       expect(scope.info).toEqualData({});
       $httpBackend.flush();
       expect(scope.info.name).toBe('John Doe');
@@ -90,7 +90,7 @@ describe('Geaden controllers', function() {
       $httpBackend.expectGET('/data/quotes.json').
         respond(
           [
-            {content: 'To be or not to be', author: 'Hamlet'}, 
+            {content: 'To be or not to be', author: 'Hamlet'},
             {content: 'That is a question', author: 'Hamlet'}
           ]);
       scope = $rootScope.$new();
@@ -109,7 +109,7 @@ describe('Geaden controllers', function() {
       scope.prevQuote();
       expect(scope.currentQuoteIndex).toBe(0);
       scope.prevQuote();
-      expect(scope.currentQuoteIndex).toBe(1);      
+      expect(scope.currentQuoteIndex).toBe(1);
     });
   });
 
@@ -122,7 +122,7 @@ describe('Geaden controllers', function() {
         respond(
           [
             {
-              title: 'Python', 
+              title: 'Python',
               _id: 1,
               desc: 'Master of Python',
               order: 0,
@@ -135,11 +135,11 @@ describe('Geaden controllers', function() {
                 {
                   url: 'http://www.bitbucket.com/geaden',
                   title: 'Bitbucket'
-                } 
+                }
               ]
             },
             {
-              title: 'Java', 
+              title: 'Java',
               _id: 2,
               desc: 'Master of Java',
               approved: 0,
@@ -152,9 +152,9 @@ describe('Geaden controllers', function() {
                 {
                   url: 'http://www.bitbucket.com/geaden',
                   title: 'Bitbucket'
-                } 
+                }
               ]
-            }          
+            }
           ]);
       $httpBackend.whenGET('/links')
         .respond([]);
@@ -176,7 +176,7 @@ describe('Geaden controllers', function() {
       $httpBackend.expectPOST('/skills/approve/', {_id: skillId}).respond(201, '');
       scope.approve(scope.skills[1]);
       expect(scope.skills[1].approved).toBe(1);
-    });  
+    });
 
     it('should delete skill', function() {
       $httpBackend.flush();
@@ -184,7 +184,7 @@ describe('Geaden controllers', function() {
       $httpBackend.expectPOST('/skills/', {_id: 2, action: 'delete'}).respond(200, '');
       scope.removeSkill(scope.skills[0], 0);
       expect(scope.skills.length).toBe(before - 1);
-    }); 
+    });
 
     it('should create skill', function() {
       $httpBackend.flush();
@@ -192,8 +192,8 @@ describe('Geaden controllers', function() {
       var skill = {title: 'Python', desc: 'Love it!'};
       skill._id = 5;
       $httpBackend.expectPOST('/skills/', {data: skill, action: 'new'}).respond(201, skill);
-      scope.addSkill(skill);      
-    }); 
+      scope.addSkill(skill);
+    });
   });
 
   describe('LinksCtrl', function() {
@@ -211,7 +211,7 @@ describe('Geaden controllers', function() {
             {
               url: 'http://www.bitbucket.com/geaden',
               title: 'Bitbucket'
-            }          
+            }
           ]);
       scope = $rootScope.$new();
       ctrl = $controller('LinksCtrl', {$scope: scope});
@@ -244,7 +244,7 @@ describe('Geaden controllers', function() {
         respond(
           [
             {
-              company: 'Foo', 
+              company: 'Foo',
               start: 'May, 2014',
               end: 'December, 2014',
               summary: 'Cool company',
@@ -252,13 +252,13 @@ describe('Geaden controllers', function() {
               url: 'http://www.foo.bar'
             },
             {
-              company: 'Boo', 
+              company: 'Boo',
               start: 'June, 2012',
               end: 'July, 2013',
               summary: 'Cool company',
               position: 'Developer',
               url: 'http://www.boo.bar'
-            },        
+            },
           ]);
       scope = $rootScope.$new();
       ctrl = $controller('ExperienceCtrl', {$scope: scope});
@@ -275,13 +275,13 @@ describe('Geaden controllers', function() {
  describe('TabsCtrl', function() {
     var scope, ctrl;
 
-    beforeEach(inject(function($rootScope, $controller) {      
+    beforeEach(inject(function($rootScope, $controller) {
       scope = $rootScope.$new();
       ctrl = $controller('TabsCtrl', {$scope: scope});
     }));
 
     it('should create "skills tabs" model', function() {
-      expect(scope.tabs.length).toBe(3);      
+      expect(scope.tabs.length).toBe(3);
     });
   });
 
@@ -294,13 +294,13 @@ describe('Geaden controllers', function() {
         respond(
           [
             {
-              school: 'Foo', 
+              school: 'Foo',
               start: 'September, 2004',
               end: 'December, 2014',
               summary: 'Cool school',
               major: 'Engineer',
               url: 'http://www.foo.bar'
-            }                
+            }
           ]);
       scope = $rootScope.$new();
       ctrl = $controller('EducationCtrl', {$scope: scope});
@@ -323,13 +323,13 @@ describe('Geaden controllers', function() {
         respond(
           [
             {
-              url: 'http://www.google.com', 
-              icon: 'google'              
+              url: 'http://www.google.com',
+              icon: 'google'
             },
             {
-              url: 'http://www.google.com', 
-              icon: 'google'              
-            }                                
+              url: 'http://www.google.com',
+              icon: 'google'
+            }
           ]);
       scope = $rootScope.$new();
       ctrl = $controller('ContactsCtrl', {$scope: scope});
@@ -353,22 +353,22 @@ describe('Geaden controllers', function() {
           [
             {
               _id: '123',
-              title: 'Build a house', 
+              title: 'Build a house',
               votes: 1,
               done: false
             },
             {
               _id: '456',
-              title: 'Plant a tree', 
+              title: 'Plant a tree',
               votes: 1,
               done: false
             },
             {
               _id: '789',
-              title: 'Have a son', 
+              title: 'Have a son',
               votes: 1,
               done: false
-            },           
+            },
           ]);
       scope = $rootScope.$new();
       ctrl = $controller('GoalsCtrl', {$scope: scope});
@@ -384,7 +384,7 @@ describe('Geaden controllers', function() {
     it('should add new goals', function() {
       expect(scope.goals.length).toBe(0);
       scope.newGoal = 'Do Great Things';
-      $httpBackend.expectPOST('/goals/data').respond({_id: 1, title: scope.newGoal});      
+      $httpBackend.expectPOST('/goals/data').respond({_id: 1, title: scope.newGoal});
       scope.addGoal(scope.newGoal);
       $httpBackend.flush();
       expect(scope.goals.length).toBe(4);
@@ -396,7 +396,7 @@ describe('Geaden controllers', function() {
       var beforeLength = scope.goals.length;
       var goal = scope.goals[0];
       $httpBackend.expectPOST('/goals/data').respond(
-        {_id: 1, title: goal.title, enabled: false}); 
+        {_id: 1, title: goal.title, enabled: false});
       scope.removeGoal(goal);
       $httpBackend.flush();
       expect(scope.goals.length).toBe(beforeLength);
@@ -407,7 +407,7 @@ describe('Geaden controllers', function() {
       $httpBackend.flush();
       var goal = scope.goals[0];
       $httpBackend.expectPOST('/goals/data').respond(
-        {_id: 1, title: goal.title, enabled: true}); 
+        {_id: 1, title: goal.title, enabled: true});
       scope.restoreGoal(goal);
       $httpBackend.flush();
       expect(scope.goals[0].enabled).toBe(true);
@@ -418,7 +418,7 @@ describe('Geaden controllers', function() {
       $httpBackend.flush();
       var beforeLength = scope.goals.length;
       var goal = scope.goals[0];
-      $httpBackend.expectPOST('/goals/data').respond({_id: 1, title: scope.newGoal}); 
+      $httpBackend.expectPOST('/goals/data').respond({_id: 1, title: scope.newGoal});
       scope.purgeGoal(goal);
       $httpBackend.flush();
       expect(scope.goals.length).toBe(beforeLength - 1);
@@ -430,7 +430,7 @@ describe('Geaden controllers', function() {
 
     beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
       scope = $rootScope.$new();
-      ctrl = $controller('AnnouncementCtrl', {$scope: scope}); 
+      ctrl = $controller('AnnouncementCtrl', {$scope: scope});
     }));
 
     it('should get announcement', function() {

@@ -1,10 +1,10 @@
 <project name="Compressor" default="minify" basedir=".">
-    <target name="minify">        
+    <target name="minify">
         <taskdef name="yui-compress" classname="net.noha.tools.ant.yuicompressor.tasks.YuiCompressorTask">
             <classpath>
                 <pathelement path="${basedir}/libs/yuicompressor-2.4.7.jar" />
                 <pathelement path="${basedir}/libs/yui-compressor-ant-task-0.5.jar" />
-                <pathelement path="${basedir}/libs/rhino-1.6R7.jar" />     
+                <pathelement path="${basedir}/libs/rhino-1.6R7.jar" />
             </classpath>
         </taskdef>
 
@@ -12,7 +12,7 @@
             <exclude name="**/*.min.js" />
             <exclude name="**/*.min.css" />
             <exclude name="**/lib/*.js" />
-            <include name="**/*.js" />           
+            <include name="**/*.js" />
             <include name="**/*.css" />
         </yui-compress>
     </target>

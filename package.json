@@ -3,7 +3,7 @@
   "description": "Geaden web site source code",
   "author": "Gennady Denisov <denisovgena@gmail.com.com>",
   "devDependencies": {
-    "karma": "^0.12.19",
+    "karma": "^0.13.22",
     "karma-jasmine": "^0.1.5",
     "karma-phantomjs-launcher": "^0.1.4"
   },
